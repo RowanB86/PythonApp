@@ -8,7 +8,7 @@ This is a temporary script file.
 import streamlit as st
 import pandas as pd
 import numpy as np
-from winsound import Beep
+#from winsound import Beep
 from time import sleep
 from random import randint
 
@@ -36,22 +36,22 @@ data_load_state.text("Done! (using st.cache_dataa)")
 def jab():
    freq = 500
    dur = 500
-   Beep(freq, dur)
+   #Beep(freq, dur)
   
 def hook():
    freq = 5000
    dur = 1000
-   Beep(freq, dur)
+   #Beep(freq, dur)
   
 def Bjab():
    freq = 250
    dur = 750
-   Beep(freq, dur)
+   #Beep(freq, dur)
 
 def Bhook():
    freq = 150
    dur = 1000
-   Beep(freq, dur)
+   #Beep(freq, dur)
   
   
   
