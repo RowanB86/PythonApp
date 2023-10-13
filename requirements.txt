@@ -2,4 +2,4 @@ folium==0.12.1
 streamlit_folium
 pandas
 numpy==1.20.1
-streamlit==0.87.0
+streamlit
