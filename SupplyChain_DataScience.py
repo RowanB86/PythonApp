@@ -62,8 +62,9 @@ if SetLocations or 'TableCreated' in st.session_state:
                         'Demand': 50
                     }    
             
-                #st.session_state['df'] = st.session_state['df'].append(newRow,ignore_index = True)
-                df = df.append(newRow,ignore_index = True)
+                #st.session_state['df'] = st.session_state['df'].concat(newRow,ignore_index = True)
+                df = pd.concat([df, pd.DataFrame(newRow,index=[i])])
+
                 
         for i in range(0,int(NumWarehouses)):
                 Latt = random.randint(int(minLatt*10000),int(maxLatt*10000)) / 10000
@@ -78,8 +79,8 @@ if SetLocations or 'TableCreated' in st.session_state:
                         'Demand': 0
                     }    
             
-                #st.session_state['df'] = st.session_state['df'].append(newRow,ignore_index = True)
-                df = df.append(newRow,ignore_index = True)
+                #st.session_state['df'] = st.session_state['df'].concat(newRow,ignore_index = True)
+                df = pd.concat([df, pd.DataFrame(newRow,index=[i+ int(NumCustomers)])], ignore_index=False)
     
                 st.session_state.TableCreated = True
                 st.session_state['edited_df'] = df 
@@ -126,8 +127,9 @@ if PerformCOG or 'map' in st.session_state:
         # For each existing combination, create a new combination that includes the current element
         for sub_set in combinations.copy():
             new_sub_set = sub_set + [eval(element)]
-            # Append the new combination to our list of combinations
+            # concat the new combination to our list of combinations
             combinations.append(new_sub_set)
+            
     
     combinations2 = []
     for element in combinations:
