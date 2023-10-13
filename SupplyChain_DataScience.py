@@ -83,7 +83,7 @@ if SetLocations or 'TableCreated' in st.session_state:
                 df = pd.concat([df, pd.DataFrame(newRow,index=[i+ int(NumCustomers)])], ignore_index=False)
     
                 st.session_state.TableCreated = True
-                st.session_state['edited_df'] = df 
+                st.session_state['edited_df'] = df.style.hide(axis="index") 
                 
     edited_df = st.data_editor(st.session_state['edited_df'])
     
