@@ -9,8 +9,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import random
-from streamlit_folium import st_folium
 import folium
+from streamlit_folium import folium_static
 
 st.title('Centre of Gravity Modelling')
 
@@ -220,5 +220,4 @@ if PerformCOG or 'map' in st.session_state:
     st.session_state['COGPerformed'] = 1
 
 if 'map' in st.session_state:
-    st_data = st_folium(st.session_state['map'], width=725)
-
+    st_data = folium_static(st.session_state['map'], width=725)
