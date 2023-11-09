@@ -167,15 +167,13 @@ if LTDChartButton:
 
     if LTDChart == 'PDF':
         ax2.plot(x, X.pdf(x),color='r',label='PDF')
-        plt.title("PDF of Usage")
+        plt.title("PDF of Lead Time Demand")
     else:
         ax2.plot(x, X.cdf(x),color='r',label='CDF')
-        plt.title("CDF of Usage")
+        plt.title("CDF of Lead Time Demand")
     
     
     ax2.axvline(x=ROP,color='m',label='Re-Order Point')
     ax2.axvline(x=MSL,color='y',label='Max Stock Level')
-    st.write(ROP)
-    st.write(MSL)
-    
+
     st.pyplot(fig)
