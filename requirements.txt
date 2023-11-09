@@ -5,3 +5,8 @@ numpy==1.20.1
 streamlit
 scipy
 matplotlib
+requests
+bs4
+sklearn
+plotly
+seaborn
