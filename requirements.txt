@@ -3,3 +3,5 @@ streamlit_folium
 pandas
 numpy==1.20.1
 streamlit
+scipy
+matplotlib
