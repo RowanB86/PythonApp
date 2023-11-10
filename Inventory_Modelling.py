@@ -55,7 +55,7 @@ LTChartButton = st.button("Generate Chart",key="LTChartButton")
 
 if LTChartButton:
     
-    
+    st.session_state.LTData = data
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
     inc = 1
@@ -105,7 +105,7 @@ UsageChartButton = st.button("Generate Chart",key="UsageChartButton")
 
 if UsageChartButton:
     
-    
+    st.session_state.UsageData = data
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
     inc = 1
