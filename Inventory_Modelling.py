@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib import rcParams
 rcParams.update({'figure.autolayout': True})
+import random
 
 class KDEDist(stats.rv_continuous):
     
@@ -131,9 +132,13 @@ except:
 
 LTDChartButton = st.button("Generate Chart",key="LTDChartButton")
 
-
 if LTDChartButton:
-    data = np.multiply(st.session_state.LTData,st.session_state.UsageData)
+    data = [None] * 1000
+    
+    for i in range(0,1000):
+        LT = random.sample(list(st.session_state.LTData),1)
+        data[i] = np.sum(random.sample(list(st.session_state.UsageData),LT[0]))
+   
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
     inc = 1
