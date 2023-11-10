@@ -38,6 +38,7 @@ if LTDist == 'Normal':
         data = np.random.normal(LTMean, LTStDev, 1000)
         st.session_state.LTMean = LTMean
         st.session_state.LTStDev = LTStDev
+        st.session_state.LTData = data
     except:
         pass
 else:
@@ -45,6 +46,7 @@ else:
         LTMean = float(st.text_input("Enter Lead Time Mean:",key="LTMean"))
         data = np.random.poisson(LTMean, 1000)
         st.session_state.LTMean = LTMean
+        st.session_state.LTData = data
     except:
         pass
 
@@ -53,7 +55,7 @@ LTChartButton = st.button("Generate Chart",key="LTChartButton")
 
 if LTChartButton:
     
-    st.session_state.LTData = data
+    
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
     inc = 1
@@ -86,6 +88,7 @@ if UsageDist == 'Normal':
         data = np.random.normal(UsageMean, UsageStDev, 1000)
         st.session_state.UsageMean = UsageMean
         st.session_state.UsageStDev = UsageStDev
+        st.session_state.UsageData = data
     except:
         pass
 else:
@@ -93,6 +96,7 @@ else:
         UsageMean = float(st.text_input("Enter Usage Mean:",key="UsageMean"))
         st.session_state.UsageMean = UsageMean
         data = np.random.poisson(UsageMean, 1000)
+        st.session_state.UsageData = data
     except:
         pass
 
@@ -101,7 +105,7 @@ UsageChartButton = st.button("Generate Chart",key="UsageChartButton")
 
 if UsageChartButton:
     
-    st.session_state.UsageData = data
+    
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
     inc = 1
