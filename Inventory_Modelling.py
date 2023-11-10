@@ -11,6 +11,7 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib import rcParams
+import random
 rcParams.update({'figure.autolayout': True})
 
 class KDEDist(stats.rv_continuous):
@@ -133,7 +134,14 @@ LTDChartButton = st.button("Generate Chart",key="LTDChartButton")
 
 
 if LTDChartButton:
-    data = np.multiply(st.session_state.LTData,st.session_state.UsageData)
+    #data = np.multiply(st.session_state.LTData,st.session_state.UsageData)
+    
+    data = [None] * 1000
+    
+    for i in range(0,1000):
+        LT = random.sample(list(st.session_state.LTData),1)
+        data[i] = np.sum(random.sample(list(st.session_state.UsageData),LT[0]))
+    
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
     inc = 1
@@ -175,5 +183,5 @@ if LTDChartButton:
     
     ax2.axvline(x=ROP,color='m',label='Re-Order Point')
     ax2.axvline(x=MSL,color='y',label='Max Stock Level')
-
+    
     st.pyplot(fig)
