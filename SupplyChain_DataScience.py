@@ -48,7 +48,7 @@ if SetLocations or 'TableCreated' in st.session_state:
     minLatt = float(Central_Latt) - (float(Radius)/69)
     maxLatt = float(Central_Latt) + (float(Radius)/69)     
     
-    if 'map' not in st.session_state or SetLocations:
+    if 'TableCreated' not in st.session_state:
         for i in range(0,int(NumCustomers)):
                 Latt = random.randint(int(minLatt*10000),int(maxLatt*10000)) / 10000
                 Long = random.randint(int(minLong*10000),int(maxLong*10000)) / 10000
@@ -92,7 +92,7 @@ if SetLocations or 'TableCreated' in st.session_state:
     
     PerformCOG = st.button("Perform Centre of Gravity Analysis",key="COG")
     
-if PerformCOG or 'map' in st.session_state:
+if PerformCOG:
     
     if 'edited_df' in st.session_state:
         data = edited_df
