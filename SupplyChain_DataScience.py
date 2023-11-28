@@ -48,7 +48,7 @@ if SetLocations or 'TableCreated' in st.session_state:
     minLatt = float(Central_Latt) - (float(Radius)/69)
     maxLatt = float(Central_Latt) + (float(Radius)/69)     
     
-    if 'TableCreated' not in st.session_state:
+    if SetLocations or 'TableCreated' not in st.session_state:
         for i in range(0,int(NumCustomers)):
                 Latt = random.randint(int(minLatt*10000),int(maxLatt*10000)) / 10000
                 Long = random.randint(int(minLong*10000),int(maxLong*10000)) / 10000
