@@ -227,7 +227,7 @@ if LTDChartButton:
     Rng2 = UB2 - LB2
     Factor = (Quantile-LB2) / Rng2
     ROP = LB1 + (Factor*Rng1)
-    ROQ = (365 / ROF) * st.session_state.AvgMean
+    ROQ = (365 / ROF) * st.session_state.AvgUsage
     MSL = ROP + ROQ
 
     if LTDChart == 'PDF':
