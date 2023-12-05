@@ -121,11 +121,11 @@ if UsageDist == 'Normal':
 else:
     try:
         UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
-        AvgMean = float(UsageMean)
-        data = np.random.poisson(AvgMean, 1000)
-        st.session_state.x = np.arange(0,AvgMean + ((AvgMean**0.5)*3))
-        st.session_state.pmf = poisson.pmf(st.session_state.x, AvgMean)
-        st.session_state.AvgMean = AvgMean
+        AvgUsage = float(UsageMean)
+        data = np.random.poisson(AvgUsage, 1000)
+        st.session_state.x = np.arange(0,AvgUsage + ((AvgUsage**0.5)*3))
+        st.session_state.pmf = poisson.pmf(st.session_state.x, AvgUsage)
+        st.session_state.AvgUsage = AvgUsage
         
     except:
         pass
@@ -135,7 +135,7 @@ UsageChartButton = st.button("Generate Chart",key="UsageChartButton")
 
 if UsageChartButton:
     
-    if LTDist == 'Normal':
+    if UsageDist == 'Normal':
         st.session_state.UsageData = data
         kde = stats.gaussian_kde(data)
         X = KDEDist(kde)
@@ -158,18 +158,18 @@ if UsageChartButton:
         st.session_state.UsageData = data
         x = st.session_state.x
         pmf = st.session_state.pmf
-        AvgMean = st.session_state.AvgMean
+        AvgUsage = st.session_state.AvgUsage
 
         fig, axe = plt.subplots() 
         fig.set_tight_layout(True)
         #ax2 = axe.twinx() 
         
-        if LTChart == 'PDF':
+        if UsageChart == 'PDF':
             axe.plot(x, pmf,'o-',color='r',label='PDF')
 
             plt.title("Probability Mass Function of Usage")
         else:
-            cdf_vals = poisson.cdf(x, UsageMean)
+            cdf_vals = poisson.cdf(x,AvgUsage)
             axe.plot(x, cdf_vals,'o-',color='r',label='CDF')
             plt.title("Cumulative Distribution Function of Usage")
             
@@ -231,10 +231,10 @@ if LTDChartButton:
     MSL = ROP + ROQ
 
     if LTDChart == 'PDF':
-        axe.plot(x, X.pdf(x),color='r',label='PDF')
+        axe.plot(x, pdfVals,color='r',label='PDF')
         plt.title("PDF of Lead Time Demand")
     else:
-        axe.plot(x, X.cdf(x),color='r',label='CDF')
+        axe.plot(x, cdfVals,color='r',label='CDF')
         plt.title("CDF of Lead Time Demand")
     
     ax2.axvline(x=ROP,color='m',label='Re-Order Point')
