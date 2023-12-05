@@ -34,20 +34,23 @@ LTDist = st.selectbox('Select Distribution',Distributions,key="LTDist")
 
 if LTDist == 'Normal':
     try:
-        LTMean = float(st.text_input("Enter Lead Time Mean:",key="LTMean"))
-        LTStDev = float(st.text_input("Enter Lead Time Standard Deviation:",key="LTStDev"))
-        data = np.random.normal(LTMean, LTStDev, 1000)
-        st.session_state.LTMean = LTMean
-        st.session_state.LTStDev = LTStDev
+        LTMean = st.text_input("Enter Lead Time Mean:",key="LTMean")
+        LTStDev = st.text_input("Enter Lead Time Standard Deviation:",key="LTStDev")
+        AvgLT = float(LTMean)
+        LTStDev2 = float(LTStDev)
+        data = np.random.normal(AvgLT, LTStDev2, 1000)
+        st.session_state.AvgLT = AvgLT
+        st.session_state.LTStDev2 = LTStDev2
     except:
         pass
 else:
     try:
-        LTMean = float(st.text_input("Enter Lead Time Mean:",key="LTMean"))
-        data = np.random.poisson(LTMean,  1000)
-        st.session_state.x = np.arange(0,LTMean + ((LTMean**0.5)*3))
-        st.session_state.pmf = poisson.pmf(st.session_state.x, LTMean)
-        st.session_state.LTMean = LTMean
+        LTMean = st.text_input("Enter Lead Time Mean:",key="LTMean")
+        AvgLT = float(LTMean)
+        data = np.random.poisson(AvgLT,  1000)
+        st.session_state.x = np.arange(0,AvgLT + ((AvgLT**0.5)*3))
+        st.session_state.pmf = poisson.pmf(st.session_state.x, AvgLT)
+        st.session_state.AvgLT = AvgLT
     except:
         pass
 
@@ -81,7 +84,7 @@ if LTChartButton:
         st.session_state.LTData = data
         x = st.session_state.x
         pmf = st.session_state.pmf
-        LTMean = int(st.session_state.LTMean)
+        AvgLT = st.session_state.AvgLT
         fig, axe = plt.subplots() 
         fig.set_tight_layout(True)
         #ax2 = axe.twinx() 
@@ -91,7 +94,7 @@ if LTChartButton:
 
             plt.title("Probability Mass Function of Lead Time")
         else:
-            cdf_vals = poisson.cdf(x, LTMean)
+            cdf_vals = poisson.cdf(x, AvgLT)
             axe.plot(x, cdf_vals,'o-',color='r',label='CDF')
             plt.title("Cumulative Distribution Function of Lead Time")
             
@@ -118,7 +121,7 @@ if UsageDist == 'Normal':
 else:
     try:
         UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
-        AvgMean = int(UsageMean)
+        AvgMean = float(UsageMean)
         data = np.random.poisson(AvgMean, 1000)
         st.session_state.x = np.arange(0,AvgMean + ((AvgMean**0.5)*3))
         st.session_state.pmf = poisson.pmf(st.session_state.x, AvgMean)
