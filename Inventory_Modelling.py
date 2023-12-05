@@ -63,16 +63,16 @@ if LTChartButton:
         x = np.arange(0, max(data), inc)
         fig, axe = plt.subplots() 
         fig.set_tight_layout(True)
-        ax2 = axe.twinx() 
+        #ax2 = axe.twinx() 
         pdfVals = X.pdf(x)
         cdfVals = X.cdf(x)
         
         
         if LTChart == 'PDF':
-            ax2.plot(x, X.pdf(x),color='r',label='PDF')
+            axe.plot(x, X.pdf(x),color='r',label='PDF')
             plt.title("PDF of Lead Time")
         else:
-            ax2.plot(x, X.cdf(x),color='r',label='CDF')
+            axe.plot(x, X.cdf(x),color='r',label='CDF')
             plt.title("CDF of Lead Time")
         
         st.plotly_chart(fig)
@@ -84,15 +84,15 @@ if LTChartButton:
         LTMean = int(st.session_state.LTMean)
         fig, axe = plt.subplots() 
         fig.set_tight_layout(True)
-        ax2 = axe.twinx() 
+        #ax2 = axe.twinx() 
         
         if LTChart == 'PDF':
-            ax2.plot(x, pmf,'o-',color='r',label='PDF')
+            axe.plot(x, pmf,'o-',color='r',label='PDF')
 
             plt.title("Probability Mass Function of Lead Time")
         else:
             cdf_vals = poisson.cdf(x, LTMean)
-            ax2.plot(x, cdf_vals,'o-',color='r',label='CDF')
+            axe.plot(x, cdf_vals,'o-',color='r',label='CDF')
             plt.title("Cumulative Distribution Function of Lead Time")
             
         plt.xlabel('Lead Time (Days)', fontsize=14)
@@ -140,16 +140,16 @@ if UsageChartButton:
         x = np.arange(0, max(data), inc)
         fig, axe = plt.subplots() 
         fig.set_tight_layout(True)
-        ax2 = axe.twinx() 
+        #ax2 = axe.twinx() 
         pdfVals = X.pdf(x)
         cdfVals = X.cdf(x)
         
         
         if UsageChart == 'PDF':
-            ax2.plot(x, X.pdf(x),color='r',label='PDF')
+            axe.plot(x, X.pdf(x),color='r',label='PDF')
             plt.title("PDF of Usage")
         else:
-            ax2.plot(x, X.cdf(x),color='r',label='CDF')
+            axe.plot(x, X.cdf(x),color='r',label='CDF')
             plt.title("CDF of Usage")
     else:
         st.session_state.UsageData = data
@@ -159,15 +159,15 @@ if UsageChartButton:
 
         fig, axe = plt.subplots() 
         fig.set_tight_layout(True)
-        ax2 = axe.twinx() 
+        #ax2 = axe.twinx() 
         
         if LTChart == 'PDF':
-            ax2.plot(x, pmf,'o-',color='r',label='PDF')
+            axe.plot(x, pmf,'o-',color='r',label='PDF')
 
             plt.title("Probability Mass Function of Usage")
         else:
             cdf_vals = poisson.cdf(x, UsageMean)
-            ax2.plot(x, cdf_vals,'o-',color='r',label='CDF')
+            axe.plot(x, cdf_vals,'o-',color='r',label='CDF')
             plt.title("Cumulative Distribution Function of Usage")
             
         plt.xlabel('Usage (Days)', fontsize=14)
@@ -228,10 +228,10 @@ if LTDChartButton:
     MSL = ROP + ROQ
 
     if LTDChart == 'PDF':
-        ax2.plot(x, X.pdf(x),color='r',label='PDF')
+        axe.plot(x, X.pdf(x),color='r',label='PDF')
         plt.title("PDF of Lead Time Demand")
     else:
-        ax2.plot(x, X.cdf(x),color='r',label='CDF')
+        axe.plot(x, X.cdf(x),color='r',label='CDF')
         plt.title("CDF of Lead Time Demand")
     
     ax2.axvline(x=ROP,color='m',label='Re-Order Point')
