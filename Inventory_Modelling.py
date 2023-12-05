@@ -247,5 +247,5 @@ if LTDChartButton:
 
     st.pyplot(fig)
     
-    st.write('Re-Order Point: ' + str(ROP))
-    st.write('Max Stock Level: ' + str(MSL))
+    st.write('Re-Order Point: ' + str(round(ROP)))
+    st.write('Max Stock Level: ' + str(round(MSL)))
