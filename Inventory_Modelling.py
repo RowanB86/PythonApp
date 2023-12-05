@@ -8,11 +8,12 @@ Created on Thu Nov  9 09:13:27 2023
 import streamlit as st
 import numpy as np
 from scipy import stats
+from scipy.stats import poisson
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib import rcParams
-rcParams.update({'figure.autolayout': True})
 import random
+rcParams.update({'figure.autolayout': True})
 
 class KDEDist(stats.rv_continuous):
     
@@ -38,15 +39,15 @@ if LTDist == 'Normal':
         data = np.random.normal(LTMean, LTStDev, 1000)
         st.session_state.LTMean = LTMean
         st.session_state.LTStDev = LTStDev
-        st.session_state.LTData = data
     except:
         pass
 else:
     try:
         LTMean = float(st.text_input("Enter Lead Time Mean:",key="LTMean"))
-        data = np.random.poisson(LTMean, 1000)
+        data = np.random.poisson(LTMean,  1000)
+        st.session_state.x = np.arange(0,LTMean + ((LTMean**0.5)*3))
+        st.session_state.pmf = poisson.pmf(st.session_state.x, LTMean)
         st.session_state.LTMean = LTMean
-        st.session_state.LTData = data
     except:
         pass
 
@@ -54,28 +55,50 @@ LTChart = st.selectbox('Select Chart Type',Chart_Types,key="LTChart")
 LTChartButton = st.button("Generate Chart",key="LTChartButton")
 
 if LTChartButton:
-    
-    st.session_state.LTData = data
-    kde = stats.gaussian_kde(data)
-    X = KDEDist(kde)
-    inc = 1
-    x = np.arange(0, max(data), inc)
-    fig, axe = plt.subplots() 
-    fig.set_tight_layout(True)
-    ax2 = axe.twinx() 
-    pdfVals = X.pdf(x)
-    cdfVals = X.cdf(x)
-    
-    
-    if LTChart == 'PDF':
-        ax2.plot(x, X.pdf(x),color='r',label='PDF')
-        plt.title("PDF of Lead Time")
+    if LTDist == 'Normal':
+        st.session_state.LTData = data
+        kde = stats.gaussian_kde(data)
+        X = KDEDist(kde)
+        inc = 1
+        x = np.arange(0, max(data), inc)
+        fig, axe = plt.subplots() 
+        fig.set_tight_layout(True)
+        ax2 = axe.twinx() 
+        pdfVals = X.pdf(x)
+        cdfVals = X.cdf(x)
+        
+        
+        if LTChart == 'PDF':
+            ax2.plot(x, X.pdf(x),color='r',label='PDF')
+            plt.title("PDF of Lead Time")
+        else:
+            ax2.plot(x, X.cdf(x),color='r',label='CDF')
+            plt.title("CDF of Lead Time")
+        
+        st.plotly_chart(fig)
     else:
-        ax2.plot(x, X.cdf(x),color='r',label='CDF')
-        plt.title("CDF of Lead Time")
-    
-    st.plotly_chart(fig)
-    
+        
+        st.session_state.LTData = data
+        x = st.session_state.x
+        pmf = st.session_state.pmf
+        LTMean = int(st.session_state.LTMean)
+        fig, axe = plt.subplots() 
+        fig.set_tight_layout(True)
+        ax2 = axe.twinx() 
+        
+        if LTChart == 'PDF':
+            ax2.plot(x, pmf,'o-',color='r',label='PDF')
+
+            plt.title("Probability Mass Function of Lead Time")
+        else:
+            cdf_vals = poisson.cdf(x, LTMean)
+            ax2.plot(x, cdf_vals,'o-',color='r',label='CDF')
+            plt.title("Cumulative Distribution Function of Lead Time")
+            
+        plt.xlabel('Lead Time (Days)', fontsize=14)
+        plt.ylabel('Probability', fontsize=14)
+        
+        st.plotly_chart(fig)        
 
 
 st.header('Usage Modelling')
@@ -83,20 +106,24 @@ UsageDist = st.selectbox('Select Distribution',Distributions,key="UsageDist")
 
 if UsageDist == 'Normal':
     try:
-        UsageMean = float(st.text_input("Enter Usage Mean:",key="UsageMean"))
-        UsageStDev = float(st.text_input("Enter Usage Standard Deviation:",key="USageStDev"))
-        data = np.random.normal(UsageMean, UsageStDev, 1000)
-        st.session_state.UsageMean = UsageMean
-        st.session_state.UsageStDev = UsageStDev
-        st.session_state.UsageData = data
+        UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
+        UsageStDev = st.text_input("Enter Usage Standard Deviation:",key="USageStDev")
+        AvgMean = float(UsageMean)
+        UsageStDev2 = float(UsageStDev)
+        data = np.random.normal(AvgMean, UsageStDev2, 1000)
+        st.session_state.AvgMean = AvgMean
+        st.session_state.UsageStDev2 = UsageStDev2
     except:
         pass
 else:
     try:
-        UsageMean = float(st.text_input("Enter Usage Mean:",key="UsageMean"))
-        st.session_state.UsageMean = UsageMean
-        data = np.random.poisson(UsageMean, 1000)
-        st.session_state.UsageData = data
+        UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
+        AvgMean = int(UsageMean)
+        data = np.random.poisson(AvgMean, 1000)
+        st.session_state.x = np.arange(0,AvgMean + ((AvgMean**0.5)*3))
+        st.session_state.pmf = poisson.pmf(st.session_state.x, AvgMean)
+        st.session_state.AvgMean = AvgMean
+        
     except:
         pass
 
@@ -105,58 +132,85 @@ UsageChartButton = st.button("Generate Chart",key="UsageChartButton")
 
 if UsageChartButton:
     
-    st.session_state.UsageData = data
-    kde = stats.gaussian_kde(data)
-    X = KDEDist(kde)
-    inc = 1
-    x = np.arange(0, max(data), inc)
-    fig, axe = plt.subplots() 
-    fig.set_tight_layout(True)
-    ax2 = axe.twinx() 
-    pdfVals = X.pdf(x)
-    cdfVals = X.cdf(x)
-    
-    
-    if UsageChart == 'PDF':
-        ax2.plot(x, X.pdf(x),color='r',label='PDF')
-        plt.title("PDF of Usage")
+    if LTDist == 'Normal':
+        st.session_state.UsageData = data
+        kde = stats.gaussian_kde(data)
+        X = KDEDist(kde)
+        inc = 1
+        x = np.arange(0, max(data), inc)
+        fig, axe = plt.subplots() 
+        fig.set_tight_layout(True)
+        ax2 = axe.twinx() 
+        pdfVals = X.pdf(x)
+        cdfVals = X.cdf(x)
+        
+        
+        if UsageChart == 'PDF':
+            ax2.plot(x, X.pdf(x),color='r',label='PDF')
+            plt.title("PDF of Usage")
+        else:
+            ax2.plot(x, X.cdf(x),color='r',label='CDF')
+            plt.title("CDF of Usage")
     else:
-        ax2.plot(x, X.cdf(x),color='r',label='CDF')
-        plt.title("CDF of Usage")
-    
-    st.plotly_chart(fig)
+        st.session_state.UsageData = data
+        x = st.session_state.x
+        pmf = st.session_state.pmf
+        AvgMean = st.session_state.AvgMean
+
+        fig, axe = plt.subplots() 
+        fig.set_tight_layout(True)
+        ax2 = axe.twinx() 
+        
+        if LTChart == 'PDF':
+            ax2.plot(x, pmf,'o-',color='r',label='PDF')
+
+            plt.title("Probability Mass Function of Usage")
+        else:
+            cdf_vals = poisson.cdf(x, UsageMean)
+            ax2.plot(x, cdf_vals,'o-',color='r',label='CDF')
+            plt.title("Cumulative Distribution Function of Usage")
+            
+        plt.xlabel('Usage (Days)', fontsize=14)
+        plt.ylabel('Probability', fontsize=14)
+        
+        st.plotly_chart(fig)    
 
 st.header('Lead Time Demand Modelling')
 
-LTDChart = st.selectbox('Select Chart Type',Chart_Types,key="LTDChart")
+try:
+    ROF = int(st.text_input("Enter Re-Order Frequency:",key="ROF"))
+except:
+    pass
+
 try:
     ProbStockout = float(st.text_input("Enter Probability of Stockout:",key="StockoutProb"))
 except:
     pass
 
+LTDChart = st.selectbox('Select Chart Type',Chart_Types,key="LTDChart")
 LTDChartButton = st.button("Generate Chart",key="LTDChartButton")
 
 if LTDChartButton:
+    #data = np.multiply(st.session_state.LTData,st.session_state.UsageData)
+    
     data = [None] * 1000
     
     for i in range(0,1000):
         LT = random.sample(list(st.session_state.LTData),1)
         data[i] = np.sum(random.sample(list(st.session_state.UsageData),LT[0]))
-   
+    
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
     inc = 1
-    x = np.arange(0, max(data), inc)
-    fig, axe = plt.subplots() 
+    x = np.arange(0, max(data)*2, inc)
+    fig, axe = plt.subplots(figsize=(10, 6)) 
     fig.set_tight_layout(True)
     ax2 = axe.twinx() 
     pdfVals = X.pdf(x)
     cdfVals = X.cdf(x)    
     Quantile = 1 - ProbStockout
     
-    min_val = min(i for i in cdfVals if i > (1-ProbStockout))
-    
-
+    min_val = min(i for i in cdfVals if i > (1-ProbStockout))   
     min_val_ind = cdfVals.tolist().index(min_val)
     
     UB1 = x[min_val_ind]
@@ -166,12 +220,11 @@ if LTDChartButton:
     
     UB2 = cdfVals[min_val_ind]
     LB2 = cdfVals[min_val_ind-1]
-    
+
     Rng2 = UB2 - LB2
     Factor = (Quantile-LB2) / Rng2
-    SSL = LB1 + (Factor*Rng1)
-    ROP = SSL + np.mean(data)
-    ROQ = ROP-SSL
+    ROP = LB1 + (Factor*Rng1)
+    ROQ = (365 / ROF) * st.session_state.AvgMean
     MSL = ROP + ROQ
 
     if LTDChart == 'PDF':
@@ -181,8 +234,15 @@ if LTDChartButton:
         ax2.plot(x, X.cdf(x),color='r',label='CDF')
         plt.title("CDF of Lead Time Demand")
     
-    
     ax2.axvline(x=ROP,color='m',label='Re-Order Point')
     ax2.axvline(x=MSL,color='y',label='Max Stock Level')
+    # Adjust the subplot parameters to make room for the legend
+    #plt.subplots_adjust(right=0.3)  # Adjust this value as needed to fit your legend
+    plt.draw()
+    # Add the legend outside the plot
+    ax2.legend(loc='upper left')
+    
+    # Apply tight layout with a pad to fit the legend
+    plt.savefig('adjusted_plot.png')
 
     st.pyplot(fig)
