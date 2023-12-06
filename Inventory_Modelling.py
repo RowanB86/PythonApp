@@ -181,7 +181,7 @@ if UsageChartButton:
 st.header('Lead Time Demand Modelling')
 
 try:
-    ROF = int(st.text_input("Enter Re-Order Frequency:",key="ROF"))
+    ROF = int(st.text_input("Enter Yearly Re-Order Frequency:",key="ROF"))
 except:
     pass
 
