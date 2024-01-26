@@ -173,7 +173,7 @@ if UsageChartButton:
             axe.plot(x, cdf_vals,'o-',color='r',label='CDF')
             plt.title("Cumulative Distribution Function of Usage")
             
-        plt.xlabel('Usage (Volume consumed in a day)', fontsize=14)
+        plt.xlabel('Usage (Volume of Items Consumed in a Day)', fontsize=14)
         plt.ylabel('Probability', fontsize=14)
         
         st.plotly_chart(fig)    
