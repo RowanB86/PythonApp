@@ -10,3 +10,4 @@ scipy
 streamlit
 streamlit_folium==0.4.0 
 seaborn
+lxml
