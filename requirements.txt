@@ -6,7 +6,6 @@ streamlit
 scipy
 matplotlib
 plotly
-plotly.express
 requests==2.31.0
 beautifulsoup4==4.11.1  # Use the latest version compatible with your Python version
 scikit-learn==1.0.2 
