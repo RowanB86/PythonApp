@@ -360,7 +360,7 @@ if st.session_state.TableCount > 0:
     
     variable_1 = st.selectbox('Select the first variable:', col_names)
     variable_2 = st.selectbox('Select the second variable:', col_names)
-    num_clusters = int(st.text_input("Enter Number of Clusters to Create (up to 5 is recommended):"))
+    num_clusters = st.text_input("Enter Number of Clusters to Create (up to 5 is recommended):")
     
     #st.experimental_rerun()
     def remove_outliers(df, column_name):
@@ -415,7 +415,7 @@ if st.session_state.TableCount > 0:
     
     
     if st.button('Show Clusters'):
-        
+        num_clusters = int(num_clusters)
         # Select the data for clustering
         selected_data = df[[variable_1, variable_2]].copy()  # Create a copy for scaling
     
