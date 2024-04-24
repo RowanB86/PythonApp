@@ -1,11 +1,11 @@
-beautifulsoup4==4.11.1
-folium==0.12.1
-matplotlib==3.3.4  # Ensure this version is compatible with your Python version
-numpy==1.20.1
-pandas==1.2.3  # Ensure this version is compatible with your Python version
-plotly==5.3.1  # This includes plotly.express
-requests==2.31.0
-scikit-learn>=0.24.0
-scipy==1.6.2
+beautifulsoup4
+folium
+matplotlib  # Ensure this version is compatible with your Python version
+numpy
+pandas # Ensure this version is compatible with your Python version
+plotly # This includes plotly.express
+requests
+scikit-learn
+scipy
 streamlit
 streamlit_folium==0.4.0 
