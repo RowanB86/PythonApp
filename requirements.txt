@@ -8,7 +8,6 @@ matplotlib
 plotly
 requests
 bs4
-sklearn.decomposition
 matplotlib.pyplot
 sklearn.preprocessing
 plotly.express
@@ -16,3 +15,6 @@ sklearn.svm
 sklearn.model_selection
 sklearn.metrics
 sklearn.tree
+requests==2.31.0
+beautifulsoup4==4.11.1  # Use the latest version compatible with your Python version
+scikit-learn==1.0.2 
