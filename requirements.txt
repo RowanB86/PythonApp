@@ -6,3 +6,13 @@ streamlit
 scipy
 matplotlib
 plotly
+requests
+bs4
+sklearn.decomposition
+matplotlib.pyplot
+sklearn.preprocessing
+plotly.express
+sklearn.svm
+sklearn.model_selection
+sklearn.metrics
+sklearn.tree
