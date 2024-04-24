@@ -7,5 +7,5 @@ plotly==5.3.1  # This includes plotly.express
 requests==2.31.0
 scikit-learn>=0.24.0,<0.25.0
 scipy==1.6.2
-streamlit==0.84.0
+streamlit
 streamlit_folium==0.4.0 
