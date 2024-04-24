@@ -8,7 +8,6 @@ matplotlib
 plotly
 requests
 bs4
-matplotlib.pyplot
 sklearn.preprocessing
 plotly.express
 sklearn.svm
