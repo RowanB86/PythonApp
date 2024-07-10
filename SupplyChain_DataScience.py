@@ -92,18 +92,19 @@ if SetLocations or 'TableCreated' in st.session_state:
     
     PerformCOG = st.button("Perform Centre of Gravity Analysis",key="COG")
     
+# Perform Centre of Gravity Analysis section
 if PerformCOG:
-    
     if 'edited_df' in st.session_state:
         data = edited_df
-        
+    
     customerDF = data[data['Location Type'] == 'Customer']
     customers = customerDF["Location ID"].tolist()
 
     warehousesDF = data[data['Location Type'] == 'Warehouse']
     warehouses = warehousesDF["Location ID"].tolist()
     
-    dist = {(i, j): (69*((warehousesDF["Longitude"][i+len(customers)]-customerDF["Longitude"][j])**2 + (warehousesDF["Latitude"][i+len(customers)]-customerDF["Latitude"][j])**2)**0.5) 
+    dist = {(i, j): (69*((warehousesDF["Longitude"][i+len(customers)]-customerDF["Longitude"][j])**2 + 
+                         (warehousesDF["Latitude"][i+len(customers)]-customerDF["Latitude"][j])**2)**0.5) 
             for i in range(len(warehouses)) for j in range(len(customers))}
     
     d = {j: customerDF["Demand"][j] for j in range(len(customers))}
@@ -115,53 +116,52 @@ if PerformCOG:
         P = 0
         
     P = int(P)
-  
     
     result = dist.items()
     listdata = list(result)
-    distarray =  np.array(listdata)
     
-    combinations = [[]]
+    # Add debug statement here
+    st.write("listdata:", listdata)
     
-    for element in warehouses:
-        # For each existing combination, create a new combination that includes the current element
-        for sub_set in combinations.copy():
-            new_sub_set = sub_set + [eval(element)]
-            # concat the new combination to our list of combinations
-            combinations.append(new_sub_set)
-            
-    
-    combinations2 = []
-    for element in combinations:
-        if len(element) == P:
-            combinations2.append(element)
-    
-    
-    numCust = len(customers)
-    cost = []
-            
-    for i in range(0,len(combinations2)):  
-        combCost = 0
-        for j in range(0,len(customers)):
-            wCost = []
-            for k in range(0,P):
-                wCost.append(d[j]*dist[combinations2[i][k]-numCust,j])
-            
-            combCost += min(np.array(wCost))
+    try:
+        distarray = np.array(listdata)
+        st.write("distarray:", distarray)
+    except ValueError as e:
+        st.write("Error converting listdata to numpy array:", e)
+        distarray = None
+
+    if distarray is not None:
+        combinations = [[]]
         
-        cost.append(combCost)
+        for element in warehouses:
+            for sub_set in combinations.copy():
+                new_sub_set = sub_set + [eval(element)]
+                combinations.append(new_sub_set)
         
-    optComb = combinations2[cost.index(min(cost))]
-    
-    services = []
-    
-    for j in range(0,numCust):
-        wCost = []
-        for k in range(0,P):
-            wCost.append(d[j]*dist[optComb[k]-numCust,j])
-    
-        closestW = optComb[wCost.index(min(np.array(wCost)))]
-        services.append((data['Latitude'][j],data['Longitude'][j],data['Latitude'][closestW],data['Longitude'][closestW]))
+        combinations2 = [element for element in combinations if len(element) == P]
+        
+        numCust = len(customers)
+        cost = []
+        
+        for i in range(0, len(combinations2)):  
+            combCost = 0
+            for j in range(0, len(customers)):
+                wCost = [d[j] * dist[(combinations2[i][k] - numCust, j)] for k in range(0, P)]
+                combCost += min(np.array(wCost))
+            cost.append(combCost)
+        
+        optComb = combinations2[cost.index(min(cost))]
+        
+        services = []
+        for j in range(0, numCust):
+            wCost = [d[j] * dist[(optComb[k] - numCust, j)] for k in range(0, P)]
+            closestW = optComb[wCost.index(min(np.array(wCost)))]
+            services.append((data['Latitude'][j], data['Longitude'][j], 
+                             data['Latitude'][closestW], data['Longitude'][closestW]))
+        
+        # The rest of your code for creating and displaying the map
+        # ...
+
         
     color_options = {'customer': 'red',
                      'supply': 'yellow',
