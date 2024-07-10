@@ -119,6 +119,7 @@ if PerformCOG:
     
     result = dist.items()
     listdata = list(result)
+    flat_listdata = [(k[0], k[1], v) for k, v in listdata]
     
     # Add debug statement here
     st.write("listdata:", listdata)
