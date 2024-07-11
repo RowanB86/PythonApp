@@ -12,90 +12,8 @@ import random
 import folium
 from streamlit_folium import folium_static
 
-st.title('Centre of Gravity Modelling')
-
-NumCustomers = st.text_input("Enter number of customers")
-NumWarehouses = st.text_input("Enter number of warehouses")
-Central_Latt = st.text_input("Enter Central Lattitude")
-Central_Long = st.text_input("Enter Central Longitude")
-Radius =  st.text_input("Enter Radius (miles) that all customers / warehouses will reside " +
-                        " within.")
-
-data = pd.DataFrame(columns=['Location ID','Latitude','Longitude','Circle Size','Location Type','Demand'])
-    
-PerformCOG = False
-COGPerformed = False
-
-if 'P' not in st.session_state:
-    P = 0
-
-if 'COGPerformed' in st.session_state:
-    COGPerformed = True
-
-SetLocations = st.button("Set warehouse / customer locations",key="SetLocations")
-if 'PerformCOG' not in st.session_state:
-    PerformedCOG = False
-else:
-    st.write('COG perfomed')
-
-if SetLocations or 'TableCreated' in st.session_state:
-    
-    df = data
-    
-    minLong = float(Central_Long) - (float(Radius)/69)
-    maxLong = float(Central_Long) + (float(Radius)/69)      
-    
-    minLatt = float(Central_Latt) - (float(Radius)/69)
-    maxLatt = float(Central_Latt) + (float(Radius)/69)     
-    
-    if SetLocations or 'TableCreated' not in st.session_state:
-        for i in range(0,int(NumCustomers)):
-                Latt = random.randint(int(minLatt*10000),int(maxLatt*10000)) / 10000
-                Long = random.randint(int(minLong*10000),int(maxLong*10000)) / 10000
-        
-                newRow = {
-                        'Location ID': str(i),
-                        'Latitude': Latt ,
-                        'Longitude': Long ,
-                        'Circle Size': 70,
-                        'Location Type': 'Customer',
-                        'Demand': 50
-                    }    
-            
-                #st.session_state['df'] = st.session_state['df'].concat(newRow,ignore_index = True)
-                df = pd.concat([df, pd.DataFrame(newRow,index=[i])])
-
-                
-        for i in range(0,int(NumWarehouses)):
-                Latt = random.randint(int(minLatt*10000),int(maxLatt*10000)) / 10000
-                Long = random.randint(int(minLong*10000),int(maxLong*10000)) / 10000
-        
-                newRow = {
-                        'Location ID': str(i+ int(NumCustomers)) ,
-                        'Latitude': Latt ,
-                        'Longitude': Long ,
-                        'Circle Size': 70,
-                        'Location Type': 'Warehouse',
-                        'Demand': 0
-                    }    
-            
-                #st.session_state['df'] = st.session_state['df'].concat(newRow,ignore_index = True)
-                df = pd.concat([df, pd.DataFrame(newRow,index=[i+ int(NumCustomers)])], ignore_index=False)
-    
-                st.session_state.TableCreated = True
-                st.session_state['edited_df'] = df.style.hide(axis="index") 
-                
-    edited_df = st.data_editor(st.session_state['edited_df'])
-    
-    P = st.text_input("Enter Number of Warehouses to be selected by COG Model")
-    st.session_state['P'] = P
-    
-    PerformCOG = st.button("Perform Centre of Gravity Analysis",key="COG")
-    
-# Perform Centre of Gravity Analysis section
-if PerformCOG:
-    if 'edited_df' in st.session_state:
-        data = edited_df
+def perform_cog_analysis():
+    data = st.session_state['edited_df']
     
     customerDF = data[data['Location Type'] == 'Customer']
     customers = customerDF["Location ID"].tolist()
@@ -109,22 +27,17 @@ if PerformCOG:
     
     d = {j: customerDF["Demand"][j] for j in range(len(customers))}
     
-    if 'P' in st.session_state:
-        P = st.session_state['P']
-    
-    if P == '':
-        P = 0
-        
-    P = int(P)
+    P = st.session_state.get('P', 0)
     
     result = dist.items()
     listdata = list(result)
     
+    flat_listdata = [(k[0], k[1], v) for k, v in listdata]
     
     try:
-        flat_listdata = [(k[0], k[1], v) for k, v in listdata]
         distarray = np.array(flat_listdata)
     except ValueError as e:
+        st.write("Error converting flat_listdata to numpy array:", e)
         distarray = None
 
     if distarray is not None:
@@ -205,8 +118,73 @@ if PerformCOG:
             
         map1.fit_bounds(data[['Latitude', 'Longitude']].values.tolist())
         st.session_state['map'] = map1
-        st.session_state['COGPerformed'] = 1
+
+st.title('Centre of Gravity Modelling')
+
+NumCustomers = st.text_input("Enter number of customers")
+NumWarehouses = st.text_input("Enter number of warehouses")
+Central_Latt = st.text_input("Enter Central Lattitude")
+Central_Long = st.text_input("Enter Central Longitude")
+Radius =  st.text_input("Enter Radius (miles) that all customers / warehouses will reside " +
+                        " within.")
+
+data = pd.DataFrame(columns=['Location ID','Latitude','Longitude','Circle Size','Location Type','Demand'])
+
+if 'P' not in st.session_state:
+    st.session_state.P = 0
+
+SetLocations = st.button("Set warehouse / customer locations", key="SetLocations")
+
+if SetLocations or 'TableCreated' in st.session_state:
+    if SetLocations or 'TableCreated' not in st.session_state:
+        minLong = float(Central_Long) - (float(Radius)/69)
+        maxLong = float(Central_Long) + (float(Radius)/69)      
+        
+        minLatt = float(Central_Latt) - (float(Radius)/69)
+        maxLatt = float(Central_Latt) + (float(Radius)/69)     
+        
+        for i in range(0, int(NumCustomers)):
+            Latt = random.randint(int(minLatt*10000), int(maxLatt*10000)) / 10000
+            Long = random.randint(int(minLong*10000), int(maxLong*10000)) / 10000
+    
+            newRow = {
+                'Location ID': str(i),
+                'Latitude': Latt,
+                'Longitude': Long,
+                'Circle Size': 70,
+                'Location Type': 'Customer',
+                'Demand': 50
+            }    
+    
+            data = pd.concat([data, pd.DataFrame(newRow, index=[i])])
+            
+        for i in range(0, int(NumWarehouses)):
+            Latt = random.randint(int(minLatt*10000), int(maxLatt*10000)) / 10000
+            Long = random.randint(int(minLong*10000), int(maxLong*10000)) / 10000
+    
+            newRow = {
+                'Location ID': str(i + int(NumCustomers)),
+                'Latitude': Latt,
+                'Longitude': Long,
+                'Circle Size': 70,
+                'Location Type': 'Warehouse',
+                'Demand': 0
+            }    
+    
+            data = pd.concat([data, pd.DataFrame(newRow, index=[i + int(NumCustomers)])], ignore_index=False)
+        
+        st.session_state.TableCreated = True
+        st.session_state['edited_df'] = data
+    
+    edited_df = st.data_editor(st.session_state['edited_df'], key="data_editor", on_change=perform_cog_analysis)
+    
+    P = st.text_input("Enter Number of Warehouses to be selected by COG Model", value=st.session_state.P, key="P")
+    st.session_state.P = P
+    
+    PerformCOG = st.button("Perform Centre of Gravity Analysis", key="COG")
+    
+    if PerformCOG:
+        perform_cog_analysis()
 
 if 'map' in st.session_state:
     st_data = folium_static(st.session_state['map'], width=725)
-
