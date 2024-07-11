@@ -227,19 +227,33 @@ def generate_ltd_chart():
 
     @profile
     def calculate_reorder_point():
+        st.write("Calculating reorder point...")
+        st.write(f"x: {x}")
+        st.write(f"cdfVals: {cdfVals}")
+        
         min_val = min(i for i in cdfVals if i > Quantile)
+        st.write(f"min_val: {min_val}")
+        
         min_val_ind = cdfVals.tolist().index(min_val)
+        st.write(f"min_val_ind: {min_val_ind}")
         
         UB1 = x[min_val_ind]
         LB1 = x[min_val_ind-1]
+        st.write(f"UB1: {UB1}, LB1: {LB1}")
         
         Rng1 = UB1 - LB1
+        st.write(f"Rng1: {Rng1}")
         
         UB2 = cdfVals[min_val_ind]
         LB2 = cdfVals[min_val_ind-1]
+        st.write(f"UB2: {UB2}, LB2: {LB2}")
 
         Rng2 = UB2 - LB2
+        st.write(f"Rng2: {Rng2}")
+        
         Factor = (Quantile - LB2) / Rng2
+        st.write(f"Factor: {Factor}")
+        
         ROP = LB1 + (Factor * Rng1)
         ROQ = (365 / ROF) * st.session_state.AvgUsage
         MSL = ROP + ROQ
