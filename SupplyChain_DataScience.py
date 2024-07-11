@@ -119,16 +119,17 @@ if PerformCOG:
     
     result = dist.items()
     listdata = list(result)
-    flat_listdata = [(k[0], k[1], v) for k, v in listdata]
     
-    # Add debug statement here
+    # Add debug statement here to check listdata
     st.write("listdata:", listdata)
     
     try:
-        distarray = np.array(listdata)
+        # Ensure listdata is uniform
+        flat_listdata = [(k[0], k[1], v) for k, v in listdata]
+        distarray = np.array(flat_listdata)
         st.write("distarray:", distarray)
     except ValueError as e:
-        st.write("Error converting listdata to numpy array:", e)
+        st.write("Error converting flat_listdata to numpy array:", e)
         distarray = None
 
     if distarray is not None:
@@ -136,7 +137,7 @@ if PerformCOG:
         
         for element in warehouses:
             for sub_set in combinations.copy():
-                new_sub_set = sub_set + [eval(element)]
+                new_sub_set = sub_set + [int(element)]
                 combinations.append(new_sub_set)
         
         combinations2 = [element for element in combinations if len(element) == P]
@@ -151,8 +152,11 @@ if PerformCOG:
                 combCost += min(np.array(wCost))
             cost.append(combCost)
         
-        optComb = combinations2[cost.index(min(cost))]
-        
+        if cost:
+            optComb = combinations2[cost.index(min(cost))]
+        else:
+            optComb = []
+
         services = []
         for j in range(0, numCust):
             wCost = [d[j] * dist[(optComb[k] - numCust, j)] for k in range(0, P)]
@@ -160,67 +164,54 @@ if PerformCOG:
             services.append((data['Latitude'][j], data['Longitude'][j], 
                              data['Latitude'][closestW], data['Longitude'][closestW]))
         
-        # The rest of your code for creating and displaying the map
-        # ...
-
+        color_options = {'customer': 'red',
+                         'supply': 'yellow',
+                         'flow': 'black',
+                         'warehouse': 'blue',
+                         'candidate': 'black',
+                         'other': 'gray'}
+        # Instantiate map
+        map1 = folium.Map(location=data[['Latitude', 'Longitude']].mean(),
+                          fit_bounds=[[data['Latitude'].min(),
+                                       data['Longitude'].min()],
+                                      [data['Latitude'].max(),
+                                       data['Longitude'].max()]])
         
-    color_options = {'customer': 'red',
-                     'supply': 'yellow',
-                     'flow': 'black',
-                     'warehouse': 'blue',
-                     'candidate': 'black',
-                     'other': 'gray'}
-    # Instantiate map
-    map1 = folium.Map(location=data[['Latitude', 'Longitude']].mean(),
-                      fit_bounds=[[data['Latitude'].min(),
-                                   data['Longitude'].min()],
-                                  [data['Latitude'].max(),
-                                   data['Longitude'].max()]])
-    
-    # Add volume points
-    
-    data2 = []
-    
-    location = 1
-    
-    for _, row in data.iterrows():
-        if location <= (len(customers)):
-    
-            folium.CircleMarker(location=[row['Latitude'],
-                                          row['Longitude']],
-                                radius=(row['Circle Size']**0.5),
-                                color=color_options.get(
-                                    str(row['Location Type']).lower(), 'gray'),
-                                tooltip=str(row['Location ID'])).add_to(map1)
+        # Add volume points
+        location = 1
+        for _, row in data.iterrows():
+            if location <= len(customers):
+                folium.CircleMarker(location=[row['Latitude'],
+                                              row['Longitude']],
+                                    radius=(row['Circle Size']**0.5),
+                                    color=color_options.get(
+                                        str(row['Location Type']).lower(), 'gray'),
+                                    tooltip=str(row['Location ID'])).add_to(map1)
+                
+            elif (location-1) in optComb:
+                folium.CircleMarker(location=[row['Latitude'],
+                                              row['Longitude']],
+                                    radius=(row['Circle Size']**0.5),
+                                    color='black',
+                                    tooltip=str(row['Location ID'])).add_to(map1)
+                
+            else:
+                folium.CircleMarker(location=[row['Latitude'],
+                                              row['Longitude']],
+                                    radius=(row['Circle Size']**0.5),
+                                    color=color_options.get(
+                                        str(row['Location Type']).lower(), 'gray'),
+                                    tooltip=str(row['Location ID'])).add_to(map1)   
+            location = location + 1
             
-            # row['Longitude']]).add_to(m)
-        elif (location-1) in optComb:
-            folium.CircleMarker(location=[row['Latitude'],
-                                          row['Longitude']],
-                                radius=(row['Circle Size']**0.5),
-                                color='black',
-    
-                                tooltip=str(row['Location ID'])).add_to(map1)
+        for i in range(len(services)):
+            folium.PolyLine([[services[i][0], services[i][1]],
+                             [services[i][2], services[i][3]]]).add_to(map1)
             
-    
-        else:
-            folium.CircleMarker(location=[row['Latitude'],
-                                          row['Longitude']],
-                                radius=(row['Circle Size']**0.5),
-                                color=color_options.get(
-                                    str(row['Location Type']).lower(), 'gray'),
-                                tooltip=str(row['Location ID'])).add_to(map1)   
-    
-        location = location + 1
-        
-    for i in range(len(services)):
-        
-        folium.PolyLine([[services[i][0], services[i][1]],
-                         [services[i][2], services[i][3]]]).add_to(map1)
-        
-    map1.fit_bounds(data[['Latitude', 'Longitude']].values.tolist())
-    st.session_state['map'] = map1
-    st.session_state['COGPerformed'] = 1
+        map1.fit_bounds(data[['Latitude', 'Longitude']].values.tolist())
+        st.session_state['map'] = map1
+        st.session_state['COGPerformed'] = 1
 
 if 'map' in st.session_state:
     st_data = folium_static(st.session_state['map'], width=725)
+
