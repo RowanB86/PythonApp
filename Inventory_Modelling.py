@@ -38,8 +38,8 @@ LTDist = st.selectbox('Select Distribution',Distributions,key="LTDist")
 def generate_lt_data():
     if LTDist == 'Normal':
         try:
-            LTMean = st.text_input("Enter Lead Time Mean:",key="LTMean")
-            LTStDev = st.text_input("Enter Lead Time Standard Deviation:",key="LTStDev")
+            LTMean = 10  # Hardcoded value for testing
+            LTStDev = 2  # Hardcoded value for testing
             AvgLT = float(LTMean)
             LTStDev2 = float(LTStDev)
             data = np.random.normal(AvgLT, LTStDev2, 1000)
@@ -50,7 +50,7 @@ def generate_lt_data():
             return None
     else:
         try:
-            LTMean = st.text_input("Enter Lead Time Mean:",key="LTMean")
+            LTMean = 10  # Hardcoded value for testing
             AvgLT = float(LTMean)
             data = np.random.poisson(AvgLT,  1000)
             st.session_state.x = np.arange(0, AvgLT + ((AvgLT**0.5)*3))
@@ -113,8 +113,8 @@ UsageDist = st.selectbox('Select Distribution',Distributions,key="UsageDist")
 def generate_usage_data():
     if UsageDist == 'Normal':
         try:
-            UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
-            UsageStDev = st.text_input("Enter Usage Standard Deviation:",key="UsageStDev")
+            UsageMean = 20  # Hardcoded value for testing
+            UsageStDev = 5  # Hardcoded value for testing
             AvgMean = float(UsageMean)
             UsageStDev2 = float(UsageStDev)
             data = np.random.normal(AvgMean, UsageStDev2, 1000)
@@ -125,7 +125,7 @@ def generate_usage_data():
             return None
     else:
         try:
-            UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
+            UsageMean = 20  # Hardcoded value for testing
             AvgUsage = float(UsageMean)
             data = np.random.poisson(AvgUsage, 1000)
             st.session_state.x = np.arange(0, AvgUsage + ((AvgUsage**0.5)*3))
@@ -183,12 +183,12 @@ if UsageChartButton and usage_data is not None:
 st.header('Lead Time Demand Modelling')
 
 try:
-    ROF = int(st.text_input("Enter Re-Order Frequency (orders / year):",key="ROF"))
+    ROF = 12  # Hardcoded value for testing
 except:
     ROF = None
 
 try:
-    ProbStockout = float(st.text_input("Enter Probability of Stockout:",key="StockoutProb"))
+    ProbStockout = 0.05  # Hardcoded value for testing
 except:
     ProbStockout = None
 
