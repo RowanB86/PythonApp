@@ -200,7 +200,11 @@ def generate_ltd_chart():
     LTData = np.array(st.session_state.LTData)
     UsageData = np.array(st.session_state.UsageData)
     
-    data = np.array([np.sum(np.random.choice(UsageData, size=int(LT), replace=True)) for LT in np.random.choice(LTData, size=1000, replace=True)])
+    @profile
+    def generate_data():
+        return np.array([np.sum(np.random.choice(UsageData, size=int(LT), replace=True)) for LT in np.random.choice(LTData, size=1000, replace=True)])
+    
+    data = generate_data()
     
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
