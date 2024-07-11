@@ -136,4 +136,47 @@ def set_locations():
         Latt = random.randint(int(minLatt*10000), int(maxLatt*10000)) / 10000
         Long = random.randint(int(minLong*10000), int(maxLong*10000)) / 10000
 
-        newRow =
+        newRow = {
+            'Location ID': str(i),
+            'Latitude': Latt,
+            'Longitude': Long,
+            'Circle Size': 70,
+            'Location Type': 'Customer',
+            'Demand': 50
+        }    
+
+        st.session_state.edited_df = pd.concat([st.session_state.edited_df, pd.DataFrame(newRow, index=[i])])
+        
+    for i in range(0, int(st.session_state.NumWarehouses)):
+        Latt = random.randint(int(minLatt*10000), int(maxLatt*10000)) / 10000
+        Long = random.randint(int(minLong*10000), int(maxLong*10000)) / 10000
+
+        newRow = {
+            'Location ID': str(i + int(st.session_state.NumCustomers)),
+            'Latitude': Latt,
+            'Longitude': Long,
+            'Circle Size': 70,
+            'Location Type': 'Warehouse',
+            'Demand': 0
+        }    
+
+        st.session_state.edited_df = pd.concat([st.session_state.edited_df, pd.DataFrame(newRow, index=[i + int(st.session_state.NumCustomers)])], ignore_index=False)
+    
+    st.session_state.TableCreated = True
+
+# Ensure edited_df is in session state
+if 'edited_df' not in st.session_state:
+    st.session_state['edited_df'] = data
+
+SetLocations = st.button("Set warehouse / customer locations", on_click=set_locations)
+
+if 'TableCreated' in st.session_state:
+    edited_df = st.data_editor(st.session_state['edited_df'], key="data_editor", on_change=perform_cog_analysis)
+    
+    P = st.text_input("Enter Number of Warehouses to be selected by COG Model", value=str(st.session_state.P), key="P_input")
+    st.session_state.P = int(P)
+    
+    PerformCOG = st.button("Perform Centre of Gravity Analysis", on_click=perform_cog_analysis)
+
+if 'map' in st.session_state:
+    st_data = folium_static(st.session_state['map'], width=725)
