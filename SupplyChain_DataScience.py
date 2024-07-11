@@ -116,25 +116,24 @@ st.title('Centre of Gravity Modelling')
 
 NumCustomers = st.text_input("Enter number of customers", key="NumCustomers")
 NumWarehouses = st.text_input("Enter number of warehouses", key="NumWarehouses")
-Central_Latt = st.text_input("Enter Central Lattitude", key="Central_Latt")
+Central_Latt = st.text_input("Enter Central Latitude", key="Central_Latt")
 Central_Long = st.text_input("Enter Central Longitude", key="Central_Long")
-Radius =  st.text_input("Enter Radius (miles) that all customers / warehouses will reside within.", key="Radius")
+Radius = st.text_input("Enter Radius (miles) that all customers / warehouses will reside within.", key="Radius")
 
-data = pd.DataFrame(columns=['Location ID','Latitude','Longitude','Circle Size','Location Type','Demand'])
+data = pd.DataFrame(columns=['Location ID', 'Latitude', 'Longitude', 'Circle Size', 'Location Type', 'Demand'])
 
 if 'P' not in st.session_state:
     st.session_state.P = 0
 
-SetLocations = st.button("Set warehouse / customer locations", key="SetLocations")
+def set_locations():
+    minLong = float(st.session_state.Central_Long) - (float(st.session_state.Radius)/69)
+    maxLong = float(st.session_state.Central_Long) + (float(st.session_state.Radius)/69)      
+    
+    minLatt = float(st.session_state.Central_Latt) - (float(st.session_state.Radius)/69)
+    maxLatt = float(st.session_state.Central_Latt) + (float(st.session_state.Radius)/69)     
+    
+    for i in range(0, int(st.session_state.NumCustomers)):
+        Latt = random.randint(int(minLatt*10000), int(maxLatt*10000)) / 10000
+        Long = random.randint(int(minLong*10000), int(maxLong*10000)) / 10000
 
-if SetLocations or 'TableCreated' in st.session_state:
-    if SetLocations or 'TableCreated' not in st.session_state:
-        minLong = float(st.session_state.Central_Long) - (float(st.session_state.Radius)/69)
-        maxLong = float(st.session_state.Central_Long) + (float(st.session_state.Radius)/69)      
-        
-        minLatt = float(st.session_state.Central_Latt) - (float(st.session_state.Radius)/69)
-        maxLatt = float(st.session_state.Central_Latt) + (float(st.session_state.Radius)/69)     
-        
-        for i in range(0, int(st.session_state.NumCustomers)):
-            Latt = random.randint(int(minLatt*10000), int(maxLatt*10000)) / 10000
-            Long = random.randint(int(minLong*10000), int(maxLong*10000)) 
+        newRow =
