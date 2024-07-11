@@ -120,16 +120,12 @@ if PerformCOG:
     result = dist.items()
     listdata = list(result)
     
-    # Add debug statement here to check listdata
-    st.write("listdata:", listdata)
     
     try:
-        # Ensure listdata is uniform
         flat_listdata = [(k[0], k[1], v) for k, v in listdata]
         distarray = np.array(flat_listdata)
         st.write("distarray:", distarray)
     except ValueError as e:
-        st.write("Error converting flat_listdata to numpy array:", e)
         distarray = None
 
     if distarray is not None:
