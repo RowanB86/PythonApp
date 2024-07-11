@@ -124,7 +124,6 @@ if PerformCOG:
     try:
         flat_listdata = [(k[0], k[1], v) for k, v in listdata]
         distarray = np.array(flat_listdata)
-        st.write("distarray:", distarray)
     except ValueError as e:
         distarray = None
 
