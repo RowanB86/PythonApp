@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Nov  9 09:13:27 2023
-
-@author: RowanBarua
-"""
-
 import streamlit as st
 import numpy as np
 from scipy import stats
@@ -13,14 +6,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib import rcParams
 import random
+import time
+
 rcParams.update({'figure.autolayout': True})
 
 class KDEDist(stats.rv_continuous):
-    
     def __init__(self, kde, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._kde = kde
-    
+
     def _pdf(self, x):
         return self._kde.pdf(x)
 
@@ -48,7 +42,7 @@ else:
         LTMean = st.text_input("Enter Lead Time Mean:",key="LTMean")
         AvgLT = float(LTMean)
         data = np.random.poisson(AvgLT,  1000)
-        st.session_state.x = np.arange(0,AvgLT + ((AvgLT**0.5)*3))
+        st.session_state.x = np.arange(0, AvgLT + ((AvgLT**0.5)*3))
         st.session_state.pmf = poisson.pmf(st.session_state.x, AvgLT)
         st.session_state.AvgLT = AvgLT
     except:
@@ -117,7 +111,7 @@ else:
         UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
         AvgUsage = float(UsageMean)
         data = np.random.poisson(AvgUsage, 1000)
-        st.session_state.x = np.arange(0,AvgUsage + ((AvgUsage**0.5)*3))
+        st.session_state.x = np.arange(0, AvgUsage + ((AvgUsage**0.5)*3))
         st.session_state.pmf = poisson.pmf(st.session_state.x, AvgUsage)
         st.session_state.AvgUsage = AvgUsage
     except:
@@ -182,12 +176,16 @@ LTDChart = st.selectbox('Select Chart Type',Chart_Types,key="LTDChart")
 LTDChartButton = st.button("Generate Chart",key="LTDChartButton")
 
 if LTDChartButton:
-    data = np.array([np.sum(random.choices(st.session_state.UsageData, k=int(random.choice(st.session_state.LTData)))) for _ in range(1000)])
+    start_time = time.time()
+    LTData = np.array(st.session_state.LTData)
+    UsageData = np.array(st.session_state.UsageData)
+    
+    data = np.array([np.sum(np.random.choice(UsageData, size=int(LT), replace=True)) for LT in np.random.choice(LTData, size=1000, replace=True)])
     
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
     inc = 1
-    x = np.arange(0, max(data)+ 3*np.std(data), inc)
+    x = np.arange(0, max(data) + 3 * np.std(data), inc)
     fig, axe = plt.subplots(figsize=(10, 6)) 
     fig.set_tight_layout(True)
     ax2 = axe.twinx() 
@@ -228,3 +226,6 @@ if LTDChartButton:
     
     st.write('Re-Order Point: ' + str(round(ROP)))
     st.write('Max Stock Level: ' + str(round(MSL)))
+    
+    end_time = time.time()
+    st.write(f"Execution Time: {end_time - start_time} seconds")
