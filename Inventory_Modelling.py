@@ -69,49 +69,91 @@ def generate_ltd_chart():
         
         st.write(f"Generated data: {data[:10]}...")
 
-        kde = stats.gaussian_kde(data)
-        X = KDEDist(kde)
-        inc = 1
-        x = np.arange(0, max(data) + 3 * np.std(data), inc)
-        pdfVals = X.pdf(x)
-        cdfVals = X.cdf(x)
-        
-        st.write(f"PDF values: {pdfVals[:10]}...")
-        st.write(f"CDF values: {cdfVals[:10]}...")
+        @profile
+        def calculate_kde():
+            st.write("Calculating KDE...")
+            kde = stats.gaussian_kde(data)
+            X = KDEDist(kde)
+            st.write("KDE calculated.")
+            return X
 
+        X = calculate_kde()
+
+        @profile
+        def generate_plot_data():
+            st.write("Generating plot data...")
+            inc = 1
+            x = np.arange(0, max(data) + 3 * np.std(data), inc)
+            pdfVals = X.pdf(x)
+            cdfVals = X.cdf(x)
+            st.write("Plot data generated.")
+            return x, pdfVals, cdfVals
+        
+        x, pdfVals, cdfVals = generate_plot_data()
+        
         Quantile = 1 - 0.05  # Hardcoded value for testing
 
-        min_val = min(i for i in cdfVals if i > Quantile)
-        min_val_ind = cdfVals.tolist().index(min_val)
-        UB1 = x[min_val_ind]
-        LB1 = x[min_val_ind - 1]
-        Rng1 = UB1 - LB1
-        UB2 = cdfVals[min_val_ind]
-        LB2 = cdfVals[min_val_ind - 1]
-        Rng2 = UB2 - LB2
-        Factor = (Quantile - LB2) / Rng2
-        ROP = LB1 + (Factor * Rng1)
-        ROQ = (365 / 12) * st.session_state.AvgUsage
-        MSL = ROP + ROQ
+        @profile
+        def calculate_reorder_point():
+            st.write("Calculating reorder point...")
+            st.write(f"x: {x}")
+            st.write(f"cdfVals: {cdfVals}")
+            
+            min_val = min(i for i in cdfVals if i > Quantile)
+            st.write(f"min_val: {min_val}")
+            
+            min_val_ind = cdfVals.tolist().index(min_val)
+            st.write(f"min_val_ind: {min_val_ind}")
+            
+            UB1 = x[min_val_ind]
+            LB1 = x[min_val_ind - 1]
+            st.write(f"UB1: {UB1}, LB1: {LB1}")
+            
+            Rng1 = UB1 - LB1
+            st.write(f"Rng1: {Rng1}")
+            
+            UB2 = cdfVals[min_val_ind]
+            LB2 = cdfVals[min_val_ind - 1]
+            st.write(f"UB2: {UB2}, LB2: {LB2}")
 
-        fig, axe = plt.subplots(figsize=(10, 6))
-        fig.set_tight_layout(True)
-        ax2 = axe.twinx()
+            Rng2 = UB2 - LB2
+            st.write(f"Rng2: {Rng2}")
+            
+            Factor = (Quantile - LB2) / Rng2
+            st.write(f"Factor: {Factor}")
+            
+            ROP = LB1 + (Factor * Rng1)
+            ROQ = (365 / 12) * st.session_state.AvgUsage
+            MSL = ROP + ROQ
+            st.write(f"ROP: {ROP}, ROQ: {ROQ}, MSL: {MSL}")
+            return ROP, MSL
+        
+        ROP, MSL = calculate_reorder_point()
 
-        if LTDChart == 'PDF':
-            axe.plot(x, pdfVals, color='r', label='PDF')
-            plt.title("PDF of Lead Time Demand")
-        else:
-            axe.plot(x, cdfVals, color='r', label='CDF')
-            plt.title("CDF of Lead Time Demand")
+        @profile
+        def generate_plots():
+            st.write("Generating plots...")
+            fig, axe = plt.subplots(figsize=(10, 6)) 
+            fig.set_tight_layout(True)
+            ax2 = axe.twinx()
 
-        ax2.axvline(x=ROP, color='m', label='Re-Order Point')
-        ax2.axvline(x=MSL, color='y', label='Max Stock Level')
-        plt.draw()
-        ax2.legend(loc='upper left')
+            if LTDChart == 'PDF':
+                axe.plot(x, pdfVals, color='r', label='PDF')
+                plt.title("PDF of Lead Time Demand")
+            else:
+                axe.plot(x, cdfVals, color='r', label='CDF')
+                plt.title("CDF of Lead Time Demand")
 
-        st.pyplot(fig)
+            ax2.axvline(x=ROP, color='m', label='Re-Order Point')
+            ax2.axvline(x=MSL, color='y', label='Max Stock Level')
+            plt.draw()
+            ax2.legend(loc='upper left')
+            
+            st.pyplot(fig)
+            st.write("Plots generated.")
 
+        generate_plots()
+        
         st.write('Re-Order Point: ' + str(round(ROP)))
         st.write('Max Stock Level: ' + str(round(MSL)))
     except Exception as e:
