@@ -205,35 +205,52 @@ def generate_ltd_chart():
         return np.array([np.sum(np.random.choice(UsageData, size=int(LT), replace=True)) for LT in np.random.choice(LTData, size=1000, replace=True)])
     
     data = generate_data()
+
+    @profile
+    def calculate_kde():
+        kde = stats.gaussian_kde(data)
+        return KDEDist(kde)
     
-    kde = stats.gaussian_kde(data)
-    X = KDEDist(kde)
-    inc = 1
-    x = np.arange(0, max(data) + 3 * np.std(data), inc)
+    X = calculate_kde()
+
+    @profile
+    def generate_plot_data():
+        inc = 1
+        x = np.arange(0, max(data) + 3 * np.std(data), inc)
+        pdfVals = X.pdf(x)
+        cdfVals = X.cdf(x)
+        return x, pdfVals, cdfVals
+    
+    x, pdfVals, cdfVals = generate_plot_data()
+    
+    Quantile = 1 - ProbStockout
+
+    @profile
+    def calculate_reorder_point():
+        min_val = min(i for i in cdfVals if i > Quantile)
+        min_val_ind = cdfVals.tolist().index(min_val)
+        
+        UB1 = x[min_val_ind]
+        LB1 = x[min_val_ind-1]
+        
+        Rng1 = UB1 - LB1
+        
+        UB2 = cdfVals[min_val_ind]
+        LB2 = cdfVals[min_val_ind-1]
+
+        Rng2 = UB2 - LB2
+        Factor = (Quantile - LB2) / Rng2
+        ROP = LB1 + (Factor * Rng1)
+        ROQ = (365 / ROF) * st.session_state.AvgUsage
+        MSL = ROP + ROQ
+        return ROP, MSL
+    
+    ROP, MSL = calculate_reorder_point()
+
     fig, axe = plt.subplots(figsize=(10, 6)) 
     fig.set_tight_layout(True)
-    ax2 = axe.twinx() 
-    pdfVals = X.pdf(x)
-    cdfVals = X.cdf(x)    
-    Quantile = 1 - ProbStockout
+    ax2 = axe.twinx()
     
-    min_val = min(i for i in cdfVals if i > Quantile)   
-    min_val_ind = cdfVals.tolist().index(min_val)
-    
-    UB1 = x[min_val_ind]
-    LB1 = x[min_val_ind-1]
-    
-    Rng1 = UB1 - LB1
-    
-    UB2 = cdfVals[min_val_ind]
-    LB2 = cdfVals[min_val_ind-1]
-
-    Rng2 = UB2 - LB2
-    Factor = (Quantile - LB2) / Rng2
-    ROP = LB1 + (Factor * Rng1)
-    ROQ = (365 / ROF) * st.session_state.AvgUsage
-    MSL = ROP + ROQ
-
     if LTDChart == 'PDF':
         axe.plot(x, pdfVals, color='r', label='PDF')
         plt.title("PDF of Lead Time Demand")
