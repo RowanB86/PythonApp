@@ -247,23 +247,27 @@ def generate_ltd_chart():
     
     ROP, MSL = calculate_reorder_point()
 
-    fig, axe = plt.subplots(figsize=(10, 6)) 
-    fig.set_tight_layout(True)
-    ax2 = axe.twinx()
-    
-    if LTDChart == 'PDF':
-        axe.plot(x, pdfVals, color='r', label='PDF')
-        plt.title("PDF of Lead Time Demand")
-    else:
-        axe.plot(x, cdfVals, color='r', label='CDF')
-        plt.title("CDF of Lead Time Demand")
-    
-    ax2.axvline(x=ROP, color='m', label='Re-Order Point')
-    ax2.axvline(x=MSL, color='y', label='Max Stock Level')
-    plt.draw()
-    ax2.legend(loc='upper left')
-    
-    st.pyplot(fig)
+    @profile
+    def generate_plots():
+        fig, axe = plt.subplots(figsize=(10, 6)) 
+        fig.set_tight_layout(True)
+        ax2 = axe.twinx()
+
+        if LTDChart == 'PDF':
+            axe.plot(x, pdfVals, color='r', label='PDF')
+            plt.title("PDF of Lead Time Demand")
+        else:
+            axe.plot(x, cdfVals, color='r', label='CDF')
+            plt.title("CDF of Lead Time Demand")
+        
+        ax2.axvline(x=ROP, color='m', label='Re-Order Point')
+        ax2.axvline(x=MSL, color='y', label='Max Stock Level')
+        plt.draw()
+        ax2.legend(loc='upper left')
+        
+        st.pyplot(fig)
+
+    generate_plots()
     
     st.write('Re-Order Point: ' + str(round(ROP)))
     st.write('Max Stock Level: ' + str(round(MSL)))
