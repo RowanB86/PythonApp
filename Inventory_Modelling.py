@@ -3,7 +3,6 @@ import numpy as np
 from scipy import stats
 from scipy.stats import poisson
 import matplotlib.pyplot as plt
-import pandas as pd
 from matplotlib import rcParams
 import random
 import time
@@ -18,6 +17,15 @@ class KDEDist(stats.rv_continuous):
     def _pdf(self, x):
         return self._kde.pdf(x)
 
+def profile(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        st.write(f"Execution Time for {func.__name__}: {end_time - start_time} seconds")
+        return result
+    return wrapper
+
 st.title('Max Stock Holding / Re-Order Point Estimation')
 
 Chart_Types = ['PDF','CDF']
@@ -26,38 +34,44 @@ Distributions = ['Poisson','Normal']
 st.header('Lead Time Modelling')
 LTDist = st.selectbox('Select Distribution',Distributions,key="LTDist")
 
-if LTDist == 'Normal':
-    try:
-        LTMean = st.text_input("Enter Lead Time Mean:",key="LTMean")
-        LTStDev = st.text_input("Enter Lead Time Standard Deviation:",key="LTStDev")
-        AvgLT = float(LTMean)
-        LTStDev2 = float(LTStDev)
-        data = np.random.normal(AvgLT, LTStDev2, 1000)
-        st.session_state.AvgLT = AvgLT
-        st.session_state.LTStDev2 = LTStDev2
-    except:
-        pass
-else:
-    try:
-        LTMean = st.text_input("Enter Lead Time Mean:",key="LTMean")
-        AvgLT = float(LTMean)
-        data = np.random.poisson(AvgLT,  1000)
-        st.session_state.x = np.arange(0, AvgLT + ((AvgLT**0.5)*3))
-        st.session_state.pmf = poisson.pmf(st.session_state.x, AvgLT)
-        st.session_state.AvgLT = AvgLT
-    except:
-        pass
+@profile
+def generate_lt_data():
+    if LTDist == 'Normal':
+        try:
+            LTMean = st.text_input("Enter Lead Time Mean:",key="LTMean")
+            LTStDev = st.text_input("Enter Lead Time Standard Deviation:",key="LTStDev")
+            AvgLT = float(LTMean)
+            LTStDev2 = float(LTStDev)
+            data = np.random.normal(AvgLT, LTStDev2, 1000)
+            st.session_state.AvgLT = AvgLT
+            st.session_state.LTStDev2 = LTStDev2
+            return data
+        except:
+            return None
+    else:
+        try:
+            LTMean = st.text_input("Enter Lead Time Mean:",key="LTMean")
+            AvgLT = float(LTMean)
+            data = np.random.poisson(AvgLT,  1000)
+            st.session_state.x = np.arange(0, AvgLT + ((AvgLT**0.5)*3))
+            st.session_state.pmf = poisson.pmf(st.session_state.x, AvgLT)
+            st.session_state.AvgLT = AvgLT
+            return data
+        except:
+            return None
+
+lt_data = generate_lt_data()
 
 LTChart = st.selectbox('Select Chart Type',Chart_Types,key="LTChart")
 LTChartButton = st.button("Generate Chart",key="LTChartButton")
 
-if LTChartButton:
+if LTChartButton and lt_data is not None:
     if LTDist == 'Normal':
-        st.session_state.LTData = data
-        kde = stats.gaussian_kde(data)
+        st.session_state.LTData = lt_data
+        kde = stats.gaussian_kde(lt_data)
         X = KDEDist(kde)
         inc = 1
-        x = np.arange(0, max(data), inc)
+        x = np.arange(0, max(lt_data), inc)
         fig, axe = plt.subplots() 
         fig.set_tight_layout(True)
         pdfVals = X.pdf(x)
@@ -72,7 +86,7 @@ if LTChartButton:
         
         st.pyplot(fig)
     else:
-        st.session_state.LTData = data
+        st.session_state.LTData = lt_data
         x = st.session_state.x
         pmf = st.session_state.pmf
         AvgLT = st.session_state.AvgLT
@@ -95,38 +109,44 @@ if LTChartButton:
 st.header('Usage Modelling')
 UsageDist = st.selectbox('Select Distribution',Distributions,key="UsageDist")
 
-if UsageDist == 'Normal':
-    try:
-        UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
-        UsageStDev = st.text_input("Enter Usage Standard Deviation:",key="UsageStDev")
-        AvgMean = float(UsageMean)
-        UsageStDev2 = float(UsageStDev)
-        data = np.random.normal(AvgMean, UsageStDev2, 1000)
-        st.session_state.AvgMean = AvgMean
-        st.session_state.UsageStDev2 = UsageStDev2
-    except:
-        pass
-else:
-    try:
-        UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
-        AvgUsage = float(UsageMean)
-        data = np.random.poisson(AvgUsage, 1000)
-        st.session_state.x = np.arange(0, AvgUsage + ((AvgUsage**0.5)*3))
-        st.session_state.pmf = poisson.pmf(st.session_state.x, AvgUsage)
-        st.session_state.AvgUsage = AvgUsage
-    except:
-        pass
+@profile
+def generate_usage_data():
+    if UsageDist == 'Normal':
+        try:
+            UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
+            UsageStDev = st.text_input("Enter Usage Standard Deviation:",key="UsageStDev")
+            AvgMean = float(UsageMean)
+            UsageStDev2 = float(UsageStDev)
+            data = np.random.normal(AvgMean, UsageStDev2, 1000)
+            st.session_state.AvgMean = AvgMean
+            st.session_state.UsageStDev2 = UsageStDev2
+            return data
+        except:
+            return None
+    else:
+        try:
+            UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
+            AvgUsage = float(UsageMean)
+            data = np.random.poisson(AvgUsage, 1000)
+            st.session_state.x = np.arange(0, AvgUsage + ((AvgUsage**0.5)*3))
+            st.session_state.pmf = poisson.pmf(st.session_state.x, AvgUsage)
+            st.session_state.AvgUsage = AvgUsage
+            return data
+        except:
+            return None
+
+usage_data = generate_usage_data()
 
 UsageChart = st.selectbox('Select Chart Type',Chart_Types,key="UsageChart")
 UsageChartButton = st.button("Generate Chart",key="UsageChartButton")
 
-if UsageChartButton:
+if UsageChartButton and usage_data is not None:
     if UsageDist == 'Normal':
-        st.session_state.UsageData = data
-        kde = stats.gaussian_kde(data)
+        st.session_state.UsageData = usage_data
+        kde = stats.gaussian_kde(usage_data)
         X = KDEDist(kde)
         inc = 1
-        x = np.arange(0, max(data), inc)
+        x = np.arange(0, max(usage_data), inc)
         fig, axe = plt.subplots() 
         fig.set_tight_layout(True)
         pdfVals = X.pdf(x)
@@ -139,7 +159,7 @@ if UsageChartButton:
             axe.plot(x, cdfVals, color='r', label='CDF')
             plt.title("CDF of Daily Usage")
     else:
-        st.session_state.UsageData = data
+        st.session_state.UsageData = usage_data
         x = st.session_state.x
         pmf = st.session_state.pmf
         AvgUsage = st.session_state.AvgUsage
@@ -165,18 +185,18 @@ st.header('Lead Time Demand Modelling')
 try:
     ROF = int(st.text_input("Enter Re-Order Frequency (orders / year):",key="ROF"))
 except:
-    pass
+    ROF = None
 
 try:
     ProbStockout = float(st.text_input("Enter Probability of Stockout:",key="StockoutProb"))
 except:
-    pass
+    ProbStockout = None
 
 LTDChart = st.selectbox('Select Chart Type',Chart_Types,key="LTDChart")
 LTDChartButton = st.button("Generate Chart",key="LTDChartButton")
 
-if LTDChartButton:
-    start_time = time.time()
+@profile
+def generate_ltd_chart():
     LTData = np.array(st.session_state.LTData)
     UsageData = np.array(st.session_state.UsageData)
     
@@ -226,6 +246,6 @@ if LTDChartButton:
     
     st.write('Re-Order Point: ' + str(round(ROP)))
     st.write('Max Stock Level: ' + str(round(MSL)))
-    
-    end_time = time.time()
-    st.write(f"Execution Time: {end_time - start_time} seconds")
+
+if LTDChartButton and ROF is not None and ProbStockout is not None:
+    generate_ltd_chart()
