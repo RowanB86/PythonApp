@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -27,7 +20,7 @@ def perform_cog_analysis():
     
     d = {j: customerDF["Demand"][j] for j in range(len(customers))}
     
-    P = st.session_state.get('P', 0)
+    P = int(st.session_state.get('P', 0))
     
     result = dist.items()
     listdata = list(result)
@@ -121,12 +114,11 @@ def perform_cog_analysis():
 
 st.title('Centre of Gravity Modelling')
 
-NumCustomers = st.text_input("Enter number of customers")
-NumWarehouses = st.text_input("Enter number of warehouses")
-Central_Latt = st.text_input("Enter Central Lattitude")
-Central_Long = st.text_input("Enter Central Longitude")
-Radius =  st.text_input("Enter Radius (miles) that all customers / warehouses will reside " +
-                        " within.")
+NumCustomers = st.text_input("Enter number of customers", key="NumCustomers")
+NumWarehouses = st.text_input("Enter number of warehouses", key="NumWarehouses")
+Central_Latt = st.text_input("Enter Central Lattitude", key="Central_Latt")
+Central_Long = st.text_input("Enter Central Longitude", key="Central_Long")
+Radius =  st.text_input("Enter Radius (miles) that all customers / warehouses will reside within.", key="Radius")
 
 data = pd.DataFrame(columns=['Location ID','Latitude','Longitude','Circle Size','Location Type','Demand'])
 
@@ -137,54 +129,12 @@ SetLocations = st.button("Set warehouse / customer locations", key="SetLocations
 
 if SetLocations or 'TableCreated' in st.session_state:
     if SetLocations or 'TableCreated' not in st.session_state:
-        minLong = float(Central_Long) - (float(Radius)/69)
-        maxLong = float(Central_Long) + (float(Radius)/69)      
+        minLong = float(st.session_state.Central_Long) - (float(st.session_state.Radius)/69)
+        maxLong = float(st.session_state.Central_Long) + (float(st.session_state.Radius)/69)      
         
-        minLatt = float(Central_Latt) - (float(Radius)/69)
-        maxLatt = float(Central_Latt) + (float(Radius)/69)     
+        minLatt = float(st.session_state.Central_Latt) - (float(st.session_state.Radius)/69)
+        maxLatt = float(st.session_state.Central_Latt) + (float(st.session_state.Radius)/69)     
         
-        for i in range(0, int(NumCustomers)):
+        for i in range(0, int(st.session_state.NumCustomers)):
             Latt = random.randint(int(minLatt*10000), int(maxLatt*10000)) / 10000
-            Long = random.randint(int(minLong*10000), int(maxLong*10000)) / 10000
-    
-            newRow = {
-                'Location ID': str(i),
-                'Latitude': Latt,
-                'Longitude': Long,
-                'Circle Size': 70,
-                'Location Type': 'Customer',
-                'Demand': 50
-            }    
-    
-            data = pd.concat([data, pd.DataFrame(newRow, index=[i])])
-            
-        for i in range(0, int(NumWarehouses)):
-            Latt = random.randint(int(minLatt*10000), int(maxLatt*10000)) / 10000
-            Long = random.randint(int(minLong*10000), int(maxLong*10000)) / 10000
-    
-            newRow = {
-                'Location ID': str(i + int(NumCustomers)),
-                'Latitude': Latt,
-                'Longitude': Long,
-                'Circle Size': 70,
-                'Location Type': 'Warehouse',
-                'Demand': 0
-            }    
-    
-            data = pd.concat([data, pd.DataFrame(newRow, index=[i + int(NumCustomers)])], ignore_index=False)
-        
-        st.session_state.TableCreated = True
-        st.session_state['edited_df'] = data
-    
-    edited_df = st.data_editor(st.session_state['edited_df'], key="data_editor", on_change=perform_cog_analysis)
-    
-    P = st.text_input("Enter Number of Warehouses to be selected by COG Model", value=st.session_state.P, key="P")
-    st.session_state.P = P
-    
-    PerformCOG = st.button("Perform Centre of Gravity Analysis", key="COG")
-    
-    if PerformCOG:
-        perform_cog_analysis()
-
-if 'map' in st.session_state:
-    st_data = folium_static(st.session_state['map'], width=725)
+            Long = random.randint(int(minLong*10000), int(maxLong*10000)) 
