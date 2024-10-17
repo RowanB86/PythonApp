@@ -20,7 +20,7 @@ st.title('BERT Question Answering App')
 # Input text and question
 context = st.text_area("Context", "")
 question = st.text_input("Question", "")
-prob_tolerance = float(st.text_input("Set Minimum Answer Probability","0.00"))
+prob_tolerance = float(st.text_input("Set Minimum Answer Probability","0.20"))
 
 if st.button("Get Answer"):
     
