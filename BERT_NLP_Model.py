@@ -89,6 +89,8 @@ if st.button("Get Answer"):
         max_index = -1
         
         answers = []
+        answer_list = []
+        
         for start_index, end_index in zip(top_start_indices, top_end_indices):
             if end_index >= start_index:  # Valid span
                 if end_index <= min_index or max_index <= start_index:
@@ -103,9 +105,9 @@ if st.button("Get Answer"):
                     answer_tokens = inputs["input_ids"][0][start_index: end_index+1]
                     answer = tokenizer.decode(answer_tokens, skip_special_tokens=True)
                     
-                    if answer_prob > prob_tolerance and answer.strip():
+                    if answer_prob > prob_tolerance and answer.strip() and answer not in answer_list:
                         answers.append((answer,answer_prob))
-        
+                        answer_list.append(answer)
                     
                     if start_index >= min_index:
                         min_index = start_index
