@@ -11,6 +11,8 @@ import streamlit as st
 import fitz
 from torch.nn.functional import softmax
 
+answer_list = []
+
 # Load fine-tuned model for question answering
 tokenizer = AutoTokenizer.from_pretrained("bert-large-uncased-whole-word-masking-finetuned-squad")
 model = AutoModelForQuestionAnswering.from_pretrained("bert-large-uncased-whole-word-masking-finetuned-squad")
@@ -89,7 +91,7 @@ if st.button("Get Answer"):
         max_index = -1
         
         answers = []
-        answer_list = []
+        
         
         for start_index, end_index in zip(top_start_indices, top_end_indices):
             if end_index >= start_index:  # Valid span
