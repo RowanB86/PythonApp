@@ -12,7 +12,7 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 
-st.write(f"Streamlit version: {st.__version__}")
+
 # Load Firebase credentials from Streamlit Secrets
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
