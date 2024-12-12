@@ -38,7 +38,7 @@ if new_game:
 
         ref = db.reference("games") 
         data = ref.get()
-        if data is none:
+        if data is None:
             gameExists = False       
 
         if gameExists == True:
