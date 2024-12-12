@@ -42,7 +42,7 @@ if new_game:
             gameExists = False       
 
         if gameExists == True:
-            games = ref.order_by_child("gameName").equal_to(gamename).get() 
+            games = ref.order_by_child("name").equal_to(gamename).get() 
             if not games:
                 gameExists = False
         
