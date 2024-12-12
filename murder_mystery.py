@@ -46,7 +46,7 @@ if new_game:
                 gameExists = False
         
         if gameExists:
-            st.write("A game with this name has already been created".)
+            st.write("A game with this name has already been created.")
         else:
             game_data = {"name": gamename, "password": password, "host": username}
             ref.push(game_data)
