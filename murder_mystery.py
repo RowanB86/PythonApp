@@ -19,7 +19,6 @@ cred = credentials.Certificate(firebase_credentials)
 if 'loggedIn' not in st.session_state:
     st.session_state['loggedIn'] = False 
 
-
 if not firebase_admin._apps:
     # Initialize Firebase
     initialize_app(cred, {
@@ -54,20 +53,20 @@ if not st.session_state['loggedIn']:
             ref.push(new_user)
             st.write("Account created.")
 
-if st.session_state['log_in']:
-    if usernameExists:
-        usernames = ref.order_by_child("username").equal_to(username).get() 
-        user_id, user_data = next(iter(usernames.items()))
-
-        if user_data["password"] == password:
-            st.session_state['loggedIn'] = True
+    if st.session_state['log_in']:
+        if usernameExists:
+            usernames = ref.order_by_child("username").equal_to(username).get() 
+            user_id, user_data = next(iter(usernames.items()))
+    
+            if user_data["password"] == password:
+                st.session_state['loggedIn'] = True
+                
+            else:
+    
+                st.write("Password is incorrect.")
             
         else:
-
-            st.write("Password is incorrect.")
-        
-    else:
-        st.write("Username not recognised.")
+            st.write("Username not recognised.")
                  
 if st.session_state['loggedIn']:
 
