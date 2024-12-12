@@ -40,7 +40,7 @@ if new_game:
         if data is none:
             gameExists = False       
 
-        if userExists = False:
+        if gameExists == True:
             games = ref.order_by_child("gameName").equal_to(gamename).get() 
             if not games:
                 gameExists = False
