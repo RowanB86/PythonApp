@@ -103,6 +103,6 @@ if st.session_state['loggedIn']:
 
     if log_out:
         st.session_state["loggedIn"] = False
-        st.experimental_rerun()
+        
         
     
