@@ -26,11 +26,12 @@ if new_game:
         # Load Firebase credentials from Streamlit Secrets
         firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
         cred = credentials.Certificate(firebase_credentials)
-        
-        # Initialize Firebase
-        initialize_app(cred, {
-            'databaseURL': 'https://murder-mystery-eb53d-default-rtdb.europe-west1.firebasedatabase.app'
-        })
+
+        if not firebase_admin._apps:
+            # Initialize Firebase
+            initialize_app(cred, {
+                'databaseURL': 'https://murder-mystery-eb53d-default-rtdb.europe-west1.firebasedatabase.app'
+            })
 
         userExists = True 
         gameExists = True
