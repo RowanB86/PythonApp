@@ -45,7 +45,7 @@ if usernames is None:
 
 if create_account:
     if usernameExists:
-        st.write('An account with this username already exists.")
+        st.write("An account with this username already exists.")
     else:
         new_user = {"username": username, "password": password, "host": username}
         ref.push(new_user)
