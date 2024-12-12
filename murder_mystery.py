@@ -60,6 +60,7 @@ if not st.session_state['loggedIn']:
     
             if user_data["password"] == password:
                 st.session_state['loggedIn'] = True
+                st.rerun()
                 
             else:
     
