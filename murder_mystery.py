@@ -40,7 +40,7 @@ if not st.session_state['loggedIn']:
     if data is None:
         usernameExists = False
     
-    usernames = ref.order_by_child("username").equal_to(username).get() 
+    usernames = ref.order_by_child("username").equal_to(st.session_state['username']).get() 
     
     if usernames is None:
         usernameExists = False
