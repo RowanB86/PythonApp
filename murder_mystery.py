@@ -27,8 +27,8 @@ if not firebase_admin._apps:
 
 if not st.session_state['loggedIn']:
 
-    username = st.text_input("Enter your username:")
-    password = st.text_input("Enter game password:")
+    st.session_state['username'] = st.text_input("Enter your username:")
+    st.session_state['password']  = st.text_input("Enter game password:")
     
     create_account = st.button("Create Account")
     st.session_state['log_in'] = st.button("Log in")
@@ -71,7 +71,7 @@ if not st.session_state['loggedIn']:
                  
 if st.session_state['loggedIn']:
 
-    st.write("You are logged in  as: " + username)
+    st.write("You are logged in  as: " + st.session_state['username'])
     
     new_game = st.button('Create New Game')
     join_game = st.button('Join Game')
