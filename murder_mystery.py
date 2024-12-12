@@ -12,7 +12,6 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 
-
 # Load Firebase credentials from Streamlit Secrets
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
@@ -26,31 +25,33 @@ if not firebase_admin._apps:
         'databaseURL': 'https://murder-mystery-eb53d-default-rtdb.europe-west1.firebasedatabase.app'
     })
 
-username = st.text_input("Enter your username:")
-password = st.text_input("Enter game password:")
+if not st.session_state['loggedIn']:
 
-create_account = st.button("Create Account")
-log_in = st.button("Log in")
-
-usernameExists = True 
-
-ref = db.reference("accounts") 
-data = ref.get()
-if data is None:
-    usernameExists = False
-
-usernames = ref.order_by_child("username").equal_to(username).get() 
-
-if usernames is None:
-    usernameExists = False
-
-if create_account:
-    if usernameExists:
-        st.write("An account with this username already exists.")
-    else:
-        new_user = {"username": username, "password": password, "host": username}
-        ref.push(new_user)
-        st.write("Account created.")
+    username = st.text_input("Enter your username:")
+    password = st.text_input("Enter game password:")
+    
+    create_account = st.button("Create Account")
+    log_in = st.button("Log in")
+    
+    usernameExists = True 
+    
+    ref = db.reference("accounts") 
+    data = ref.get()
+    if data is None:
+        usernameExists = False
+    
+    usernames = ref.order_by_child("username").equal_to(username).get() 
+    
+    if usernames is None:
+        usernameExists = False
+    
+    if create_account:
+        if usernameExists:
+            st.write("An account with this username already exists.")
+        else:
+            new_user = {"username": username, "password": password, "host": username}
+            ref.push(new_user)
+            st.write("Account created.")
 
 if log_in:
     if usernameExists:
