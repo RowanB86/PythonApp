@@ -58,7 +58,7 @@ if not st.session_state['loggedIn']:
             usernames = ref.order_by_child("username").equal_to(st.session_state['username']).get() 
             user_id, user_data = next(iter(usernames.items()))
     
-            if user_data["password"] == password:
+            if user_data["password"] == st.session_state['password']:
                 st.session_state['loggedIn'] = True
                 st.rerun()
                 
