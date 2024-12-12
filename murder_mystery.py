@@ -6,14 +6,8 @@ Created on Thu Dec 12 11:33:34 2024
 """
 
 import streamlit as st
-import pyodbc
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import pymssql
-import traceback
-import textwrap
-from streamlit_ace import st_ace
 import firebase_admin
 from firebase_admin import credentials, initialize_app
 import json
