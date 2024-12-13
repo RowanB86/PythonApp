@@ -28,7 +28,7 @@ if not firebase_admin._apps:
 if not st.session_state['loggedIn']:
 
     st.session_state['username'] = st.text_input("Enter your username:")
-    st.session_state['password']  = st.text_input("Enter game password:")
+    st.session_state['password']  = st.text_input("Enter game password:",key=game_password1)
     
     create_account = st.button("Create Account")
     st.session_state['log_in'] = st.button("Log in")
@@ -76,7 +76,7 @@ if st.session_state['loggedIn']:
     with st.expander("Create new game"):
         
         game_name = st.text_input("Enter name of game:")
-        password = st.text_input("Enter game password:")
+        password = st.text_input("Enter game password:",key=game_password2)
         new_game = st.button('Create New Game')
         
         if new_game:
@@ -117,7 +117,7 @@ if st.session_state['loggedIn']:
                 games_list.append(game_data["name"])
 
         game_choice = st.selectbox("Choose a game to join:", games_list)
-        game_password = st.text_input("Enter game password:")
+        game_password = st.text_input("Enter game password:",key=game_password3)
         join_game = st.button('Join Game')
         refresh_game_list = st.button('Refresh game list')
 
