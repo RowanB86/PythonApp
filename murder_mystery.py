@@ -112,7 +112,7 @@ if st.session_state['loggedIn']:
         games = ref.get()
         games_list = []
 
-        if games not None:
+        if games is not None:
             for game_id, game_data in games.items():
                 games_list.append(game_data["name"])
 
@@ -121,7 +121,7 @@ if st.session_state['loggedIn']:
         join_game = st.button('Join Game')
         refresh_game_list = st.button('Refresh game list')
 
-        if join_game and game_choice not None:
+        if join_game and game_choice is not None:
             games = ref.order_by_child("name").equal_to(game_choice).get() 
             game_id, game_data = next(iter(games.items()))
 
