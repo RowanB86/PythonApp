@@ -49,7 +49,7 @@ if not st.session_state['loggedIn']:
         if usernameExists:
             st.write("An account with this username already exists.")
         else:
-            new_user = {"username": username, "password": password, "host": username}
+            new_user = {"username": username, "password": password}
             ref.push(new_user)
             st.write("Account created.")
 
@@ -72,34 +72,40 @@ if not st.session_state['loggedIn']:
 if st.session_state['loggedIn']:
 
     st.write("You are logged in  as: " + st.session_state['username'])
-    
-    new_game = st.button('Create New Game')
-    join_game = st.button('Join Game')
-    gamename = st.text_input("Enter name of game:")
-    
-    if new_game:
-    
-        if username != '' and gamename != '' and password != '':
 
-            userExists = True 
-            gameExists = True
+    with st.expander("Create new game"):
+        new_game = st.button('Create New Game')
+        
+        gamename = st.text_input("Enter name of game:")
+        
+        if new_game:
+        
+            if username != '' and gamename != '' and password != '':
     
-            ref = db.reference("games") 
-            data = ref.get()
-            if data is None:
-                gameExists = False       
-    
-            if gameExists == True:
-                games = ref.order_by_child("name").equal_to(gamename).get() 
-                if not games:
-                    gameExists = False
-            
-            if gameExists:
-                st.write("A game with this name has already been created.")
-            else:
-                game_data = {"name": gamename, "password": password, "host": username}
-                ref.push(game_data)
-                st.write("New game created.")
+                userExists = True 
+                gameExists = True
+        
+                ref = db.reference("games") 
+                data = ref.get()
+                if data is None:
+                    gameExists = False       
+        
+                if gameExists == True:
+                    games = ref.order_by_child("name").equal_to(gamename).get() 
+                    if not games:
+                        gameExists = False
+                
+                if gameExists:
+                    st.write("A game with this name has already been created.")
+                else:
+                    game_data = {"name": gamename, "password": password, "host": username}
+                    ref.push(game_data)
+                    st.write("New game created.")
+
+    with st.expander("Join game"):
+        
+        
+        join_game = st.button('Join Game')
 
     log_out = st.button("Log out")
 
