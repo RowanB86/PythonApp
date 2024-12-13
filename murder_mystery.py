@@ -102,7 +102,7 @@ if st.session_state['loggedIn']:
                     game_data = {"name": game_name, "password": password, "host": st.session_state['username']}
                     ref.push(game_data)
                     ref = db.reference("players_in_game") 
-                    player_game_data = {"name": game_name, "player": username}
+                    player_game_data = {"name": game_name, "player": st.session_state['username']}
                     ref.push(player_game_data)
                     
                     st.write("New game created.")
