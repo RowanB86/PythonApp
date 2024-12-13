@@ -49,7 +49,7 @@ if not st.session_state['loggedIn']:
         if usernameExists:
             st.write("An account with this username already exists.")
         else:
-            new_user = {"username": username, "password": password}
+            new_user = {"username": st.session_state['username'], "password": st.session_state['password']}
             ref.push(new_user)
             st.write("Account created.")
 
