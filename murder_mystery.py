@@ -74,13 +74,14 @@ if st.session_state['loggedIn']:
     st.write("You are logged in  as: " + st.session_state['username'])
 
     with st.expander("Create new game"):
-        new_game = st.button('Create New Game')
         
-        gamename = st.text_input("Enter name of game:")
+        game_name = st.text_input("Enter name of game:")
+        password = st.text_input("Enter game password:")
+        new_game = st.button('Create New Game')
         
         if new_game:
         
-            if username != '' and gamename != '' and password != '':
+            if st.session_state['username'] != '' and game_name != '' and password != '':
     
                 userExists = True 
                 gameExists = True
@@ -91,21 +92,55 @@ if st.session_state['loggedIn']:
                     gameExists = False       
         
                 if gameExists == True:
-                    games = ref.order_by_child("name").equal_to(gamename).get() 
+                    games = ref.order_by_child("name").equal_to(game_name).get() 
                     if not games:
                         gameExists = False
                 
                 if gameExists:
                     st.write("A game with this name has already been created.")
                 else:
-                    game_data = {"name": gamename, "password": password, "host": username}
+                    game_data = {"name": game_name, "password": password, "host": st.session_state['username']}
                     ref.push(game_data)
+                    ref = db.reference("players_in_game") 
+                    player_game_data = {"name": game_name, "player": username}
+                    ref.push(player_game_data)
+                    
                     st.write("New game created.")
 
     with st.expander("Join game"):
-        
-        
+        ref = db.reference("games")
+        games = ref.get()
+        games_list = []
+
+        for game_id, game_data in games.items():
+            games_list.append(game_data["name"])
+
+        game_choice = st.selectbox("Choose a game to join:", games_list)
+        game_password = st.text_input("Enter game password:")
         join_game = st.button('Join Game')
+        refresh_game_list = st.button('Refresh game list')
+
+        if join_game:
+            games = ref.order_by_child("name").equal_to(game_choice).get() 
+            game_id, game_data = next(iter(games.items()))
+
+            if game_data["password"] == game_password:
+                playerInGame = False
+                ref = db.reference("players_in_game")
+                players_in_game = ref.order_by_child("game_name").equal_to(game_choice).get() 
+
+                for player_game_id, game_player_data in players_in_games.items():
+                    if game_player_data["player_name"] == st.session_state['username']:
+                        playerInGame = True
+
+                if playerInGame:
+                    st.write("You are already in this game.")
+                else:
+                    player_game_data = {"name": game_choice, "player": st.session_state['username']}
+                    ref.push(player_game_data)
+            else:
+                st.write("Password is incorrect.")
+                    
 
     log_out = st.button("Log out")
 
