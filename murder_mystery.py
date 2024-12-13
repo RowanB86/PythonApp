@@ -130,7 +130,7 @@ if st.session_state['loggedIn']:
                 ref = db.reference("players_in_game")
                 players_in_game = ref.order_by_child("game_name").equal_to(game_choice).get() 
 
-                for player_game_id, game_player_data in players_in_games.items():
+                for player_game_id, game_player_data in players_in_game.items():
                     if game_player_data["player_name"] == st.session_state['username']:
                         playerInGame = True
 
