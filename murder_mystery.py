@@ -102,7 +102,7 @@ if st.session_state['loggedIn']:
                     game_data = {"name": game_name, "password": password, "host": st.session_state['username']}
                     ref.push(game_data)
                     ref = db.reference("players_in_game") 
-                    player_game_data = {"name": game_name, "player": st.session_state['username']}
+                    player_game_data = {"game": game_name, "player": st.session_state['username']}
                     ref.push(player_game_data)
                     
                     st.write("New game created.")
@@ -128,17 +128,18 @@ if st.session_state['loggedIn']:
             if game_data["password"] == game_password:
                 playerInGame = False
                 ref = db.reference("players_in_game")
-                players_in_game = ref.order_by_child("game_name").equal_to(game_choice).get() 
+                players_in_game = ref.order_by_child("game").equal_to(game_choice).get() 
 
                 for player_game_id, game_player_data in players_in_game.items():
-                    if game_player_data["player_name"] == st.session_state['username']:
+                    if game_player_data["player"] == st.session_state['username']:
                         playerInGame = True
 
                 if playerInGame:
                     st.write("You are already in this game.")
                 else:
-                    player_game_data = {"name": game_choice, "player": st.session_state['username']}
+                    player_game_data = {"game": game_choice, "player": st.session_state['username']}
                     ref.push(player_game_data)
+                    st.write('You have joined ' + game_choice + '.')
             else:
                 st.write("Password is incorrect.")
                     
