@@ -227,6 +227,10 @@ if st.session_state['loggedIn']:
               st.markdown("# " + player_data["character"])
               st.image(image_dict[player_data["character"]])
               st.markdown(character_desc_dict[player_data["character"]]) 
+
+        refresh_player_list = st.button('Refresh player list')
+        if refresh_player_list:
+          st.rerun()
                 
     else:
         with st.expander("Create new game"):
