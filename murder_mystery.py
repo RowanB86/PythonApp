@@ -143,8 +143,9 @@ if st.session_state['loggedIn']:
     st.write("You are logged in  as: " + st.session_state['username'])
 
     ref = db.reference("players_in_game")
-    players = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
-    if players:
+    players = ref.get()
+  
+    if players is not None:
       for player_id,player_data in players.items():
         if player_data["player"] == st.session_state['username']:
           st.session_state['player_in_game'] = True
