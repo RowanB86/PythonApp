@@ -150,6 +150,8 @@ if st.session_state['loggedIn']:
         if player_data["player"] == st.session_state['username']:
           st.session_state['player_in_game'] = True
           st.session_state['game_name'] = player_data["game"]
+          st.session_state["user_character"] = player_data["character"]
+          st.session_state['player_character_chosen'] = True
     
     if st.session_state['player_in_game']:
         with st.expander("Your character"):
