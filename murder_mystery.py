@@ -163,7 +163,7 @@ if st.session_state['loggedIn']:
               
                 if player_characters is not None:
                     for player_id, player_data in player_characters.items():
-                        player_character_list.pop(player_character_list[player_data["character"]])
+                        player_character_list.pop(player_character_list.index(player_data["character"]))
                         st.session_state["character_index"] = min(st.session_state["character_index"] ,len(player_character_list)-1)
 
                 st.markdown("# " + player_character_list[st.session_state["character_index"]])
