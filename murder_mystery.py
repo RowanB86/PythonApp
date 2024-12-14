@@ -154,7 +154,7 @@ if st.session_state['loggedIn']:
     if st.session_state['player_in_game']:
         with st.expander("Your character"):
             if st.session_state['player_character_chosen']:
-                st.markdown("#" + st.session_state["user_character"])
+                st.markdown("# " + st.session_state["user_character"])
                 st.image(image_dict[st.session_state["user_character"]])
                 st.markdown(character_desc_dict[st.session_state["user_character"]])                
             else:
