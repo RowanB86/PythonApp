@@ -182,12 +182,12 @@ if st.session_state['loggedIn']:
                 if st.session_state['back_button']:
                     st.session_state['character_index'] -= 1
                     #st.session_state['step_counter'] = max(st.session_state['step_counter'],0)
-                    st.experimental_rerun()
+                    st.rerun()
                 
                 if st.session_state['next_button']:
                     st.session_state['character_index'] += 1
                     #st.session_state['step_counter'] = min(st.session_state['step_counter'],num_steps)
-                    st.experimental_rerun()
+                    st.rerun()
               
                 
                 
@@ -262,6 +262,7 @@ if st.session_state['loggedIn']:
                         st.session_state['player_in_game'] = True
                         st.session_state['game_name'] = game_choice
                         st.write('You have joined ' + game_choice + '.')
+                        st.rerun()
                 else:
                     st.write("Password is incorrect.")
                     
