@@ -206,7 +206,7 @@ if st.session_state['loggedIn']:
         with st.expander("Create new game"):
             
             game_name = st.text_input("Enter name of game:")
-            password = st.text_input("Enter game password:",key='game_password2')
+            password = st.text_input("Enter game password:",key='game_password2',type='password')
             new_game = st.button('Create New Game')
             
             if new_game:
@@ -248,7 +248,7 @@ if st.session_state['loggedIn']:
                     games_list.append(game_data["name"])
     
             game_choice = st.selectbox("Choose a game to join:", games_list)
-            game_password = st.text_input("Enter game password:",key='game_password3')
+            game_password = st.text_input("Enter game password:",key='game_password3',type='password')
             join_game = st.button('Join Game')
             refresh_game_list = st.button('Refresh game list')
     
