@@ -146,7 +146,7 @@ if st.session_state['loggedIn']:
     players = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
     if players:
       for player_id,player_data in players.items():
-        if player_data["player"] = st.session_state['username']:
+        if player_data["player"] == st.session_state['username']:
           st.session_state['player_in_game'] = True
     
     if st.session_state['player_in_game']:
