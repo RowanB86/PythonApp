@@ -94,6 +94,9 @@ if not firebase_admin._apps:
         'databaseURL': 'https://murder-mystery-eb53d-default-rtdb.europe-west1.firebasedatabase.app'
     })
 
+if 'character_index' not in st.session_state:
+    st.session_state["character_index"] = 0
+
 if not st.session_state['loggedIn']:
 
     st.session_state['username'] = st.text_input("Enter your username:")
@@ -142,16 +145,52 @@ if st.session_state['loggedIn']:
     if st.session_state['player_in_game']:
         with st.expander("Your character"):
             if st.session_state['player_character_chosen']:
-                
+                st.markdown("#" + st.session_state["user_character"])
+                st.image(image_dict[st.session_state["user_character"]])
+                st.markdown(character_desc_dict[st.session_state["user_character"]])                
             else:
                 ref = db.reference("player_characters")
                 player_characters = ref.order_by_child("game").equal_to(st.session_state['game_name']).get()
 
                 if player_characters:
                     for player_id, player_data in player_characters.items():
-                        player_character
-                
+                        player_character_list.pop(player_data["character"])
+                        st.session_state["character_index"] = min(st.session_state["character_index"] ,len(player_character_list)-1)
 
+                st.markdown("#" + player_character_list[st.session_state["character_index"]])
+                st.image(image_dict[player_character_list[st.session_state["character_index"]]])
+                st.markdown(character_desc_dict[player_character_list[st.session_state["character_index"]]])
+
+                select_character = st.button("Select character")
+
+                if select_character:
+                  player_character_list.pop(player_character_list[st.session_state["character_index"]])
+                  st.session_state["character_index"] = min(st.session_state["character_index"] ,len(player_character_list)-1)
+                  st.session_state["user_character"] = player_character_list[st.session_state["character_index"]]
+                  st.session_state['player_character_chosen'] = True 
+                
+                col1,col2,col3 = st.columns([1, 6, 1]) 
+
+                with col1:
+                    if st.session_state["character_index"] > 0:
+                      st.session_state['back_button'] = st.button('Back')
+                
+                with col3:
+                    if st.session_state["character_index"] < (len(player_character_list)-1):
+                      st.session_state['next_button'] = st.button('Next')
+                    
+                if st.session_state['back_button']:
+                    st.session_state['character_index'] -= 1
+                    #st.session_state['step_counter'] = max(st.session_state['step_counter'],0)
+                    st.experimental_rerun()
+                
+                if st.session_state['next_button']:
+                    st.session_state['character_index'] += 1
+                    #st.session_state['step_counter'] = min(st.session_state['step_counter'],num_steps)
+                    st.experimental_rerun()
+              
+                
+                
     else:
         with st.expander("Create new game"):
             
