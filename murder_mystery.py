@@ -149,6 +149,7 @@ if st.session_state['loggedIn']:
       for player_id,player_data in players.items():
         if player_data["player"] == st.session_state['username']:
           st.session_state['player_in_game'] = True
+          st.session_state['game_name'] = player_data["game"]
     
     if st.session_state['player_in_game']:
         with st.expander("Your character"):
