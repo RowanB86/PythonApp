@@ -142,12 +142,13 @@ if st.session_state['loggedIn']:
 
     st.write("You are logged in  as: " + st.session_state['username'])
 
-    ref = db.reference("games")
-    games = ref.order_by_child("name").equal_to(st.session_state['username']).get() 
-    if games:
-      st.session_state['player_in_game'] = True
+    ref = db.reference("players_in_game")
+    players = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+    if players:
+      for player_id,player_data in players.items():
+        if player_data["player"] = st.session_state['username']:
+          st.session_state['player_in_game'] = True
     
-
     if st.session_state['player_in_game']:
         with st.expander("Your character"):
             if st.session_state['player_character_chosen']:
