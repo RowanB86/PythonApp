@@ -237,6 +237,7 @@ if st.session_state['loggedIn']:
                         st.session_state['player_in_game'] = True
                         st.session_state['game_name'] = game_name
                         st.write("New game created.")
+                        st.rerun()
     
         with st.expander("Join game"):
             ref = db.reference("games")
