@@ -173,12 +173,14 @@ if st.session_state['loggedIn']:
                 select_character = st.button("Select character")
 
                 if select_character:
-                  player_character_list.pop(st.session_state["character_index"])
+        
                   st.session_state["character_index"] = min(st.session_state["character_index"] ,len(player_character_list)-1)
                   st.session_state["user_character"] = player_character_list[st.session_state["character_index"]]
                   st.session_state['player_character_chosen'] = True 
                   new_player = {"game": st.session_state['game_name'],  "character": st.session_state["user_character"],"username": st.session_state['username']}
+                  player_character_list.pop(st.session_state["character_index"])
                   ref.push(new_player)
+                  st.rerun()
                 
                 col1,col2,col3 = st.columns([1, 6, 1]) 
 
