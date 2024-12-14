@@ -150,9 +150,14 @@ if st.session_state['loggedIn']:
         if player_data["player"] == st.session_state['username']:
           st.session_state['player_in_game'] = True
           st.session_state['game_name'] = player_data["game"]
-          st.session_state["user_character"] = player_data["character"]
-          st.session_state['player_character_chosen'] = True
-    
+          ref = db.reference("player_characters")
+          player_characters = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+
+          for player_id,character_data in player_characters.items():
+            if character_data["username"] == st.session_state['username']:
+              st.session_state["user_character"] = character_data["character"]
+              st.session_state['player_character_chosen'] = True
+              
     if st.session_state['player_in_game']:
         with st.expander("Your character"):
             if st.session_state['player_character_chosen']:
