@@ -158,9 +158,9 @@ if st.session_state['loggedIn']:
                 st.markdown(character_desc_dict[st.session_state["user_character"]])                
             else:
                 ref = db.reference("player_characters")
-                player_characters = ref.order_by_child("game").equal_to(st.session_state['game_name']).get()
-
-                if player_characters:
+                player_characters = ref.get()
+              
+                if player_characters is not None:
                     for player_id, player_data in player_characters.items():
                         player_character_list.pop(player_data["character"])
                         st.session_state["character_index"] = min(st.session_state["character_index"] ,len(player_character_list)-1)
