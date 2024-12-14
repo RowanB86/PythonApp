@@ -172,21 +172,19 @@ if st.session_state['loggedIn']:
                 col1,col2,col3 = st.columns([1, 6, 1]) 
 
                 with col1:
-                    if st.session_state["character_index"] > 0:
-                      st.session_state['back_button'] = st.button('Back')
+                    st.session_state['back_button'] = st.button('Back')
                 
                 with col3:
-                    if st.session_state["character_index"] < (len(player_character_list)-1):
-                      st.session_state['next_button'] = st.button('Next')
+                    st.session_state['next_button'] = st.button('Next')
                     
                 if st.session_state['back_button']:
                     st.session_state['character_index'] -= 1
-                    #st.session_state['step_counter'] = max(st.session_state['step_counter'],0)
+                    st.session_state['character_index'] = max(st.session_state['character_index'],0)
                     st.rerun()
                 
                 if st.session_state['next_button']:
                     st.session_state['character_index'] += 1
-                    #st.session_state['step_counter'] = min(st.session_state['step_counter'],num_steps)
+                    st.session_state['character_index'] = min(st.session_state['character_index'],len(player_character_list)-1)
                     st.rerun()
               
                 
