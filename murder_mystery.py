@@ -218,7 +218,15 @@ if st.session_state['loggedIn']:
                     st.session_state['character_index'] = min(st.session_state['character_index'],len(player_character_list)-1)
                     st.rerun()
               
-                
+        with st.expander("Players in the game"):
+          ref = db.reference("player_characters")
+          player_character_data = ref.get()
+          if player_character_data:
+            for player_id,player_data in player_character_data.items():
+              with expander(player_data["character"] + ' (' + player_data["username"] + ')':
+                st.markdown("# " + player_data["character"])
+                st.image(image_dict[player_data["character"]])
+                st.markdown(character_desc_dict[player_data["character"]]) 
                 
     else:
         with st.expander("Create new game"):
