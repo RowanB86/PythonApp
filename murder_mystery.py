@@ -15,8 +15,8 @@ import json
 # Load Firebase credentials from Streamlit Secrets
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
-player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington' \
-                        'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn' \
+player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
+                        'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
                         'Percy Hargrove','Reginald Reggie Crowley']
 
 image_dict = {
@@ -34,47 +34,47 @@ image_dict = {
 
 character_desc_dict = {
     "Alfred Penrose": """
-    Role: Loyal Butler
-    Description: A stoic and meticulous servant who has served the family for decades. He knows every secret hidden within the estate.
+    **Role:** Loyal Butler  
+    **Description:** A stoic and meticulous servant who has served the family for decades. He knows every secret hidden within the estate.
     """,
     "Captain Theodore Drake": """
-    Role: Retired Military Officer
-    Description: A gruff, disciplined veteran with a sharp tongue and a deep sense of honor. He’s had a mysterious falling-out with the victim years ago.
+    **Role:** Retired Military Officer  
+    **Description:** A gruff, disciplined veteran with a sharp tongue and a deep sense of honor. He’s had a mysterious falling-out with the victim years ago.
     """,
     "Charlotte Fontain": """
-    Role: Ambitious Journalist
-    Description: A sharp and ambitious writer always looking for the next big scoop. She was investigating the victim for a scandalous exposé.
+    **Role:** Ambitious Journalist  
+    **Description:** A sharp and ambitious writer always looking for the next big scoop. She was investigating the victim for a scandalous exposé.
     """,
     "Detective Hugh Barrington": """
-    Role: Police Detective
-    Description: A seasoned investigator with a sharp eye for detail and a no-nonsense attitude. He's been called in to solve the case 
+    **Role:** Police Detective  
+    **Description:** A seasoned investigator with a sharp eye for detail and a no-nonsense attitude. He's been called in to solve the case 
     and is determined to expose the truth.    
     """,
     "Dr. Horace Bellamy": """
-    Role: Eccentric Scholar
-    Description: A reclusive historian obsessed with uncovering ancient secrets. He has a strained relationship with the victim, who discredited his research.    
+    **Role:** Eccentric Scholar  
+    **Description:** A reclusive historian obsessed with uncovering ancient secrets. He has a strained relationship with the victim, who discredited his research.    
     """,
     "Eleanor Winslow": """
-    Role: Aspiring Actress
-    Description: A bright and beautiful starlet desperate to climb the social ladder. She has ties to nearly everyone at the gathering and hides a few skeletons 
+    **Role:** Aspiring Actress  
+    **Description:** A bright and beautiful starlet desperate to climb the social ladder. She has ties to nearly everyone at the gathering and hides a few skeletons 
     in her closet.    
     """,
     "Isabella Moretti": """
-    Role: Mysterious Thief
-    Description: A charming and elusive cat burglar known for her daring heists. She was at the scene "by coincidence" but claims she had no interest in the victim.
+    **Role:** Mysterious Thief  
+    **Description:** A charming and elusive cat burglar known for her daring heists. She was at the scene "by coincidence" but claims she had no interest in the victim.
     """,
     "Lady Vivian Blackthorn": """
-    Role: Wealthy Socialite
-    Description: A glamorous and influential figure who inherited her family’s fortune. She's known for her charm but has a dark history of 
+    **Role:** Wealthy Socialite  
+    **Description:** A glamorous and influential figure who inherited her family’s fortune. She's known for her charm but has a dark history of 
     family feuds.    
     """,
     "Percy Hargrove": """
-    Role: Brooding Musician
-    Description: A talented but troubled violinist who was commissioned to perform at the event. He’s known for his temper and financial struggles.    
+    **Role:** Brooding Musician  
+    **Description:** A talented but troubled violinist who was commissioned to perform at the event. He’s known for his temper and financial struggles.    
     """,
     "Reginald Reggie Crowley": """
-    Role: Shady Businessman
-    Description: A slick, cigar-smoking entrepreneur with a reputation for bending the law. He’s rumored to have been involved in underhanded 
+    **Role:** Shady Businessman  
+    **Description:** A slick, cigar-smoking entrepreneur with a reputation for bending the law. He’s rumored to have been involved in underhanded 
     dealings with the victim.
     """
 }
@@ -157,7 +157,7 @@ if st.session_state['loggedIn']:
                         player_character_list.pop(player_data["character"])
                         st.session_state["character_index"] = min(st.session_state["character_index"] ,len(player_character_list)-1)
 
-                st.markdown("#" + player_character_list[st.session_state["character_index"]])
+                st.markdown("# " + player_character_list[st.session_state["character_index"]])
                 st.image(image_dict[player_character_list[st.session_state["character_index"]]])
                 st.markdown(character_desc_dict[player_character_list[st.session_state["character_index"]]])
 
