@@ -157,13 +157,24 @@ if st.session_state['loggedIn']:
             if character_data["username"] == st.session_state['username']:
               st.session_state["user_character"] = character_data["character"]
               st.session_state['player_character_chosen'] = True
+              st.session_state['player_id'] = player_id
               
     if st.session_state['player_in_game']:
         with st.expander("Your character"):
             if st.session_state['player_character_chosen']:
                 st.markdown("# " + st.session_state["user_character"])
                 st.image(image_dict[st.session_state["user_character"]])
-                st.markdown(character_desc_dict[st.session_state["user_character"]])                
+                st.markdown(character_desc_dict[st.session_state["user_character"]]) 
+
+                de_select = st.button("Deselect character")
+
+                if de_select:
+                  ref = db.reference(f"player_characters/{st.session_state['player_id']}")
+                  ref.delete()
+                  st.session_state['player_character_chosen'] = False
+                  player_character_list.append(st.session_state["user_character"])
+                  st.rerun()
+          
             else:
                 ref = db.reference("player_characters")
                 player_characters = ref.get()
