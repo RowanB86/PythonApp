@@ -141,6 +141,7 @@ if not st.session_state['loggedIn']:
 if st.session_state['loggedIn']:
 
     st.write("You are logged in  as: " + st.session_state['username'])
+    st.session_state['player_character_chosen'] = False
 
     ref = db.reference("players_in_game")
     players = ref.get()
