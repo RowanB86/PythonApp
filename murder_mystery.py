@@ -146,10 +146,11 @@ if st.session_state['loggedIn']:
     players = ref.get()
   
     if players is not None:
+      st.session_state['game_name'] = players["game"]
       for player_id,player_data in players.items():
         if player_data["player"] == st.session_state['username']:
           st.session_state['player_in_game'] = True
-          st.session_state['game_name'] = player_data["game"]
+          
           ref = db.reference("player_characters")
           player_characters = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
 
