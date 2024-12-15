@@ -221,6 +221,7 @@ if st.session_state['loggedIn']:
               
         st.markdown('# Players in the game')
         ref = db.reference("player_characters")
+        st.write('the game name is: ' + st.session_state['game_name'])
         player_character_data = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
         if player_character_data:
           for player_id,player_data in player_character_data.items():
