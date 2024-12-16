@@ -100,13 +100,13 @@ def UpdatePlayerCharacterList(game,username):
     player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
                           'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
                           'Percy Hargrove','Reginald Reggie Crowley']   
-    ref = db.reference('player_characters')
+    ref = db.reference('players_in_game')
     players = ref.order_by_child("game").equal_to(st.session_state['game']).get() 
     if players:
      
 
         for player_id,player_data in players.items():
-            if player_data["username"] == username:
+            if player_data["player] = username:
                 player_character_list.pop(player_data["character"]
 
     return(player_character_list)
