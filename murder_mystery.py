@@ -331,7 +331,7 @@ if st.session_state['loggedIn']:
     if leave_game:
         ref = db.reference("player_characters")
         player_characters = ref.get() 
-        for player_id,player_data in players_characters.items()
+        for player_id,player_data in players_characters.items():
           if player_data["username"] == st.session_state["username"]
               st.session_state["user_character"] = player_data["character"]
             
