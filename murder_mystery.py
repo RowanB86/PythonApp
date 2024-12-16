@@ -20,7 +20,6 @@ if 'player_character_list' not in st.session_state:
                                                 'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
                                                 'Percy Hargrove','Reginald Reggie Crowley']
 
-
 image_dict = {
     "Alfred Penrose": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Alfred Penrose.png",
     "Captain Theodore Drake": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Captain Theodore Drake.png",
@@ -100,11 +99,13 @@ def UpdatePlayerCharacterList(game):
     player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
                           'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
                           'Percy Hargrove','Reginald Reggie Crowley']   
+    
     ref = db.reference('player_characters')
     players = ref.order_by_child("game").equal_to(st.session_state['game']).get() 
+    
     if players:
-        for player_id,player_data in players.
-            player_character_list.pop(player_data["character"]
+        for player_id,player_data in players.items()
+            player_character_list.pop(player_data["character"])
 
     return(player_character_list)
 
