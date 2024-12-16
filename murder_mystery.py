@@ -15,9 +15,11 @@ import json
 # Load Firebase credentials from Streamlit Secrets
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
-player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
-                        'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
-                        'Percy Hargrove','Reginald Reggie Crowley']
+if 'player_character_list' not in st.session_state:
+    player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
+                            'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
+                            'Percy Hargrove','Reginald Reggie Crowley']
+
 
 image_dict = {
     "Alfred Penrose": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Alfred Penrose.png",
@@ -93,6 +95,19 @@ if not firebase_admin._apps:
     initialize_app(cred, {
         'databaseURL': 'https://murder-mystery-eb53d-default-rtdb.europe-west1.firebasedatabase.app'
     })
+
+def UpdatePlayerCharacterList(game):
+    ref = db.reference('player_characters')
+    players = ref.order_by_child("game").equal_to(st.session_state['game']).get() 
+    if players:
+        player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
+                              'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
+                              'Percy Hargrove','Reginald Reggie Crowley']        
+
+        for player_id,player_data in players.items():
+            player_character_list.pop(player_data["character"]
+
+    return(player_character_list)
 
 if 'character_index' not in st.session_state:
     st.session_state["character_index"] = 0
@@ -174,7 +189,7 @@ if st.session_state['loggedIn']:
                   ref = db.reference(f"player_characters/{st.session_state['player_id']}")
                   ref.delete()
                   st.session_state['player_character_chosen'] = False
-                  player_character_list.append(st.session_state["user_character"])
+                  st.session_state["player_character_list"] = UpdatePlayerCharacterList(st.session_state['game_name'])
                   st.rerun()
           
             else:
@@ -182,10 +197,10 @@ if st.session_state['loggedIn']:
                 player_characters = ref.get()
               
                 if player_characters is not None:
-                    for player_id, player_data in player_characters.items():
-                        player_character_list.pop(player_character_list.index(player_data["character"]))
-                        st.session_state["character_index"] = min(st.session_state["character_index"] ,len(player_character_list)-1)
+                    st.session_state["player_character_list"] =  UpdatePlayerCharacterList(st.session_state['game_name'])
+                    st.session_state["character_index"] = min(st.session_state["character_index"] ,len(st.session_state["player_character_list"])-1)
 
+                player_character_list = st.session_state["player_character_list"]
                 st.markdown("# " + player_character_list[st.session_state["character_index"]])
                 st.image(image_dict[player_character_list[st.session_state["character_index"]]])
                 st.markdown(character_desc_dict[player_character_list[st.session_state["character_index"]]])
@@ -193,7 +208,6 @@ if st.session_state['loggedIn']:
                 select_character = st.button("Select character")
 
                 if select_character:
-        
                   st.session_state["character_index"] = min(st.session_state["character_index"] ,len(player_character_list)-1)
                   st.session_state["user_character"] = player_character_list[st.session_state["character_index"]]
                   st.session_state['player_character_chosen'] = True 
@@ -224,6 +238,7 @@ if st.session_state['loggedIn']:
         ref = db.reference("player_characters")
         st.write('the game name is: ' + st.session_state['game_name'])
         player_character_data = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+      
         if player_character_data:
           for player_id,player_data in player_character_data.items():
             with st.expander(player_data["character"] + ' (' + player_data["username"] + ')'):
@@ -310,9 +325,24 @@ if st.session_state['loggedIn']:
                         st.rerun()
                 else:
                     st.write("Password is incorrect.")
-                    
 
-    log_out = st.button("Log out")
+    leave_game = st.button("Leave game")
+
+    if leave_game:
+        ref = db.reference("player_characters")
+        player_characters = ref.get() 
+        for player_id,player_data in players_characters.items()
+          if player_data["username"] == st.session_state["username"]
+              st.session_state["user_character"] = player_data["character"]
+            
+        ref = db.reference(f"player_characters/{st.session_state['player_id']}")
+        ref.delete()
+        st.session_state['player_character_chosen'] = False
+        st.session_state['player_in_game'] = False
+        st.session_state["player_character_list"] = UpdatePlayerCharacterList(st.session_state["game_name"])
+        st.rerun()
+      
+    log_out = st.button("Log out")  
 
     if log_out:
         st.session_state["loggedIn"] = False
