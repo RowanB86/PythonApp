@@ -16,9 +16,9 @@ import json
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
 if 'player_character_list' not in st.session_state:
-    player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
-                            'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
-                            'Percy Hargrove','Reginald Reggie Crowley']
+    st.session_state["player_character_list"] = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
+                                                'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
+                                                'Percy Hargrove','Reginald Reggie Crowley']
 
 
 image_dict = {
@@ -97,12 +97,13 @@ if not firebase_admin._apps:
     })
 
 def UpdatePlayerCharacterList(game):
+    player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
+                          'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
+                          'Percy Hargrove','Reginald Reggie Crowley']   
     ref = db.reference('player_characters')
     players = ref.order_by_child("game").equal_to(st.session_state['game']).get() 
     if players:
-        player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
-                              'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
-                              'Percy Hargrove','Reginald Reggie Crowley']        
+     
 
         for player_id,player_data in players.items():
             player_character_list.pop(player_data["character"]
