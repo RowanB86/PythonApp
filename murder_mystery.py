@@ -104,7 +104,7 @@ def UpdatePlayerCharacterList(game):
     players = ref.order_by_child("game").equal_to(st.session_state['game']).get() 
     
     if players:
-        for player_id,player_data in players.items()
+        for player_id,player_data in players.items():
             player_character_list.pop(player_data["character"])
 
     return(player_character_list)
