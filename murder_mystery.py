@@ -96,7 +96,7 @@ if not firebase_admin._apps:
         'databaseURL': 'https://murder-mystery-eb53d-default-rtdb.europe-west1.firebasedatabase.app'
     })
 
-def UpdatePlayerCharacterList(game):
+def UpdatePlayerCharacterList(game,username):
     player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
                           'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
                           'Percy Hargrove','Reginald Reggie Crowley']   
@@ -106,7 +106,8 @@ def UpdatePlayerCharacterList(game):
      
 
         for player_id,player_data in players.items():
-            player_character_list.pop(player_data["character"]
+            if player_data["username"] == username:
+                player_character_list.pop(player_data["character"]
 
     return(player_character_list)
 
