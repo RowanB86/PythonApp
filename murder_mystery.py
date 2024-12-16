@@ -332,7 +332,7 @@ if st.session_state['loggedIn']:
         ref = db.reference("player_characters")
         player_characters = ref.get() 
         for player_id,player_data in players_characters.items():
-          if player_data["username"] == st.session_state["username"]
+          if player_data["username"] == st.session_state["username"]:
               st.session_state["user_character"] = player_data["character"]
             
         ref = db.reference(f"player_characters/{st.session_state['player_id']}")
