@@ -156,6 +156,8 @@ if not st.session_state['loggedIn']:
 if st.session_state['loggedIn']:
 
     st.write("You are logged in  as: " + st.session_state['username'])
+    if st.session_state['player_in_game']:
+        st.write('You are playing in: ' + st.session_state['game_name'])
     st.session_state['player_character_chosen'] = False
 
     ref = db.reference("players_in_game")
@@ -236,7 +238,7 @@ if st.session_state['loggedIn']:
               
         st.markdown('# Players in the game')
         ref = db.reference("player_characters")
-        st.write('the game name is: ' + st.session_state['game_name'])
+        
         player_character_data = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
       
         if player_character_data:
