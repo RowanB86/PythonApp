@@ -105,7 +105,7 @@ def UpdatePlayerCharacterList(game):
     
     if players:
         for player_id,player_data in players.items():
-            player_character_list.pop(player_data["character"])
+            player_character_list.pop(player_character_list.index(player_data["character"]))
 
     return(player_character_list)
 
