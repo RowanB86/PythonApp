@@ -367,13 +367,13 @@ if st.session_state['loggedIn']:
                     st.session_state['player_character_chosen'] = False
                     st.session_state['player_in_game'] = False
                     st.session_state["player_character_list"] = UpdatePlayerCharacterList(st.session_state["game_name"])
-                    st.session_state.confirm_action = False
+                    #st.session_state.confirm_action = False
                     st.rerun()
 
             with col2:
                 if st.button("No, cancel"):
                     st.info("Action canceled.")
-                    st.session_state.confirm_action = False
+                    #st.session_state.confirm_action = False
     
     log_out = st.button("Log out")  
 
