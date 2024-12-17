@@ -335,49 +335,33 @@ if st.session_state['loggedIn']:
 
     if st.session_state['player_in_game']: 
         leave_game = st.button("Leave game")
-    
+
         if leave_game:
-            st.session_state.confirm_action = True  # Set confirmation flag
+            st.session_state.confirm_action = True
     
-        if st.session_state.confirm_action:
-            st.warning("Are you sure you want to leave the game?")
-            col1, col2 = st.columns(2)
-    
-            with col1:
-                yes_button = st.button("Yes, I'm sure", key="yes_leave_button")
-                if yes_button:
-                    # Perform Deletion
-                    ref = db.reference("player_characters")
-                    player_characters = ref.get() 
-                    st.session_state['iter_count'] = 0 
-                    for player_id, player_data in player_characters.items():
-                        st.session_state['iter_count'] += 1
-                        if player_data["username"] == st.session_state["username"]:
-                            ref.child(player_id).delete()
-                            break
-                    
-                    ref = db.reference("players_in_game")
-                    players = ref.get()
-                    for player_id, player_data in players.items():
-                        if player_data["player"] == st.session_state["username"]:
-                            ref.child(player_id).delete()
-                            break                
-    
-                    # Reset Session States
-                    st.session_state['player_character_chosen'] = False
-                    st.session_state['player_in_game'] = False
-                    st.session_state["player_character_list"] = UpdatePlayerCharacterList(st.session_state["game_name"])
-                    st.session_state.confirm_action = False
-    
-                    # Rerun at the End
-                    st.experimental_rerun()
-    
-            with col2:
-                no_button = st.button("No, cancel.", key="no_leave_button")
-                if no_button:
-                    st.info("Action canceled.")
-                    st.session_state.confirm_action = False
-                    st.experimental_rerun()
+            ref = db.reference("player_characters")
+            player_characters = ref.get() 
+            st.session_state['iter_count'] = 0 
+            for player_id,player_data in player_characters.items():
+                st.session_state['iter_count'] += 1
+                if player_data["username"] == st.session_state["username"]:
+                    ref = db.reference(f"player_characters/{player_id}")
+                    ref.delete()
+                    break
+            
+            ref = db.reference("players_in_game")
+            players = ref.get()
+            for player_id,player_data in players.items():
+                if player_data["player"] == st.session_state["username"]:
+                    ref = db.reference(f"players_in_game/{player_id}")
+                    ref.delete()
+                    break                
+            
+            st.session_state['player_character_chosen'] = False
+            st.session_state['player_in_game'] = False
+            st.session_state["player_character_list"] = UpdatePlayerCharacterList(st.session_state["game_name"])
+            st.session_state.confirm_action = False
+            st.rerun()
 
 
     log_out = st.button("Log out")  
