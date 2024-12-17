@@ -371,7 +371,7 @@ if st.session_state['loggedIn']:
                     st.rerun()
 
             with col2:
-                no_button = st.button("Yes, I'm sure")
+                no_button = st.button("No, cancel.")
                 if no_button:
                     st.info("Action canceled.")
                     st.session_state.confirm_action = False
