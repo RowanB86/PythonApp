@@ -160,6 +160,9 @@ if not st.session_state['loggedIn']:
                  
 if st.session_state['loggedIn']:
 
+    if 'iter_count' in st.session_state:
+        st.write(st.session_state['iter_count'])
+
     st.write("You are logged in  as: " + st.session_state['username'])
     if st.session_state['player_in_game']:
         st.write('You are playing in: ' + st.session_state['game_name'])
