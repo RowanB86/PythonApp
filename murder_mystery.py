@@ -369,7 +369,7 @@ if st.session_state['loggedIn']:
 
         if yes_I_am:
             leave_game(st.session_state["game_name"],st.session_state["username"])
-            st.session_state.confirm_action = False
+            #st.session_state.confirm_action = False
             st.rerun()
 
     log_out = st.button("Log out")  
