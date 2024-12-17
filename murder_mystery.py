@@ -380,6 +380,7 @@ if st.session_state['loggedIn']:
 
     if 'iter_count' in st.session_state:
         st.write(st.session_state['iter_count'])
+        
     log_out = st.button("Log out")  
 
     if log_out:
