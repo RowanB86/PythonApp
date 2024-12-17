@@ -378,7 +378,8 @@ if st.session_state['loggedIn']:
                     st.info("Action canceled.")
                     st.session_state.confirm_action = False
 
-    st.write(st.session_state['iter_count'])
+    if 'iter_count' in st.session_state:
+        st.write(st.session_state['iter_count'])
     log_out = st.button("Log out")  
 
     if log_out:
