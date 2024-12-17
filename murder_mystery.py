@@ -347,6 +347,7 @@ if st.session_state['loggedIn']:
                 if st.button("Yes, I'm sure"):
                     ref = db.reference("player_characters")
                     player_characters = ref.get() 
+                    st.write(st.session_state["username"] )
                     for player_id,player_data in player_characters.items():
                       st.write(player_data["username"] )
                       st.write(st.session_state["username"] )
