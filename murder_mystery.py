@@ -114,6 +114,30 @@ def UpdatePlayerCharacterList(game):
 
     return(player_character_list)
 
+def leave_game(game_name,username):
+    st.session_state.confirm_action = True
+    
+    ref = db.reference("player_characters")
+    player_characters = ref.get() 
+    for player_id,player_data in player_characters.items():
+        if player_data["username"] == username:
+            ref = db.reference(f"player_characters/{player_id}")
+            ref.delete()
+            break
+    
+    ref = db.reference("players_in_game")
+    players = ref.get()
+    for player_id,player_data in players.items():
+        if player_data["player"] == username:
+            ref = db.reference(f"players_in_game/{player_id}")
+            ref.delete()
+            break                
+    
+    st.session_state['player_character_chosen'] = False
+    st.session_state['player_in_game'] = False
+    st.session_state["player_character_list"] = UpdatePlayerCharacterList(game_name)
+
+
 if 'character_index' not in st.session_state:
     st.session_state["character_index"] = 0
 
@@ -337,31 +361,7 @@ if st.session_state['loggedIn']:
         leave_game = st.button("Leave game")
 
         if leave_game:
-            st.session_state.confirm_action = True
-    
-            ref = db.reference("player_characters")
-            player_characters = ref.get() 
-            st.session_state['iter_count'] = 0 
-            for player_id,player_data in player_characters.items():
-                st.session_state['iter_count'] += 1
-                if player_data["username"] == st.session_state["username"]:
-                    ref = db.reference(f"player_characters/{player_id}")
-                    ref.delete()
-                    break
-            
-            ref = db.reference("players_in_game")
-            players = ref.get()
-            for player_id,player_data in players.items():
-                if player_data["player"] == st.session_state["username"]:
-                    ref = db.reference(f"players_in_game/{player_id}")
-                    ref.delete()
-                    break                
-            
-            st.session_state['player_character_chosen'] = False
-            st.session_state['player_in_game'] = False
-            st.session_state["player_character_list"] = UpdatePlayerCharacterList(st.session_state["game_name"])
-            st.session_state.confirm_action = False
-            st.rerun()
+            leave_game(st.session_state["game_name"],st.session_state["username"])
 
 
     log_out = st.button("Log out")  
