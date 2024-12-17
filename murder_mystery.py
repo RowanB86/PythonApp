@@ -101,7 +101,7 @@ def UpdatePlayerCharacterList(game):
                           'Percy Hargrove','Reginald Reggie Crowley']   
     
     ref = db.reference('player_characters')
-    players = ref.order_by_child("game").equal_to(st.session_state['game']).get() 
+    players = ref.order_by_child("game").equal_to(game).get() 
     
     if players:
         for player_id,player_data in players.items():
