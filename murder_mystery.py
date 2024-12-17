@@ -89,6 +89,11 @@ if 'player_in_game' not in st.session_state:
 if 'player_character_chosen' not in st.session_state:
     st.session_state['player_character_chosen'] = False 
 
+if "confirm_leave_action" not in st.session_state:
+    st.session_state.confirm_action = False
+
+
+
 if not firebase_admin._apps:
     # Initialize Firebase
     initialize_app(cred, {
@@ -330,29 +335,43 @@ if st.session_state['loggedIn']:
 
     if st.session_state['player_in_game']: 
         leave_game = st.button("Leave game")
+
+        if leave_game:
+            st.session_state.confirm_action = True
     
-        if leave_game :
-            ref = db.reference("player_characters")
-            player_characters = ref.get() 
-            for player_id,player_data in player_characters.items():
-              if player_data["username"] == st.session_state["username"]:
-                  ref = db.reference(f"player_characters/{player_id}")
-                  ref.delete()
-                  break
-    
-            ref = db.reference("players_in_game")
-            players = ref.get()
-            for player_id,player_data in players.items():
-                if player_data["player"] == st.session_state["username"]:
-                  ref = db.reference(f"players_in_game/{player_id}")
-                  ref.delete()
-                  break                
+        if st.session_state.confirm_action:
+            st.warning("Are you sure you want to leave the game?")
+            col1, col2 = st.columns(2)
+
+            with col1:
+                if st.button("Yes, I'm sure"):
+                    ref = db.reference("player_characters")
+                    player_characters = ref.get() 
+                    for player_id,player_data in player_characters.items():
+                      if player_data["username"] == st.session_state["username"]:
+                          ref = db.reference(f"player_characters/{player_id}")
+                          ref.delete()
+                          break
             
-            st.session_state['player_character_chosen'] = False
-            st.session_state['player_in_game'] = False
-            st.session_state["player_character_list"] = UpdatePlayerCharacterList(st.session_state["game_name"])
-            st.rerun()
-      
+                    ref = db.reference("players_in_game")
+                    players = ref.get()
+                    for player_id,player_data in players.items():
+                        if player_data["player"] == st.session_state["username"]:
+                          ref = db.reference(f"players_in_game/{player_id}")
+                          ref.delete()
+                          break                
+                    
+                    st.session_state['player_character_chosen'] = False
+                    st.session_state['player_in_game'] = False
+                    st.session_state["player_character_list"] = UpdatePlayerCharacterList(st.session_state["game_name"])
+                    st.session_state.confirm_action = False
+                    st.rerun()
+
+            with col2:
+                if st.button("No, cancel"):
+                    st.info("Action canceled.")
+                    st.session_state.confirm_action = False
+    
     log_out = st.button("Log out")  
 
     if log_out:
