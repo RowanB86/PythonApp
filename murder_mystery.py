@@ -361,6 +361,7 @@ if st.session_state['loggedIn']:
         leave_game_button = st.button("Leave game")
 
         if leave_game_button:
+            st.session_state.confirm_action = True
             leave_game(st.session_state["game_name"],st.session_state["username"])
 
 
