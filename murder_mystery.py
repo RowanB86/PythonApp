@@ -333,7 +333,7 @@ if st.session_state['loggedIn']:
         player_characters = ref.get() 
         for player_id,player_data in player_characters.items():
           if player_data["username"] == st.session_state["username"]:
-              ref = db.reference(f"player_characters/{st.session_state['player_id']}")
+              ref = db.reference(f"player_characters/{'player_id'}")
               ref.delete()
               break
 
@@ -341,7 +341,7 @@ if st.session_state['loggedIn']:
         players = ref.get()
         for player_id,player_data in players.items():
             if player_data["player"] == st.session_state["username"]:
-              ref = db.reference(f"players_in_game/{st.session_state['player_id']}")
+              ref = db.reference(f"players_in_game/{'player_id'}")
               ref.delete()
               break                
         
