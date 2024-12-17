@@ -1,18 +1,27 @@
-beautifulsoup4
-folium
-matplotlib  # Ensure this version is compatible with your Python version
-numpy
-pandas # Ensure this version is compatible with your Python version
-plotly # This includes plotly.express
-requests
-scikit-learn
-scipy
-streamlit
-streamlit_folium==0.4.0 
-seaborn
-lxml
-pyodbc
-transformers
-torch
-PyMuPDF
-firebase_admin
+#beautifulsoup4
+#folium
+#matplotlib  # Ensure this version is compatible with your Python version
+#numpy
+#pandas # Ensure this version is compatible with your Python version
+#plotly # This includes plotly.express
+#requests
+#scikit-learn
+#scipy
+#streamlit
+#streamlit_folium==0.4.0 
+#seaborn
+#lxml
+#pyodbc
+#transformers
+#torch
+#PyMuPDF
+#firebase_admin
+
+streamlit==1.41.0
+streamlit_folium==0.11.0
+firebase_admin==6.2.0
+pandas==2.0.3
+numpy==1.25.0
+requests==2.31.0
+plotly==5.17.0
+
