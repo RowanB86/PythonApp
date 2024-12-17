@@ -160,9 +160,6 @@ if not st.session_state['loggedIn']:
                  
 if st.session_state['loggedIn']:
 
-    if 'iter_count' in st.session_state:
-        st.write(st.session_state['iter_count'])
-
     st.write("You are logged in  as: " + st.session_state['username'])
     if st.session_state['player_in_game']:
         st.write('You are playing in: ' + st.session_state['game_name'])
@@ -347,8 +344,6 @@ if st.session_state['loggedIn']:
             st.session_state['iter_count'] = 0 
             for player_id,player_data in player_characters.items():
                 st.session_state['iter_count'] += 1
-                st.write(player_data["username"] )
-                st.write(st.session_state["username"] )
                 if player_data["username"] == st.session_state["username"]:
                     ref = db.reference(f"player_characters/{player_id}")
                     ref.delete()
