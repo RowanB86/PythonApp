@@ -358,9 +358,9 @@ if st.session_state['loggedIn']:
                     st.write("Password is incorrect.")
 
     if st.session_state['player_in_game']: 
-        leave_game = st.button("Leave game")
+        leave_game_button = st.button("Leave game")
 
-        if leave_game:
+        if leave_game_button:
             leave_game(st.session_state["game_name"],st.session_state["username"])
 
 
