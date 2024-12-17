@@ -344,7 +344,8 @@ if st.session_state['loggedIn']:
             col1, col2 = st.columns(2)
 
             with col1:
-                if st.button("Yes, I'm sure"):
+                yes_button = st.button("Yes, I'm sure")
+                if yes_button:
                     ref = db.reference("player_characters")
                     player_characters = ref.get() 
                     for player_id,player_data in player_characters.items():
@@ -370,7 +371,8 @@ if st.session_state['loggedIn']:
                     st.rerun()
 
             with col2:
-                if st.button("No, cancel"):
+                no_button = st.button("Yes, I'm sure")
+                if no_button:
                     st.info("Action canceled.")
                     st.session_state.confirm_action = False
     
