@@ -197,7 +197,6 @@ if st.session_state['loggedIn']:
                 player_characters = ref.get()
               
                 if player_characters is not None:
-                    st.write(st.session_state['game_name'])
                     st.session_state["player_character_list"] =  UpdatePlayerCharacterList(st.session_state['game_name'])
                     st.session_state["character_index"] = min(st.session_state["character_index"] ,len(st.session_state["player_character_list"])-1)
 
