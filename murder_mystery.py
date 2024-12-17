@@ -348,6 +348,8 @@ if st.session_state['loggedIn']:
                     ref = db.reference("player_characters")
                     player_characters = ref.get() 
                     for player_id,player_data in player_characters.items():
+                      st.write(player_data["username"] )
+                      st.write(st.session_state["username"] )
                       if player_data["username"] == st.session_state["username"]:
                           ref = db.reference(f"player_characters/{player_id}")
                           ref.delete()
