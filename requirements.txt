@@ -23,6 +23,7 @@ firebase_admin==6.2.0
 pandas==2.1.4      # Use a newer, compatible version
 numpy==1.26.2      # Compatible with Python 3.12
 requests==2.31.0
+openai
 
 
 
