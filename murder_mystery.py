@@ -12,6 +12,8 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 
+openai.api_key = json.loads(st.secrets["openai"]["api_key"])
+
 # Load Firebase credentials from Streamlit Secrets
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
@@ -78,6 +80,30 @@ character_desc_dict = {
     **Description:** A slick, cigar-smoking entrepreneur with a reputation for bending the law. He’s rumored to have been involved in underhanded 
     dealings with the victim.
     """
+}
+
+locations = {
+    "Grand Ballroom": {
+        "description": "A lavish room with glittering chandeliers and ornate decorations. The site of the last known gathering before the murder."
+    },
+    "Library": {
+        "description": "A quiet, dusty space filled with rows of ancient books and hidden alcoves. It holds the secrets of many family scandals."
+    },
+    "Wine Cellar": {
+        "description": "A dimly lit, musty cellar stocked with vintage wines and dark corners. An ideal place for hiding secrets—or bodies."
+    },
+    "Garden Maze": {
+        "description": "A sprawling hedge maze with narrow pathways and a central fountain. It's easy to get lost here, especially in the dark."
+    },
+    "Master Bedroom": {
+        "description": "An opulent room with heavy drapes and a locked chest at the foot of the bed. Rumors say it holds incriminating documents."
+    },
+    "Kitchen": {
+        "description": "A bustling space with gleaming knives and bubbling pots. The staff often gossip here about the guests' movements."
+    },
+    "Study": {
+        "description": "A small room with a large oak desk and scattered papers. The scene of many heated arguments and secret deals."
+    }
 }
 
 if 'loggedIn' not in st.session_state:
@@ -186,6 +212,39 @@ if not st.session_state['loggedIn']:
 if st.session_state['loggedIn']:
 
     st.write("You are logged in  as: " + st.session_state['username'])
+
+    
+    if 'user_is_host' in st.session_state:
+        if st.session["user_is_host"]:
+            start_game = st.button("Start_Game",key="start_game_as_host")
+
+            if start_game:
+                st.session['game_has_started'] == True
+                messages = [{"role": "system", "content": "You are are the game master for a murder myster game."}]
+                
+                messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
+                messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
+                messages += [{"role": "user", "content": "Please create a backstory that details intricate dynamics between the characters of a murder mystery game that accords well with \
+                              the locations that each character will later explore. Try to do this with as few tokens as possible because this backstory will be fed back to you every time \
+                              a new event in the game occurs. Create a backstory that you will be able to easily and efficiently process later on. Do not add anything superfluous."}]
+                
+                backstory = openai.ChatCompletion.create(
+                       model="gpt-4o-mini",
+                       messages=messages)
+
+
+    st.session_state["user_is_host"] = False
+
+    ref = db.reference("games")
+    games = ref.get()
+
+    if games is not none:
+        for game_id,game_data in games.items():
+            if game_data["host"] == st.session_state['username']:
+                st.session_state["user_is_host"] = True
+        
+    ref = db.reference("players_in_game")
+
     if st.session_state['player_in_game']:
         st.write('You are playing in: ' + st.session_state['game_name'])
     st.session_state['player_character_chosen'] = False
@@ -199,6 +258,8 @@ if st.session_state['loggedIn']:
         if player_data["player"] == st.session_state['username']:
           st.session_state['player_in_game'] = True
           st.session_state['game_name'] = player_data["game"]
+
+        
           ref = db.reference("player_characters")
           player_characters = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
 
