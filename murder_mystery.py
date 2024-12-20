@@ -271,16 +271,19 @@ f
                                 messages += [{"role": "assistant", "content": f"{objectives[k]}"}]
                                 
                             if j == 0:
+                                placeholder.write(f"Generating {character}'s first objective")
                                 messages += [{"role": "user", "content": f"Please come up with an objective (there will be three in total) that {character} will aim to  \
                                 fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's 
                                 objectives list. Do you not generate anything superfluous."}]
                                 prefix = f"{character}'s first objective is: "
                             elif j == 1:
+                                placeholder.write(f"Generating {character}'s second objective")
                                 messages += [{"role": "user", "content": f"Please come up with a second objective (there will be three in total) that {character} will aim to  \
                                 fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's 
                                 objectives list. Do you not generate anything superfluous."}]  
                                 prefix = f"{character}'s second objective is: "
                             elif j == 2:
+                                placeholder.write(f"Generating {character}'s third objective")
                                 messages += [{"role": "user", "content": f"Please come up with a final, third objective that {character} will aim to  \
                                 fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's 
                                 objectives list. Do you not generate anything superfluous."}]    
@@ -294,8 +297,8 @@ f
                             objectives.append(prefix + objective)
                             new_objective = {"game": game_name, "character": character, "objective": objective}
                             ref.push(new_objective)
-                            
-
+                placeholder.write("Objectives generated")       
+                    
     ref = db.reference("players_in_game")
 
     if st.session_state['player_in_game']:
