@@ -11,6 +11,7 @@ import numpy as np
 import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
+import openai
 
 openai.api_key = st.secrets["openai"]["api_key"]
 
