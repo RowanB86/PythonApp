@@ -249,8 +249,7 @@ f
                 ref = db.reference("backstories")
                 game_data = {"game_name": st.session_state['game_name'], "backstory":  backstory}
                 ref.push(game_data)
-                placeholder = st.empty()
-                placeholder.write("Backstory created.")
+                st.write("Backstory created.")
 
                 ref = db.reference("objectives")
                 num_characters = len(character_desc_dict)
@@ -271,19 +270,19 @@ f
                                 messages += [{"role": "assistant", "content": f"{objectives[k]}"}]
                                 
                             if j == 0:
-                                placeholder.write(f"Generating {character}'s first objective")
+                                st.write(f"Generating {character}'s first objective")
                                 messages += [{"role": "user", "content": f"Please come up with an objective (there will be three in total) that {character} will aim to  \
                                 fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's 
                                 objectives list. Do you not generate anything superfluous."}]
                                 prefix = f"{character}'s first objective is: "
                             elif j == 1:
-                                placeholder.write(f"Generating {character}'s second objective")
+                                st.write(f"Generating {character}'s second objective")
                                 messages += [{"role": "user", "content": f"Please come up with a second objective (there will be three in total) that {character} will aim to  \
                                 fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's 
                                 objectives list. Do you not generate anything superfluous."}]  
                                 prefix = f"{character}'s second objective is: "
                             elif j == 2:
-                                placeholder.write(f"Generating {character}'s third objective")
+                                st.write(f"Generating {character}'s third objective")
                                 messages += [{"role": "user", "content": f"Please come up with a final, third objective that {character} will aim to  \
                                 fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's 
                                 objectives list. Do you not generate anything superfluous."}]    
