@@ -239,7 +239,7 @@ if st.session_state['loggedIn']:
                 messages += [{"role": "user", "content": "Please create a backstory that details intricate dynamics between the characters of a murder mystery game that accords well with \
                               the locations that each character will later explore. Try to do this with as few tokens as possible because this backstory will be fed back to you every time \
                               a new event in the game occurs. Create a backstory that you will be able to easily and efficiently process later on. Do not add anything superfluous."}]
-f
+
                 st.write("Generating backstory.")
                 response = openai.ChatCompletion.create(
                        model="gpt-4o-mini",
