@@ -220,7 +220,7 @@ if st.session_state['loggedIn']:
             start_game = st.button("Start_Game",key="start_game_as_host")
 
             if start_game:
-                st.session_state['game_has_started'] == True
+                st.session_state['game_has_started'] = True
                 messages = [{"role": "system", "content": "You are are the game master for a murder myster game."}]
                 messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
                 messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
