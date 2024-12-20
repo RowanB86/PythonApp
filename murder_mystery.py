@@ -239,10 +239,11 @@ if st.session_state['loggedIn']:
                               a new event in the game occurs. Create a backstory that you will be able to easily and efficiently process later on. Do not add anything superfluous."}]
 
                 st.write("Generating backstory.")
-                backstory = openai.ChatCompletion.create(
+                response = openai.ChatCompletion.create(
                        model="gpt-4o-mini",
                        messages=messages)
 
+                backstory = response["choices"][0]["message"]["content"]
                 ref = db.reference("backstories")
                 game_data = {"game_name": st.session_state['game_name'], "backstory":  backstory}
                 ref.push(game_data)
