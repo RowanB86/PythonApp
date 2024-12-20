@@ -297,7 +297,7 @@ f
                             objectives.append(prefix + objective)
                             new_objective = {"game": game_name, "character": character, "objective": objective}
                             ref.push(new_objective)
-                placeholder.write("Objectives generated")       
+                #placeholder.write("Objectives generated")       
                     
     ref = db.reference("players_in_game")
 
