@@ -214,7 +214,7 @@ if st.session_state['loggedIn']:
 
     st.write("You are logged in  as: " + st.session_state['username'])
     st.session_state["user_is_host"] = False
-
+    
     ref = db.reference("games")
     games = ref.get()
 
@@ -252,7 +252,24 @@ f
 
                 st.write("Backstory created.")
 
-                
+                ref = db.reference("objectives")
+                num_characters = len(character_desc_dict)
+                objectives = []
+
+                for character in character_desc_dict.keys():
+                    for j in range(0,3):
+                        if j = 0:
+                            messages = [{"role": "system", "content": "You are are the game master for a murder myster game."}]
+                            messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
+                            messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
+                            messages += [{"role": "assistant", "content": "Game Rules: Each character is allowed to explore one location every round and will each have 3 personal objectives \
+                                        to complete by the end of the game. There is no limit to the number of rounds that can be played. \
+                                        Characters will be able to do things like use items from their inventory to perform actions, talk to other characters they encounter \
+                                        in the game (both playing and non-playing). At least one of the 10 characters should be involved in committing the murder. "}]
+                            messages += [{"role": "assistant", "content": f"Back story to the game: {backstory}"}]
+                            for k in range(0,len(objectives)):
+                                
+                    
 
 
     ref = db.reference("players_in_game")
