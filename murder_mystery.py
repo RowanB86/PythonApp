@@ -12,7 +12,7 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 
-openai.api_key = json.loads(st.secrets["openai"]["api_key"])
+openai.api_key = st.secrets["openai"]["api_key"]
 
 # Load Firebase credentials from Streamlit Secrets
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
