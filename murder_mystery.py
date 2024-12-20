@@ -294,7 +294,7 @@ if st.session_state['loggedIn']:
 
                             objective = response["choices"][0]["message"]["content"] 
                             objectives.append(prefix + objective)
-                            new_objective = {"game": game_name, "character": character, "objective": objective}
+                            new_objective = {"game": st.session_state['game_name'], "character": character, "objective": objective}
                             ref.push(new_objective)
                 #placeholder.write("Objectives generated")       
                     
