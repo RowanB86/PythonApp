@@ -213,7 +213,15 @@ if not st.session_state['loggedIn']:
 if st.session_state['loggedIn']:
 
     st.write("You are logged in  as: " + st.session_state['username'])
+    st.session_state["user_is_host"] = False
 
+    ref = db.reference("games")
+    games = ref.get()
+
+    if games is not None:
+        for game_id,game_data in games.items():
+            if game_data["host"] == st.session_state['username']:
+                st.session_state["user_is_host"] = True
     
     if 'user_is_host' in st.session_state:
         if st.session_state["user_is_host"]:
@@ -241,19 +249,6 @@ if st.session_state['loggedIn']:
                 if backstories is not None:
                     game_data = {"game_name": st.session_state['game_name'], "backstory":  backstory}
                     backstories.push(game_data)
-
-                
-                
-
-    st.session_state["user_is_host"] = False
-
-    ref = db.reference("games")
-    games = ref.get()
-
-    if games is not None:
-        for game_id,game_data in games.items():
-            if game_data["host"] == st.session_state['username']:
-                st.session_state["user_is_host"] = True
         
     ref = db.reference("players_in_game")
 
