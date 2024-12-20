@@ -216,7 +216,7 @@ if st.session_state['loggedIn']:
 
     
     if 'user_is_host' in st.session_state:
-        if st.session["user_is_host"]:
+        if st.session_state["user_is_host"]:
             start_game = st.button("Start_Game",key="start_game_as_host")
 
             if start_game:
