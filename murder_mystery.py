@@ -249,8 +249,8 @@ f
                 ref = db.reference("backstories")
                 game_data = {"game_name": st.session_state['game_name'], "backstory":  backstory}
                 ref.push(game_data)
-
-                st.write("Backstory created.")
+                placeholder = st.empty()
+                placeholder.write("Backstory created.")
 
                 ref = db.reference("objectives")
                 num_characters = len(character_desc_dict)
@@ -258,7 +258,6 @@ f
 
                 for character in character_desc_dict.keys():
                     for j in range(0,3):
-                        if j = 0:
                             messages = [{"role": "system", "content": "You are are the game master for a murder myster game."}]
                             messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
                             messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
@@ -267,10 +266,35 @@ f
                                         Characters will be able to do things like use items from their inventory to perform actions, talk to other characters they encounter \
                                         in the game (both playing and non-playing). At least one of the 10 characters should be involved in committing the murder. "}]
                             messages += [{"role": "assistant", "content": f"Back story to the game: {backstory}"}]
+                            
                             for k in range(0,len(objectives)):
+                                messages += [{"role": "assistant", "content": f"{objectives[k]}"}]
                                 
-                    
+                            if j == 0:
+                                messages += [{"role": "user", "content": f"Please come up with an objective (there will be three in total) that {character} will aim to  \
+                                fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's 
+                                objectives list. Do you not generate anything superfluous."}]
+                                prefix = f"{character}'s first objective is: "
+                            elif j == 1:
+                                messages += [{"role": "user", "content": f"Please come up with a second objective (there will be three in total) that {character} will aim to  \
+                                fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's 
+                                objectives list. Do you not generate anything superfluous."}]  
+                                prefix = f"{character}'s second objective is: "
+                            elif j == 2:
+                                messages += [{"role": "user", "content": f"Please come up with a final, third objective that {character} will aim to  \
+                                fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's 
+                                objectives list. Do you not generate anything superfluous."}]    
+                                prefix = f"{character}'s third objective is: "
 
+                            response = openai.ChatCompletion.create(
+                                       model="gpt-4o-mini",
+                                       messages=messages)
+
+                            objective = response["choices"][0]["message"]["content"] 
+                            objectives.append(prefix + objective)
+                            new_objective = {"game": game_name, "character": character, "objective": objective}
+                            ref.push(new_objective)
+                            
 
     ref = db.reference("players_in_game")
 
