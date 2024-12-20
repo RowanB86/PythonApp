@@ -244,11 +244,8 @@ if st.session_state['loggedIn']:
                        messages=messages)
 
                 ref = db.reference("backstories")
-                backstories = ref.get()
-
-                if backstories is not None:
-                    game_data = {"game_name": st.session_state['game_name'], "backstory":  backstory}
-                    backstories.push(game_data)
+                game_data = {"game_name": st.session_state['game_name'], "backstory":  backstory}
+                ref.push(game_data)
         
     ref = db.reference("players_in_game")
 
