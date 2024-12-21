@@ -382,15 +382,15 @@ if st.session_state['loggedIn']:
                     character_viewpoint = {"game": st.session_state['game_name'], "character": character, "viewpoint": viewpoint}
                     ref.push(character_viewpoint)
 
-                    ref = db.reference("game_progression")
-                    games = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
-                    for game_id,game in games.items():
-                        game_id = game_id
-
-                    ref = db.reference("game_progression/{game_id}")
-                    ref.update({"round": 1})
-
                 placeholder.write("Character viewpoints generated.")
+
+                ref = db.reference("game_progression")
+                games = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+                for game_id,game in games.items():
+                    game_id = game_id
+
+                ref = db.reference("game_progression/{game_id}")
+                ref.update({"round": 1})
                            
     ref = db.reference("players_in_game")
 
