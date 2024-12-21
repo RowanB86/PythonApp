@@ -296,6 +296,7 @@ if st.session_state['loggedIn']:
                             objectives.append(prefix + objective)
                             new_objective = {"game": st.session_state['game_name'], "character": character, "objective": objective}
                             ref.push(new_objective)
+                        
                 placeholder.write("Objectives generated")       
 
                 ref = db.reference("items")
@@ -371,8 +372,16 @@ if st.session_state['loggedIn']:
                     character_viewpoint = {"game": st.session_state['game_name'], "character": character, "viewpoint": viewpoint}
                     ref.push(character_viewpoint)
 
+                    ref = db.reference("game_progression")
+                    games = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+                    for game_id,game in games.items():
+                        game_id = game_id
+
+                    ref = db.reference("game_progression/{game_id}")
+                    ref.update({"round": 1})
+
                 placeholder.write("Character viewpoints generated.")
-                    
+                
                 
     ref = db.reference("players_in_game")
 
@@ -390,7 +399,6 @@ if st.session_state['loggedIn']:
           st.session_state['player_in_game'] = True
           st.session_state['game_name'] = player_data["game"]
 
-        
           ref = db.reference("player_characters")
           player_characters = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
 
@@ -508,6 +516,11 @@ if st.session_state['loggedIn']:
                         ref.push(player_game_data)
                         st.session_state['player_in_game'] = True
                         st.session_state['game_name'] = game_name
+                        ref = db.reference("game_progression")
+                        new_game_data = {"game": game_name, "round": 0}
+                        ref.push(new_game_data)
+
+                        
                         st.write("New game created.")
                         st.rerun()
     
