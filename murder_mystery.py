@@ -285,13 +285,13 @@ if st.session_state['loggedIn']:
                                 
                             if j == 0:
                                 placeholder.write(f"Generating {character}'s first objective")
-                                messages += [{"role": "user", "content": f"Please come up with an objective (there will be three in total) that {character} will aim to  \
+                                messages += [{"role": "user", "content": f"Please come up with the first of three objectives (there will be three in total) that {character} will aim to  \
                                 fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's \
                                 objectives list. Do not generate anything superfluous."}]
                                 prefix = f"{character}'s first objective is: "
                             elif j == 1:
                                 placeholder.write(f"Generating {character}'s second objective")
-                                messages += [{"role": "user", "content": f"Please come up with a second objective (there will be three in total) that {character} will aim to  \
+                                messages += [{"role": "user", "content": f"Please come up with a second of three objectives (there will be three in total) that {character} will aim to  \
                                 fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's \
                                 objectives list. Do not generate anything superfluous."}]  
                                 prefix = f"{character}'s second objective is: "
@@ -333,13 +333,13 @@ if st.session_state['loggedIn']:
                                 
                             if j == 0:
                                 placeholder.write(f"Generating {character}'s first item")
-                                messages += [{"role": "user", "content": f"Please come up with an item (there will be three in total) that {character} might be able to use   \
+                                messages += [{"role": "user", "content": f"Please come up with the first of three items (there will be three in total) that {character} might be able to use   \
                                 to help fulfil their objectives. Only return the details of the item. The content you produce will appear on this character's \
                                 inventory list. Do not generate anything superfluous."}]
                                 prefix = f"{character}'s first item is: "
                             elif j == 1:
                                 placeholder.write(f"Generating {character}'s second item")
-                                messages += [{"role": "user", "content": f"Please come up with a second item (there will be three in total) that {character} might be able to use   \
+                                messages += [{"role": "user", "content": f"Please come up with a second of three items (there will be three in total) that {character} might be able to use   \
                                 to help fulfil their objectives. Only return the details of the item. The content you produce will appear on this character's \
                                 inventory list. Do not generate anything superfluous."}]
                                 prefix = f"{character}'s second item is: "
@@ -480,9 +480,11 @@ if st.session_state['loggedIn']:
                     st.session_state['character_index'] += 1
                     st.session_state['character_index'] = min(st.session_state['character_index'],len(player_character_list)-1)
                     st.rerun()
+                    
         if st.session_state["game_has_started"]:
             with st.expander("Locations"):
                 for location in locations.keys():
+                    
                     st.markdown('# ' + location)
                     st.markdown(locations[location]["description"])
     
@@ -492,7 +494,8 @@ if st.session_state['loggedIn']:
     
                 if items is not None:
                     for item_id,item_data in items.items():
-                        st.write(item_data["item"] + '\n')
+                        if item_data["character"] == st.session_state["user_character"]:
+                            st.write(item_data["item"] + '\n')
                         
             with st.expander("Objectives"):
                 ref = db.reference("objectives")
@@ -500,7 +503,8 @@ if st.session_state['loggedIn']:
     
                 if objectives is not None:
                     for objective_id,objective_data in objectives.items():
-                        st.write(objective_data["objective"] + '\n')                
+                        if objective_data["character"] == st.session_state["user_character"]:
+                            st.write(objective_data["objective"] + '\n')                
     
             with st.expander("Character Viewpoint"):
                 ref = db.reference("character_viewpoints")
@@ -508,7 +512,8 @@ if st.session_state['loggedIn']:
     
                 if viewpoints is not None:
                     for viewpoint_id,viewpoint_data in viewpoints.items():
-                        st.write(viewpoint_data["viewpoint"])
+                        if viewpoint_data["character"] == st.session_state["user_character"]:
+                            st.write(viewpoint_data["viewpoint"])
                     
         st.markdown('# Players in the game')
         ref = db.reference("player_characters")
