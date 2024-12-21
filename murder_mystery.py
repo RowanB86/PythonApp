@@ -480,35 +480,35 @@ if st.session_state['loggedIn']:
                     st.session_state['character_index'] += 1
                     st.session_state['character_index'] = min(st.session_state['character_index'],len(player_character_list)-1)
                     st.rerun()
-
-        with st.expander("Locations"):
-            for location in locations.keys():
-                st.markdown('# ' + location)
-                st.markdown(locations[location])
-
-        with st.expander("Inventory"):
-            ref = db.reference("items")
-            items = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
-
-            if items is not None:
-                for item_id,item_data in items.items():
-                    st.write(item_data["item"] + '\n')
-                    
-        with st.expander("Objectives"):
-            ref = db.reference("objectives")
-            objectives = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
-
-            if objectives is not None:
-                for objective_id,objective_data in objectives.items():
-                    st.write(objective_data["objective"] + '\n')                
-
-        with st.expander("Character Viewpoint"):
-            ref = db.reference("character_viewpoints")
-            viewpoints = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
-
-            if viewpoints is not None:
-                for viewpoint_id,viewpoint_data in viewpoints.items():
-                    st.write(viewpoint_data["viewpoint"])
+        if st.session_state["game_has_started"]:
+            with st.expander("Locations"):
+                for location in locations.keys():
+                    st.markdown('# ' + location)
+                    st.markdown(locations[location]["description"])
+    
+            with st.expander("Inventory"):
+                ref = db.reference("items")
+                items = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+    
+                if items is not None:
+                    for item_id,item_data in items.items():
+                        st.write(item_data["item"] + '\n')
+                        
+            with st.expander("Objectives"):
+                ref = db.reference("objectives")
+                objectives = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+    
+                if objectives is not None:
+                    for objective_id,objective_data in objectives.items():
+                        st.write(objective_data["objective"] + '\n')                
+    
+            with st.expander("Character Viewpoint"):
+                ref = db.reference("character_viewpoints")
+                viewpoints = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+    
+                if viewpoints is not None:
+                    for viewpoint_id,viewpoint_data in viewpoints.items():
+                        st.write(viewpoint_data["viewpoint"])
                     
         st.markdown('# Players in the game')
         ref = db.reference("player_characters")
