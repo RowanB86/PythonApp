@@ -393,7 +393,7 @@ if st.session_state['loggedIn']:
                 for game_id,game in games.items():
                     game_id = game_id
 
-                ref = db.reference("game_progression/{game_id}")
+                ref = db.reference(f"game_progression/{game_id}")
                 ref.update({"round": 1})
                            
     ref = db.reference("players_in_game")
