@@ -24,7 +24,7 @@ if 'player_character_list' not in st.session_state:
                                                 'Percy Hargrove','Reginald Reggie Crowley']
 
 if 'game_has_started' not in st.session_state:
-    st.session_state["game_has_started"] == False
+    st.session_state["game_has_started"] = False
 
 game_rules = """
 Each character is allowed to explore one location every round and will each have 3 personal objectives \
