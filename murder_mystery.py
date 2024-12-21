@@ -345,7 +345,7 @@ if st.session_state['loggedIn']:
                             ref.push(new_item)
                 placeholder.write("Items generated")
 
-                ref = db.reference("Character_Viewpoints")
+                ref = db.reference("character_viewpoints")
 
                 for character in character_desc_dict.keys():
                     placeholder.write(f"Generating {character}'s 'Character Viewpoint'")
