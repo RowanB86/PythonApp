@@ -22,6 +22,10 @@ if 'player_character_list' not in st.session_state:
     st.session_state["player_character_list"] = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
                                                 'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
                                                 'Percy Hargrove','Reginald Reggie Crowley']
+
+if 'game_has_started' not in st.session_state:
+    st.session_state["game_has_started"] == False
+
 game_rules = """
 Each character is allowed to explore one location every round and will each have 3 personal objectives \
                             to complete by the end of the game. There is no limit to the number of rounds that can be played. \
