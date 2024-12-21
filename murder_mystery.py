@@ -369,6 +369,7 @@ if st.session_state['loggedIn']:
                     response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
                     viewpoint = response["choices"][0]["message"]["content"] 
                     character_viewpoint = {"game": st.session_state['game_name'], "character": character, "viewpoint": viewpoint}
+                    ref.push(character_viewpoint)
 
                 placeholder.write("Character viewpoints generated.")
                     
