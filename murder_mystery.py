@@ -22,7 +22,12 @@ if 'player_character_list' not in st.session_state:
     st.session_state["player_character_list"] = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
                                                 'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
                                                 'Percy Hargrove','Reginald Reggie Crowley']
-
+game_rules = """
+Each character is allowed to explore one location every round and will each have 3 personal objectives \
+                            to complete by the end of the game. There is no limit to the number of rounds that can be played. \
+                            Characters will be able to do things like use items from their inventory to perform actions, talk to other characters they encounter \
+                            in the game (both playing and non-playing). At least one of the 10 characters should be involved in committing the murder.
+"""
 image_dict = {
     "Alfred Penrose": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Alfred Penrose.png",
     "Captain Theodore Drake": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Captain Theodore Drake.png",
@@ -229,18 +234,16 @@ if st.session_state['loggedIn']:
 
             if start_game:
                 st.session_state['game_has_started'] = True
-                messages = [{"role": "system", "content": "You are are the game master for a murder myster game."}]
+                messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
                 messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
                 messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
-                messages += [{"role": "assistant", "content": "Game Rules: Each character is allowed to explore one location every round and will each have 3 personal objectives \
-                            to complete by the end of the game. There is no limit to the number of rounds that can be played. \
-                            Characters will be able to do things like use items from their inventory to perform actions, talk to other characters they encounter \
-                            in the game (both playing and non-playing). At least one of the 10 characters should be involved in committing the murder. "}]
+                messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
                 messages += [{"role": "user", "content": "Please create a backstory that details intricate dynamics between the characters of a murder mystery game that accords well with \
                               the locations that each character will later explore. Try to do this with as few tokens as possible because this backstory will be fed back to you every time \
                               a new event in the game occurs. Create a backstory that you will be able to easily and efficiently process later on. Do not add anything superfluous."}]
 
-                st.write("Generating backstory.")
+                placeholder = st.empty()
+                placeholder.write("Generating backstory.")
                 response = openai.ChatCompletion.create(
                        model="gpt-4o-mini",
                        messages=messages)
@@ -249,43 +252,40 @@ if st.session_state['loggedIn']:
                 ref = db.reference("backstories")
                 game_data = {"game_name": st.session_state['game_name'], "backstory":  backstory}
                 ref.push(game_data)
-                st.write("Backstory created.")
+                placeholder.write("Backstory created.")
 
                 ref = db.reference("objectives")
                 num_characters = len(character_desc_dict)
                 objectives = []
-
+                
                 for character in character_desc_dict.keys():
                     for j in range(0,3):
-                            messages = [{"role": "system", "content": "You are are the game master for a murder myster game."}]
+                            messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
                             messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
                             messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
-                            messages += [{"role": "assistant", "content": "Game Rules: Each character is allowed to explore one location every round and will each have 3 personal objectives \
-                                        to complete by the end of the game. There is no limit to the number of rounds that can be played. \
-                                        Characters will be able to do things like use items from their inventory to perform actions, talk to other characters they encounter \
-                                        in the game (both playing and non-playing). At least one of the 10 characters should be involved in committing the murder. "}]
+                            messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
                             messages += [{"role": "assistant", "content": f"Back story to the game: {backstory}"}]
                             
                             for k in range(0,len(objectives)):
                                 messages += [{"role": "assistant", "content": f"{objectives[k]}"}]
                                 
                             if j == 0:
-                                st.write(f"Generating {character}'s first objective")
+                                placeholder.write(f"Generating {character}'s first objective")
                                 messages += [{"role": "user", "content": f"Please come up with an objective (there will be three in total) that {character} will aim to  \
                                 fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's \
-                                objectives list. Do you not generate anything superfluous."}]
+                                objectives list. Do not generate anything superfluous."}]
                                 prefix = f"{character}'s first objective is: "
                             elif j == 1:
-                                st.write(f"Generating {character}'s second objective")
+                                placeholder.write(f"Generating {character}'s second objective")
                                 messages += [{"role": "user", "content": f"Please come up with a second objective (there will be three in total) that {character} will aim to  \
                                 fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's \
-                                objectives list. Do you not generate anything superfluous."}]  
+                                objectives list. Do not generate anything superfluous."}]  
                                 prefix = f"{character}'s second objective is: "
                             elif j == 2:
-                                st.write(f"Generating {character}'s third objective")
+                                placeholder.write(f"Generating {character}'s third objective")
                                 messages += [{"role": "user", "content": f"Please come up with a final, third objective that {character} will aim to  \
                                 fulfil throughout the course of the game. Only return the details of the objective. The content you produce will appear on this character's \
-                                objectives list. Do you not generate anything superfluous."}]    
+                                objectives list. Do not generate anything superfluous."}]    
                                 prefix = f"{character}'s third objective is: "
 
                             response = openai.ChatCompletion.create(
@@ -296,8 +296,83 @@ if st.session_state['loggedIn']:
                             objectives.append(prefix + objective)
                             new_objective = {"game": st.session_state['game_name'], "character": character, "objective": objective}
                             ref.push(new_objective)
-                #placeholder.write("Objectives generated")       
+                placeholder.write("Objectives generated")       
+
+                ref = db.reference("items")
+                num_characters = len(character_desc_dict)
+                items = []
+                
+                for character in character_desc_dict.keys():
+                    for j in range(0,3):
+                            messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
+                            messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
+                            messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
+                            messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
+                            messages += [{"role": "assistant", "content": f"Back story to the game: {backstory}"}]
+                            
+                            for k in range(0,len(objectives)):
+                                messages += [{"role": "assistant", "content": f"{objectives[k]}"}]
+
+                            for k in range(0,len(items)):
+                                messages += [{"role": "assistant", "content": f"{items[k]}"}]
+                                
+                            if j == 0:
+                                placeholder.write(f"Generating {character}'s first item")
+                                messages += [{"role": "user", "content": f"Please come up with an item (there will be three in total) that {character} might be able to use   \
+                                to help fulfil their objectives. Only return the details of the item. The content you produce will appear on this character's \
+                                inventory list. Do not generate anything superfluous."}]
+                                prefix = f"{character}'s first item is: "
+                            elif j == 1:
+                                placeholder.write(f"Generating {character}'s second item")
+                                messages += [{"role": "user", "content": f"Please come up with a second item (there will be three in total) that {character} might be able to use   \
+                                to help fulfil their objectives. Only return the details of the item. The content you produce will appear on this character's \
+                                inventory list. Do not generate anything superfluous."}]
+                                prefix = f"{character}'s second item is: "
+                            elif j == 2:
+                                placeholder.write(f"Generating {character}'s third item")
+                                messages += [{"role": "user", "content": f"Please come up with a final, third item that {character} might be able to use  \
+                                to help fulfil their objectives. Only return the details of the item. The content you produce will appear on this character's \
+                                inventory list. Do not generate anything superfluous."}]    
+                                prefix = f"{character}'s third item is: "
+
+                            response = openai.ChatCompletion.create(
+                                       model="gpt-4o-mini",
+                                       messages=messages)
+
+                            item = response["choices"][0]["message"]["content"] 
+                            items.append(prefix + item)
+                            new_item = {"game": st.session_state['game_name'], "character": character, "item": item}
+                            ref.push(new_item)
+                placeholder.write("Items generated")
+
+                ref = db.reference("Character_Viewpoints")
+
+                for character in character_desc_dict.keys():
+                    placeholder.write(f"Generating {character}'s 'Character Viewpoint'")
+                    messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
+                    messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
+                    messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
+                    messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
+                    messages += [{"role": "assistant", "content": f"Back story to the game: {backstory}"}]
                     
+                    for k in range(0,len(objectives)):
+                        messages += [{"role": "assistant", "content": f"{objectives[k]}"}]
+    
+                    for k in range(0,len(items)):
+                        messages += [{"role": "assistant", "content": f"{items[k]}"}]  
+    
+                    messages += [{"role": "user", "content": f"In accordance with the backstory to the game and all other information you have about the \
+                    narrative surrounding the game, please can you detail {character}'s 'Character Viewpoint' i.e. what information the character has about the \
+                    events that have occurred in the game or any secrets this character knows that other characters might not. The response that you generate \
+                    will be visible to this particular character and appear in their 'Character Viewpoint' section. Please do not generate anything superfluous."}]
+
+                    response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+                    viewpoint = response["choices"][0]["message"]["content"] 
+                    character_viewpoint = {"game": st.session_state['game_name'], "character": character, "viewpoint": viewpoint}
+
+                placeholder.write("Character viewpoints generated.")
+                    
+                
     ref = db.reference("players_in_game")
 
     if st.session_state['player_in_game']:
