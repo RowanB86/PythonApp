@@ -229,14 +229,14 @@ if st.session_state['loggedIn']:
             if game_data["host"] == st.session_state['username']:
                 st.session_state["user_is_host"] = True
 
-    ref = db.reference("game_progression")
-    games = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
-
-    st.session_state["game_has_started"] = False
-    if games is not None:
-        for game_id,game_data in games.items():
-            if game_data["round"] > 0:
-                st.session_state["game_has_started"] = True
+        ref = db.reference("game_progression")
+        games = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+    
+        st.session_state["game_has_started"] = False
+        if games is not None:
+            for game_id,game_data in games.items():
+                if game_data["round"] > 0:
+                    st.session_state["game_has_started"] = True
   
     if 'user_is_host' in st.session_state and st.session_state["game_has_started"] == False:
         if st.session_state["user_is_host"]:
