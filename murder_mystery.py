@@ -225,10 +225,20 @@ if st.session_state['loggedIn']:
 
     if games is not None:
         for game_id,game_data in games.items():
+            st.session_state["game_name"] = game_data["name"]
             if game_data["host"] == st.session_state['username']:
                 st.session_state["user_is_host"] = True
-    
-    if 'user_is_host' in st.session_state:
+
+    ref = db.reference("game_progression")
+    games = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+
+    st.session_state["game_has_started"] = False
+    if games is not None:
+        for game_id,game_data in games.items():
+            if game_data["round"] > 0:
+                st.session_state["game_has_started"] = True
+  
+    if 'user_is_host' in st.session_state and st.session_state["game_has_started"] == False:
         if st.session_state["user_is_host"]:
             start_game = st.button("Start_Game",key="start_game_as_host")
 
@@ -381,12 +391,12 @@ if st.session_state['loggedIn']:
                     ref.update({"round": 1})
 
                 placeholder.write("Character viewpoints generated.")
-                
-                
+                           
     ref = db.reference("players_in_game")
 
     if st.session_state['player_in_game']:
         st.write('You are playing in: ' + st.session_state['game_name'])
+    
     st.session_state['player_character_chosen'] = False
 
     ref = db.reference("players_in_game")
@@ -407,7 +417,8 @@ if st.session_state['loggedIn']:
               st.session_state["user_character"] = character_data["character"]
               st.session_state['player_character_chosen'] = True
               st.session_state['player_id'] = player_id
-              
+
+        
     if st.session_state['player_in_game']:
         with st.expander("Your character"):
             if st.session_state['player_character_chosen']:
@@ -465,7 +476,36 @@ if st.session_state['loggedIn']:
                     st.session_state['character_index'] += 1
                     st.session_state['character_index'] = min(st.session_state['character_index'],len(player_character_list)-1)
                     st.rerun()
-              
+
+        with st.expander("Locations"):
+            for location in locations.keys():
+                st.markdown('# ' + location)
+                st.markdown(locations[location])
+
+        with st.expander("Inventory"):
+            ref = db.reference("items")
+            items = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+
+            if items is not None:
+                for item_id,item_data in items.items():
+                    st.write(item_data["item"] + '\n')
+                    
+        with st.expander("Objectives"):
+            ref = db.reference("objectives")
+            objectives = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+
+            if objectives is not None:
+                for objective_id,objective_data in objectives.items():
+                    st.write(objective_data["objective"] + '\n')                
+
+        with st.expander("Character Viewpoint"):
+            ref = db.reference("character_viewpoints")
+            viewpoints = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+
+            if viewpoints is not None:
+                for viewpoint_id,viewpoint_data in viewpoints.items():
+                    st.write(viewpoint_data["viewpoint"])
+                    
         st.markdown('# Players in the game')
         ref = db.reference("player_characters")
         
