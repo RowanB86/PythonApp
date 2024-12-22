@@ -541,8 +541,62 @@ if st.session_state['loggedIn']:
 
                 submit_action = st.button("Submit Action")
                 if submit_action:
+                    ref = db.reference("backstories")
+                    games = ref.order_by_child("game_name").equal_to(st.session_state['game_name']).get() 
+
+                    for game_id,game_data in games.items():
+                        backstory = game_data["backstory"]
+
+                    ref = db.reference("items")
+                    items = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+
+                    ref = db.reference("objectives")
+                    objectives = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+
+                    ref = db.reference("character_viewpoints")
+                    viewpoints = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+                    
                     ref = db.reference("game_events")
                     events = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+                    
+                    messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
+                    messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
+                    messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
+                    messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
+                    messages += [{"role": "assistant", "content": f"Back story to the game (only you know this story. The players of the game don't.): {backstory}"}]
+
+                    if items is not None:
+                        for item_id,item_data in items.items():
+                            messages += [{"role": "assistant", "content": f"This is an item belonging to {item_data["character"]}: {item_data["item"]}"}]
+
+                    if objectives is not None:
+                        for objective_id,objectives_data in objectives.items():
+                            messages += [{"role": "assistant", "content": f"This is one of {objectives_data["character"]}'s objectives: {objectives_data["objective"]}"}]
+
+                    if viewpoints is not None:
+                        for viewpoint_id,viewpoints_data in viewpoints.items():
+                            messages += [{"role": "assistant", "content": f"This is the perspective of {viewpoints_data["character"]}: {viewpoints_data["viewpoint"]}"}]
+
+                    if events is not None:
+                        for event_id, events_data in events.items():
+                            messages += [{"role": "assistant", "content": f"This was an event involving {events_data["character"]} and performed in round {events_data["round"]}: {events_data["event"]}"}]
+
+                    
+                    messages += [{"role": "assistant", "content": f"st.session_state["user_character"] has made a request to perform the following action: {action}."}]
+                    messages += [{"role": "user", "content": f"Please carefully assess the action that {st.session_state["user_character"]} has requested to make, the backstory, the rules of the game \
+                    and all other relevant information, decide whether the requested action is permissible within the rules of the game and determine a realistic outcome of the action. Be careful to  \ 
+                    check that the requested action will not take the character beyond the limits of what they are permitted to do within a given round e.g. they are only allowed to explore one location per round.
+                    Please return a description of the action performed and the outcome in a way that will be informative to the character who attempted the action and also suitable to be recorded in an events log \
+                    that will be fed back to you as the game progresses. Do not generate any superfluous information. Your output will be automatically recorded in an events log."}]
+
+                    response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+                    event = response["choices"][0]["message"]["content"] 
+
+                    ref = db.reference("events")
+                    new_event = {"game": st.session_state['game_name'], "character": st.session_state["user_character"], "round": st.session_state["round_number"],"event": event}
+                    ref.push(new_event)
+
+                    placeholder2 = event
 
         st.markdown('# Players in the game')
         ref = db.reference("player_characters")
