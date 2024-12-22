@@ -222,6 +222,12 @@ if not st.session_state['loggedIn']:
 if st.session_state['loggedIn']:
 
     st.write("You are logged in  as: " + st.session_state['username'])
+
+    refresh_game = st.button("Refresh Game")
+
+    if refresh_game:
+        st.rerun()
+    
     st.session_state["user_is_host"] = False
     
     ref = db.reference("games")
