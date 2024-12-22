@@ -555,7 +555,7 @@ if st.session_state['loggedIn']:
                     ref = db.reference("character_viewpoints")
                     viewpoints = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
                     
-                    ref = db.reference("game_events")
+                    ref = db.reference("events")
                     if ref:
                         events = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
                     
