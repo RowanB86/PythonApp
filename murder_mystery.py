@@ -230,7 +230,7 @@ if st.session_state['loggedIn']:
         ref = db.reference("game_progression")
         games = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
         for game_ID,game in games.items():
-            st.write("The game is in Round: " + game["round"])
+            st.write("The game is in Round: " + str(game["round"]))
             st.session_state["round_number"] = game["round"]
 
     
