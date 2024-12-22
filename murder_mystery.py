@@ -582,7 +582,7 @@ if st.session_state['loggedIn']:
                             messages += [{"role": "assistant", "content": f"This was an event involving {events_data["character"]} and performed in round {events_data["round"]}: {events_data["event"]}"}]
 
                     
-                    messages += [{"role": "assistant", "content": f"st.session_state["user_character"] has made a request to perform the following action: {action}."}]
+                    messages += [{"role": "assistant", "content": f"{st.session_state["user_character"]} has made a request to perform the following action: {action}."}]
                     messages += [{"role": "user", "content": f"Please carefully assess the action that {st.session_state["user_character"]} has requested to make, the backstory, the rules of the game \
                     and all other relevant information, decide whether the requested action is permissible within the rules of the game and determine a realistic outcome of the action. Be careful to  \ 
                     check that the requested action will not take the character beyond the limits of what they are permitted to do within a given round e.g. they are only allowed to explore one location per round.
