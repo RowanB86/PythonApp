@@ -585,9 +585,9 @@ if st.session_state['loggedIn']:
                     messages += [{"role": "assistant", "content": f"{st.session_state["user_character"]} has made a request to perform the following action: {action}."}]
                     messages += [{"role": "user", "content": f"Please carefully assess the action that {st.session_state["user_character"]} has requested to make, the backstory, the rules of the game \
                     and all other relevant information, decide whether the requested action is permissible within the rules of the game and determine a realistic outcome of the action. Be careful to  \ 
-                    check that the requested action will not take the character beyond the limits of what they are permitted to do within a given round e.g. they are only allowed to explore one location per round. \
-                    Please return a description of the action performed and the outcome in a way that will be informative to the character who attempted the action and also suitable to be recorded in an events log \
-                    that will be fed back to you as the game progresses. Do not generate any superfluous information. Your output will be automatically recorded in an events log."}]
+                    check that the requested action will not take the character beyond the limits of what they are permitted to do within a given round e.g. they are only allowed to explore one location \
+                    per round. Please return a description of the action performed and the outcome in a way that will be informative to the character who attempted the action and also suitable to be \
+                    recorded in an events log that will be fed back to you as the game progresses. Do not generate any superfluous information. Your output will be automatically recorded in an events log."}]
 
                     response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
                     event = response["choices"][0]["message"]["content"] 
