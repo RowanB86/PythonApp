@@ -537,9 +537,8 @@ if st.session_state['loggedIn']:
 
             with st.expander("Perform an action"):
                 action = st.text_input("Describe an action that you would like to perform")
-                placeholder2 = st.empty()
-
                 submit_action = st.button("Submit Action")
+                placeholder2 = st.empty()
                 if submit_action:
                     ref = db.reference("backstories")
                     games = ref.order_by_child("game_name").equal_to(st.session_state['game_name']).get() 
@@ -597,7 +596,7 @@ if st.session_state['loggedIn']:
                     new_event = {"game": st.session_state['game_name'], "character": st.session_state["user_character"], "round": st.session_state["round_number"],"event": event}
                     ref.push(new_event)
 
-                    placeholder2 = event
+                    placeholder2.write(event)
 
         st.markdown('# Players in the game')
         ref = db.reference("player_characters")
