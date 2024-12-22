@@ -27,7 +27,7 @@ if 'game_has_started' not in st.session_state:
     st.session_state["game_has_started"] = False
 
 game_rules = """
-Each character is allowed to explore one location every round and will each have 3 personal objectives \
+Each character is allowed to explore locations and will each have 3 personal objectives \
                             to complete by the end of the game. There is no limit to the number of rounds that can be played. \
                             Characters will be able to do things like use items from their inventory to perform actions, talk to other characters they encounter \
                             in the game (both playing and non-playing). At least one of the 10 characters should be involved in committing the murder. A detective 
@@ -585,8 +585,7 @@ if st.session_state['loggedIn']:
                     messages += [{"role": "assistant", "content": f"{st.session_state['user_character']} has made a request to perform the following action: {action}."}]
                     messages += [{"role": "user", "content": f"Please carefully assess the action that {st.session_state['user_character']} has requested to make, the backstory, the rules of the game, the events \
                     that have occurred in the game up till this point and all other relevant information, decide whether the requested action is permissible within the rules of the game and determine a realistic outcome of the action. Be careful to  \
-                    check that the requested action will not take the character beyond the limits of what they are permitted to do within a given round e.g. they are only allowed to explore one location \
-                    per round. If a question is posed to one of the other 9 player characters, record the details of the question that was asked, but do not respond on the player character's behalf. The player \
+                    check that the requested action will not take the character beyond the limits of what they are permitted. If a question is posed to one of the other 9 player characters, record the details of the question that was asked, but do not respond on the player character's behalf. The player \
                     character is controlled by a human who will have the chance to respond to the question themselves. Please return a description of the action performed and the outcome in a way that will be \
                     informative to the character who attempted the action and also suitable to be recorded in an events log that will be fed back to you as the game progresses."}]
 
