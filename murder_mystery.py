@@ -603,7 +603,7 @@ if st.session_state['loggedIn']:
                     messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
                     messages += [{"role": "assistant", "content": f"This is a record of an event that occurred in the game as the result of an action that was performed by a player character: {event}."}]
                     messages += [{"role": "user", "content": "Extract (return) the part of the description of the event that will be suitable to be recorded in an events log that \
-                    will later be fed back to you as the game progresses. Try to do this with as few tokens as possible whilst retaining the important nuances of the event."}]
+                    will later be fed back to you as the game progresses. If a question was posed by one player character to another, make sure you include the question that was asked. Try to do this with as few tokens as possible whilst retaining the important nuances of the event."}]
 
                     response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
                     event = response["choices"][0]["message"]["content"]
