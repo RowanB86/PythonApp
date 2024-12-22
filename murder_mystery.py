@@ -628,7 +628,7 @@ if st.session_state['loggedIn']:
                     events = ref.order_by_child("game").equal_to(st.session_state['game_name']).get()
                     if events is not None:
                         for event_id,event in events.items():
-                            messages += [{"role": "assistant", "content": f"This was an event involving {events_data["character"]} and performed in round {events_data["round"]}: {events_data["event"]}"}]
+                            messages += [{"role": "assistant", "content": f"This was an event involving {event["character"]} and performed in round {event["round"]}: {event["event"]}"}]
     
                 messages += [{"role": "user", "content": f"Please assess all events that have occurred in the game and provide the player a log of all events that player character; \
                 st.session_state['user_character'] would realistically have been aware of in the game e.g. a question that was posed to him by another character in the game or an action that the \
