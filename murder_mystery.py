@@ -587,7 +587,7 @@ if st.session_state['loggedIn']:
                     that have occurred in the game up till this point and all other relevant information, decide whether the requested action is permissible within the rules of the game and determine a realistic outcome of the action. Be careful to  \
                     check that the requested action will not take the character beyond the limits of what they are permitted to do within a given round e.g. they are only allowed to explore one location \
                     per round. If a question is posed to one of the other 9 player characters, record that the question was asked, but do not respond on the player character's behalf. The player character is controlled by a human who will have the chance to respond to the question themselves. Please return a description of the action performed and the outcome in a way that will be informative to the character who attempted the action and also suitable to be \
-                    recorded in an events log that will be fed back to you as the game progresses. Do not generate any superfluous information. Your output will be automatically recorded in an events log."}]
+                    recorded in an events log that will be fed back to you as the game progresses."}]
 
                     response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
                     event = response["choices"][0]["message"]["content"] 
