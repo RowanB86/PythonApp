@@ -592,11 +592,27 @@ if st.session_state['loggedIn']:
                     response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
                     event = response["choices"][0]["message"]["content"] 
 
+                    messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
+                    messages += [{"role": "assistant", "content": f"This is a record of an event that occurred in the game as the result of an action that was performed by a player character: {event}."}]
+                    messages += [{"role": "user", "content": "Extract (return) the part of the description of the event that will inform the user of the result of their action and nothing more."}]
+
+                    response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+                    event = response["choices"][0]["message"]["content"]
+                    placeholder2.write(event)
+                    
+                    messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
+                    messages += [{"role": "assistant", "content": f"This is a record of an event that occurred in the game as the result of an action that was performed by a player character: {event}."}]
+                    messages += [{"role": "user", "content": "Extract (return) the part of the description of the event that will be suitable to be recorded in an events log that \
+                    will later be fed back to you as the game progresses. Try to do this with as few tokens as possible whilst retaining the important nuances of the event."}]
+
+                    response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+                    event = response["choices"][0]["message"]["content"]
+                    
                     ref = db.reference("events")
                     new_event = {"game": st.session_state['game_name'], "character": st.session_state["user_character"], "round": st.session_state["round_number"],"event": event}
                     ref.push(new_event)
 
-                    placeholder2.write(event)
+                    
 
         st.markdown('# Players in the game')
         ref = db.reference("player_characters")
