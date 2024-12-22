@@ -597,7 +597,9 @@ if st.session_state['loggedIn']:
                     messages += [{"role": "assistant", "content": f"This is a record of an event that occurred in the game as the result of an action that was performed by a player character: {event}."}]
                     messages += [{"role": "user", "content": "Extract (return) the part of the description of the event that will inform the user of the result of their action and nothing more. If a \
                     question was posed by one player character to another, make sure you include the question that was asked, but do not include the response of the player character that was asked the \
-                    question as they are controlled by a human who will have the opportunity to respond themselves. If a non-player character is asked a question, you can include their response."}]
+                    question as they are controlled by a human who will have the opportunity to respond themselves. The player characters are; 'Alfred Penrose','Captain Theodore Drake','Charlotte Fontain',\
+                    'Detective Hugh Barrington','Dr. Horace Bellamy','Eleanor Winslow', 'Isabella Moretti','Lady Vivian Blackthorn','Percy Hargrove','Reginald Reggie Crowley'.If a non-player character is \
+                    asked a question, you can include their response."}]
 
                     response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
                     event2 = response["choices"][0]["message"]["content"]
@@ -608,7 +610,9 @@ if st.session_state['loggedIn']:
                     messages += [{"role": "user", "content": "Extract (return) the part of the description of the event that will be suitable to be recorded in an events log that \
                     will later be fed back to you as the game progresses. There are 10 player characters in the game. If a question was posed by one player character to another, make sure you include \
                     the question that was asked, but do not include the response of the player character that was asked the question as they are controlled by a human who will have the opportunity to \
-                    respond themselves. If a non-player character is asked a question, you can include their response. Try to do this with as few tokens as possible whilst retaining the important nuances of the event."}]
+                    respond themselves. The player characters are; 'Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington','Dr. Horace Bellamy','Eleanor Winslow', \
+                    'Isabella Moretti','Lady Vivian Blackthorn','Percy Hargrove','Reginald Reggie Crowley'. If a non-player character is asked a question, you can include their response. \
+                    Try to do this with as few tokens as possible whilst retaining the important nuances of the event."}]
 
                     response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
                     event = response["choices"][0]["message"]["content"]
