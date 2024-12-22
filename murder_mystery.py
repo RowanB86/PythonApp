@@ -617,7 +617,24 @@ if st.session_state['loggedIn']:
                     new_event = {"game": st.session_state['game_name'], "character": st.session_state["user_character"], "round": st.session_state["round_number"],"event": event}
                     ref.push(new_event)
 
-                    
+        with st.expander("Events log"): 
+            get_events_update = st.button("Get events update")
+            events_placeholder = st.empty()
+
+            if get_events_update:
+                messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
+                ref = db.reference("events")
+                if ref:
+                    events = ref.order_by_child("game").equal_to(st.session_state['game_name']).get()
+                    if events is not None:
+                        for event_id,event in events.items():
+                            messages += [{"role": "assistant", "content": f"This was an event involving {events_data["character"]} and performed in round {events_data["round"]}: {events_data["event"]}"}]
+    
+                messages += [{"role": "user", "content": "Please assess all events that have occurred in the game and provide the player a log of all events that player character; st.session_state["user_character"] \
+                would realistically have been aware of in the game e.g. a question that was posed to him by another character  in the game or an action that the character performed.}]
+                response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+                events_log = response["choices"][0]["message"]["content"]
+                events_placeholder.write(events_log)
 
         st.markdown('# Players in the game')
         ref = db.reference("player_characters")
