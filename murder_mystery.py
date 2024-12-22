@@ -630,8 +630,9 @@ if st.session_state['loggedIn']:
                         for event_id,event in events.items():
                             messages += [{"role": "assistant", "content": f"This was an event involving {events_data["character"]} and performed in round {events_data["round"]}: {events_data["event"]}"}]
     
-                messages += [{"role": "user", "content": "Please assess all events that have occurred in the game and provide the player a log of all events that player character; st.session_state["user_character"] \
-                would realistically have been aware of in the game e.g. a question that was posed to him by another character in the game or an action that the character performed."}]
+                messages += [{"role": "user", "content": f"Please assess all events that have occurred in the game and provide the player a log of all events that player character; \
+                st.session_state['user_character'] would realistically have been aware of in the game e.g. a question that was posed to him by another character in the game or an action that the \
+                character performed."}]
                 response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
                 events_log = response["choices"][0]["message"]["content"]
                 events_placeholder.write(events_log)
