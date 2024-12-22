@@ -30,7 +30,11 @@ game_rules = """
 Each character is allowed to explore one location every round and will each have 3 personal objectives \
                             to complete by the end of the game. There is no limit to the number of rounds that can be played. \
                             Characters will be able to do things like use items from their inventory to perform actions, talk to other characters they encounter \
-                            in the game (both playing and non-playing). At least one of the 10 characters should be involved in committing the murder.
+                            in the game (both playing and non-playing). At least one of the 10 characters should be involved in committing the murder. A detective 
+                            is allowed to pose five questions to any player they like once per round, regardless of whether they're in the same room as the player.
+                            A player questioned by a detective is able to respond to these questions regardless of if they're in the same room. Other characters are
+                            only able to communicate with one another if they're in the same room and characters should not ask another character more than two questions
+                            per round. Any character is allowed to pose up to 2 questions to any other character in the same room as them.
 """
 image_dict = {
     "Alfred Penrose": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Alfred Penrose.png",
@@ -222,7 +226,14 @@ if not st.session_state['loggedIn']:
 if st.session_state['loggedIn']:
 
     st.write("You are logged in  as: " + st.session_state['username'])
+    if st.session_state["game_has_started"]:
+        ref = db.reference("game_progression")
+        games = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+        for game_ID,game in games.items():
+            st.write("The game is in Round: " + game["round"])
+            st.session_state["round_number"] = game["round"]
 
+    
     refresh_game = st.button("Refresh Game")
 
     if refresh_game:
@@ -258,9 +269,11 @@ if st.session_state['loggedIn']:
                 messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
                 messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
                 messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
-                messages += [{"role": "user", "content": "Please create a backstory that details intricate dynamics between the characters of a murder mystery game that accords well with \
-                              the locations that each character will later explore. Try to do this with as few tokens as possible because this backstory will be fed back to you every time \
-                              a new event in the game occurs. Create a backstory that you will be able to easily and efficiently process later on. Do not add anything superfluous."}]
+                messages += [{"role": "user", "content": "Please create a plot that details intricate dynamics between the characters of a murder mystery game and events that occurred in accordance with \
+                              the locations that each character will later explore. Players will not see this story, but you will refer to it throughout the game when processing events \
+                              that occur. Please make the plot intricate in order to inspire an interesting game. At least one of the 10 characters should have been involved in committing the murder. \
+                              Try to do this with as few tokens as possible because this plot will be fed back to you every time \
+                              a new event in the game occurs. Create a plot that you will be able to easily and efficiently process later on. Do not add anything superfluous."}]
 
                 placeholder = st.empty()
                 placeholder.write("Generating backstory.")
@@ -367,6 +380,7 @@ if st.session_state['loggedIn']:
                 placeholder.write("Items generated")
 
                 ref = db.reference("character_viewpoints")
+                viewpoints = []
 
                 for character in character_desc_dict.keys():
                     placeholder.write(f"Generating {character}'s 'Character Viewpoint'")
@@ -380,7 +394,7 @@ if st.session_state['loggedIn']:
                         messages += [{"role": "assistant", "content": f"{objectives[k]}"}]
     
                     for k in range(0,len(items)):
-                        messages += [{"role": "assistant", "content": f"{items[k]}"}]  
+                        messages += [{"role": "assistant", "content": f"{items[k]}"}]   
     
                     messages += [{"role": "user", "content": f"In accordance with the backstory to the game and all other information you have about the \
                     narrative surrounding the game, please can you detail {character}'s 'Character Viewpoint' i.e. what information the character has about the \
@@ -520,7 +534,16 @@ if st.session_state['loggedIn']:
                     for viewpoint_id,viewpoint_data in viewpoints.items():
                         if viewpoint_data["character"] == st.session_state["user_character"]:
                             st.write(viewpoint_data["viewpoint"])
-                    
+
+            with st.expander("Perform an action"):
+                action = st.text_input("Describe an action that you would like to perform")
+                placeholder2 = st.empty()
+
+                submit_action = st.button("Submit Action")
+                if submit_action:
+                    ref = db.reference("game_events")
+                    events = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+
         st.markdown('# Players in the game')
         ref = db.reference("player_characters")
         
