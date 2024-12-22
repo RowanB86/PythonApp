@@ -557,7 +557,8 @@ if st.session_state['loggedIn']:
                     viewpoints = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
                     
                     ref = db.reference("game_events")
-                    events = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+                    if ref:
+                        events = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
                     
                     messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
                     messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
