@@ -19,165 +19,298 @@ openai.api_key = st.secrets["openai"]["api_key"]
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
 if 'player_character_list' not in st.session_state:
-    st.session_state["player_character_list"] = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
-                                                'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
-                                                'Percy Hargrove','Reginald Reggie Crowley']
+st.session_state["player_character_list"] = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
+                                            'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
+                                            'Percy Hargrove','Reginald Reggie Crowley']
 
 if 'game_has_started' not in st.session_state:
-    st.session_state["game_has_started"] = False
+st.session_state["game_has_started"] = False
 
 game_rules = """
 Each character is allowed to explore locations and will each have 3 personal objectives \
-                            to complete by the end of the game. There is no limit to the number of rounds that can be played. \
-                            Characters will be able to do things like use items from their inventory to perform actions, talk to other characters they encounter \
-                            in the game (both playing and non-playing). At least one of the 10 characters should be involved in committing the murder. A detective 
-                            is allowed to pose five questions to any player they like once per round, regardless of whether they're in the same room as the player.
-                            A player questioned by a detective is able to respond to these questions regardless of if they're in the same room. Other characters are
-                            only able to communicate with one another if they're in the same room and characters should not ask another character more than two questions
-                            per round. Any character is allowed to pose up to 2 questions to any other character in the same room as them.
+                        to complete by the end of the game. There is no limit to the number of rounds that can be played. \
+                        Characters will be able to do things like use items from their inventory to perform actions, talk to other characters they encounter \
+                        in the game (both playing and non-playing). At least one of the 10 characters should be involved in committing the murder. A detective 
+                        is allowed to pose five questions to any player they like once per round, regardless of whether they're in the same room as the player.
+                        A player questioned by a detective is able to respond to these questions regardless of if they're in the same room. Other characters are
+                        only able to communicate with one another if they're in the same room and characters should not ask another character more than two questions
+                        per round. Any character is allowed to pose up to 2 questions to any other character in the same room as them.
 """
 image_dict = {
-    "Alfred Penrose": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Alfred Penrose.png",
-    "Captain Theodore Drake": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Captain Theodore Drake.png",
-    "Charlotte Fontain": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Charlotte Fontain.png",
-    "Detective Hugh Barrington": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Detective Hugh Barrington.png",
-    "Dr. Horace Bellamy": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Dr. Horace Bellamy.png",
-    "Eleanor Winslow": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Eleanor Winslow.png",
-    "Isabella Moretti": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Isabella Moretti.png",
-    "Lady Vivian Blackthorn": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Lady Vivian Blackthorn.png",
-    "Percy Hargrove": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Percy Hargrove.png",
-    "Reginald Reggie Crowley": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Reginald Reggie Crowley.png"
+"Alfred Penrose": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Alfred Penrose.png",
+"Captain Theodore Drake": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Captain Theodore Drake.png",
+"Charlotte Fontain": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Charlotte Fontain.png",
+"Detective Hugh Barrington": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Detective Hugh Barrington.png",
+"Dr. Horace Bellamy": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Dr. Horace Bellamy.png",
+"Eleanor Winslow": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Eleanor Winslow.png",
+"Isabella Moretti": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Isabella Moretti.png",
+"Lady Vivian Blackthorn": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Lady Vivian Blackthorn.png",
+"Percy Hargrove": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Percy Hargrove.png",
+"Reginald Reggie Crowley": "https://raw.githubusercontent.com/rowanb86/PythonApp/main/images/Reginald Reggie Crowley.png"
 }
 
 character_desc_dict = {
-    "Alfred Penrose": """
-    **Role:** Loyal Butler  
-    **Description:** A stoic and meticulous servant who has served the family for decades. He knows every secret hidden within the estate.
-    """,
-    "Captain Theodore Drake": """
-    **Role:** Retired Military Officer  
-    **Description:** A gruff, disciplined veteran with a sharp tongue and a deep sense of honor. He’s had a mysterious falling-out with the victim years ago.
-    """,
-    "Charlotte Fontain": """
-    **Role:** Ambitious Journalist  
-    **Description:** A sharp and ambitious writer always looking for the next big scoop. She was investigating the victim for a scandalous exposé.
-    """,
-    "Detective Hugh Barrington": """
-    **Role:** Police Detective  
-    **Description:** A seasoned investigator with a sharp eye for detail and a no-nonsense attitude. He's been called in to solve the case 
-    and is determined to expose the truth.    
-    """,
-    "Dr. Horace Bellamy": """
-    **Role:** Eccentric Scholar  
-    **Description:** A reclusive historian obsessed with uncovering ancient secrets. He has a strained relationship with the victim, who discredited his research.    
-    """,
-    "Eleanor Winslow": """
-    **Role:** Aspiring Actress  
-    **Description:** A bright and beautiful starlet desperate to climb the social ladder. She has ties to nearly everyone at the gathering and hides a few skeletons 
-    in her closet.    
-    """,
-    "Isabella Moretti": """
-    **Role:** Mysterious Thief  
-    **Description:** A charming and elusive cat burglar known for her daring heists. She was at the scene "by coincidence" but claims she had no interest in the victim.
-    """,
-    "Lady Vivian Blackthorn": """
-    **Role:** Wealthy Socialite  
-    **Description:** A glamorous and influential figure who inherited her family’s fortune. She's known for her charm but has a dark history of 
-    family feuds.    
-    """,
-    "Percy Hargrove": """
-    **Role:** Brooding Musician  
-    **Description:** A talented but troubled violinist who was commissioned to perform at the event. He’s known for his temper and financial struggles.    
-    """,
-    "Reginald Reggie Crowley": """
-    **Role:** Shady Businessman  
-    **Description:** A slick, cigar-smoking entrepreneur with a reputation for bending the law. He’s rumored to have been involved in underhanded 
-    dealings with the victim.
-    """
+"Alfred Penrose": """
+**Role:** Loyal Butler  
+**Description:** A stoic and meticulous servant who has served the family for decades. He knows every secret hidden within the estate.
+""",
+"Captain Theodore Drake": """
+**Role:** Retired Military Officer  
+**Description:** A gruff, disciplined veteran with a sharp tongue and a deep sense of honor. He’s had a mysterious falling-out with the victim years ago.
+""",
+"Charlotte Fontain": """
+**Role:** Ambitious Journalist  
+**Description:** A sharp and ambitious writer always looking for the next big scoop. She was investigating the victim for a scandalous exposé.
+""",
+"Detective Hugh Barrington": """
+**Role:** Police Detective  
+**Description:** A seasoned investigator with a sharp eye for detail and a no-nonsense attitude. He's been called in to solve the case 
+and is determined to expose the truth.    
+""",
+"Dr. Horace Bellamy": """
+**Role:** Eccentric Scholar  
+**Description:** A reclusive historian obsessed with uncovering ancient secrets. He has a strained relationship with the victim, who discredited his research.    
+""",
+"Eleanor Winslow": """
+**Role:** Aspiring Actress  
+**Description:** A bright and beautiful starlet desperate to climb the social ladder. She has ties to nearly everyone at the gathering and hides a few skeletons 
+in her closet.    
+""",
+"Isabella Moretti": """
+**Role:** Mysterious Thief  
+**Description:** A charming and elusive cat burglar known for her daring heists. She was at the scene "by coincidence" but claims she had no interest in the victim.
+""",
+"Lady Vivian Blackthorn": """
+**Role:** Wealthy Socialite  
+**Description:** A glamorous and influential figure who inherited her family’s fortune. She's known for her charm but has a dark history of 
+family feuds.    
+""",
+"Percy Hargrove": """
+**Role:** Brooding Musician  
+**Description:** A talented but troubled violinist who was commissioned to perform at the event. He’s known for his temper and financial struggles.    
+""",
+"Reginald Reggie Crowley": """
+**Role:** Shady Businessman  
+**Description:** A slick, cigar-smoking entrepreneur with a reputation for bending the law. He’s rumored to have been involved in underhanded 
+dealings with the victim.
+"""
 }
 
 locations = {
-    "Grand Ballroom": {
-        "description": "A lavish room with glittering chandeliers and ornate decorations. The site of the last known gathering before the murder."
-    },
-    "Library": {
-        "description": "A quiet, dusty space filled with rows of ancient books and hidden alcoves. It holds the secrets of many family scandals."
-    },
-    "Wine Cellar": {
-        "description": "A dimly lit, musty cellar stocked with vintage wines and dark corners. An ideal place for hiding secrets—or bodies."
-    },
-    "Garden Maze": {
-        "description": "A sprawling hedge maze with narrow pathways and a central fountain. It's easy to get lost here, especially in the dark."
-    },
-    "Master Bedroom": {
-        "description": "An opulent room with heavy drapes and a locked chest at the foot of the bed. Rumors say it holds incriminating documents."
-    },
-    "Kitchen": {
-        "description": "A bustling space with gleaming knives and bubbling pots. The staff often gossip here about the guests' movements."
-    },
-    "Study": {
-        "description": "A small room with a large oak desk and scattered papers. The scene of many heated arguments and secret deals."
-    }
+"Grand Ballroom": {
+    "description": "A lavish room with glittering chandeliers and ornate decorations. The site of the last known gathering before the murder."
+},
+"Library": {
+    "description": "A quiet, dusty space filled with rows of ancient books and hidden alcoves. It holds the secrets of many family scandals."
+},
+"Wine Cellar": {
+    "description": "A dimly lit, musty cellar stocked with vintage wines and dark corners. An ideal place for hiding secrets—or bodies."
+},
+"Garden Maze": {
+    "description": "A sprawling hedge maze with narrow pathways and a central fountain. It's easy to get lost here, especially in the dark."
+},
+"Master Bedroom": {
+    "description": "An opulent room with heavy drapes and a locked chest at the foot of the bed. Rumors say it holds incriminating documents."
+},
+"Kitchen": {
+    "description": "A bustling space with gleaming knives and bubbling pots. The staff often gossip here about the guests' movements."
+},
+"Study": {
+    "description": "A small room with a large oak desk and scattered papers. The scene of many heated arguments and secret deals."
+}
 }
 
 if 'loggedIn' not in st.session_state:
-    st.session_state['loggedIn'] = False 
+st.session_state['loggedIn'] = False 
 
 if 'player_in_game' not in st.session_state:
-    st.session_state['player_in_game'] = False 
+st.session_state['player_in_game'] = False 
 
 if 'player_character_chosen' not in st.session_state:
-    st.session_state['player_character_chosen'] = False 
+st.session_state['player_character_chosen'] = False 
 
 if "confirm_leave_action" not in st.session_state:
-    st.session_state.confirm_action = False
+st.session_state.confirm_action = False
 
 if 'leave_game_button' not in st.session_state:
-    st.session_state['leave_game_button']  = False
+st.session_state['leave_game_button']  = False
 
 if not firebase_admin._apps:
-    # Initialize Firebase
-    initialize_app(cred, {
-        'databaseURL': 'https://murder-mystery-eb53d-default-rtdb.europe-west1.firebasedatabase.app'
-    })
+# Initialize Firebase
+initialize_app(cred, {
+    'databaseURL': 'https://murder-mystery-eb53d-default-rtdb.europe-west1.firebasedatabase.app'
+})
 
 def UpdatePlayerCharacterList(game):
-    player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
-                          'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
-                          'Percy Hargrove','Reginald Reggie Crowley']   
-    
-    ref = db.reference('player_characters')
-    players = ref.order_by_child("game").equal_to(game).get() 
-    
-    if players:
-        for player_id,player_data in players.items():
-            player_character_list.pop(player_character_list.index(player_data["character"]))
+player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
+                      'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
+                      'Percy Hargrove','Reginald Reggie Crowley']   
 
-    return(player_character_list)
+ref = db.reference('player_characters')
+players = ref.order_by_child("game").equal_to(game).get() 
+
+if players:
+    for player_id,player_data in players.items():
+        player_character_list.pop(player_character_list.index(player_data["character"]))
+
+return(player_character_list)
 
 def leave_game(game_name,username):
-    st.session_state.confirm_action = True
-    
-    ref = db.reference("player_characters")
-    player_characters = ref.get() 
-    for player_id,player_data in player_characters.items():
-        if player_data["username"] == username:
-            ref = db.reference(f"player_characters/{player_id}")
-            ref.delete()
-            break
-    
-    ref = db.reference("players_in_game")
-    players = ref.get()
-    for player_id,player_data in players.items():
-        if player_data["player"] == username:
-            ref = db.reference(f"players_in_game/{player_id}")
-            ref.delete()
-            break                
-    
-    st.session_state['player_character_chosen'] = False
-    st.session_state['player_in_game'] = False
-    st.session_state["player_character_list"] = UpdatePlayerCharacterList(game_name)
+st.session_state.confirm_action = True
 
+ref = db.reference("player_characters")
+player_characters = ref.get() 
+for player_id,player_data in player_characters.items():
+    if player_data["username"] == username:
+        ref = db.reference(f"player_characters/{player_id}")
+        ref.delete()
+        break
+
+ref = db.reference("players_in_game")
+players = ref.get()
+for player_id,player_data in players.items():
+    if player_data["player"] == username:
+        ref = db.reference(f"players_in_game/{player_id}")
+        ref.delete()
+        break                
+
+st.session_state['player_character_chosen'] = False
+st.session_state['player_in_game'] = False
+st.session_state["player_character_list"] = UpdatePlayerCharacterList(game_name)
+
+def generate_action(game,character,action):
+    ref = db.reference("backstories")
+    games = ref.order_by_child("game_name").equal_to(game).get() 
+
+    for game_id,game_data in games.items():
+        backstory = game_data["backstory"]
+
+    ref = db.reference("items")
+    items = ref.order_by_child("game").equal_to(game).get() 
+
+    ref = db.reference("objectives")
+    objectives = ref.order_by_child("game").equal_to(game).get() 
+
+    ref = db.reference("character_viewpoints")
+    viewpoints = ref.order_by_child("game").equal_to(game).get() 
+    
+    ref = db.reference("events")
+    if ref:
+        events = ref.order_by_child("game").equal_to(game).get() 
+    
+    messages = [{"role": "system", "content": "You are the game master for a murder mystery game."}]
+    messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
+    messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
+    messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
+    messages += [{"role": "assistant", "content": f"Back story to the game (only you know this story. The players of the game don't.): {backstory}"}]
+
+    if items is not None:
+        for item_id,item_data in items.items():
+            messages += [{"role": "assistant", "content": f"This is an item belonging to {item_data["character"]}: {item_data["item"]}"}]
+
+    if objectives is not None:
+        for objective_id,objectives_data in objectives.items():
+            messages += [{"role": "assistant", "content": f"This is one of {objectives_data["character"]}'s objectives: {objectives_data["objective"]}"}]
+
+    if viewpoints is not None:
+        for viewpoint_id,viewpoints_data in viewpoints.items():
+            messages += [{"role": "assistant", "content": f"This is the perspective of {viewpoints_data["character"]}: {viewpoints_data["viewpoint"]}"}]
+
+    if events is not None:
+        for event_id, events_data in events.items():
+            messages += [{"role": "assistant", "content": f"This was an event involving {events_data["character"]} and performed in round {events_data["round"]}: {events_data["event"]}"}]
+
+    messages += [{"role": "assistant", "content": f"{character} has made a request to perform the following action: {action}."}]
+    messages += [{"role": "user", "content": f"{character} is a character that I want you to control. Please carefully assess the events that have occurred in the game so \
+    so far, the backstory, {character}'s items and objectives and describe an action that {character} could attempt to perform in order to help fulfil their objectives. \
+    Pay close attention to events that have occurred that may have directly affected {character}, that they have not yet responded to e.g. if another player character has \
+    posed a question to {character} and {character} has not yet responded, it would make sense that {character} chooses to  respond to that question in some way even if \
+    they choose not to give much of an answer to the question (they may give an evasive answer). Other actions might involve exploring a location or using one of their \
+    items to interact with their environment. Please only describe the action that they attempt. Do not include any consequence of their action."}]
+
+    response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+    action = response["choices"][0]["message"]["content"] 
+
+    return action
+
+def submit_action(game,character,action):
+        ref = db.reference("backstories")
+        games = ref.order_by_child("game_name").equal_to(game).get() 
+
+        for game_id,game_data in games.items():
+            backstory = game_data["backstory"]
+
+        ref = db.reference("items")
+        items = ref.order_by_child("game").equal_to(game).get() 
+
+        ref = db.reference("objectives")
+        objectives = ref.order_by_child("game").equal_to(game).get() 
+
+        ref = db.reference("character_viewpoints")
+        viewpoints = ref.order_by_child("game").equal_to(game).get() 
+        
+        ref = db.reference("events")
+        if ref:
+            events = ref.order_by_child("game").equal_to(game).get() 
+        
+        messages = [{"role": "system", "content": "You are the game master for a murder mystery game."}]
+        messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
+        messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
+        messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
+        messages += [{"role": "assistant", "content": f"Back story to the game (only you know this story. The players of the game don't.): {backstory}"}]
+
+        if items is not None:
+            for item_id,item_data in items.items():
+                messages += [{"role": "assistant", "content": f"This is an item belonging to {item_data["character"]}: {item_data["item"]}"}]
+
+        if objectives is not None:
+            for objective_id,objectives_data in objectives.items():
+                messages += [{"role": "assistant", "content": f"This is one of {objectives_data["character"]}'s objectives: {objectives_data["objective"]}"}]
+
+        if viewpoints is not None:
+            for viewpoint_id,viewpoints_data in viewpoints.items():
+                messages += [{"role": "assistant", "content": f"This is the perspective of {viewpoints_data["character"]}: {viewpoints_data["viewpoint"]}"}]
+
+        if events is not None:
+            for event_id, events_data in events.items():
+                messages += [{"role": "assistant", "content": f"This was an event involving {events_data["character"]} and performed in round {events_data["round"]}: {events_data["event"]}"}]
+
+        
+        messages += [{"role": "assistant", "content": f"{character} has made a request to perform the following action: {action}."}]
+        messages += [{"role": "user", "content": f"Please carefully assess the action that {character} has requested to make, the backstory, the rules of the game, the events \
+        that have occurred in the game up till this point and all other relevant information, decide whether the requested action is permissible within the rules of the game and determine a realistic outcome of the action. Be careful to  \
+        check that the requested action will not take the character beyond the limits of what they are permitted. If a question is posed to one of the other 9 player characters, record the details of the question that was asked, but do not respond on the player character's behalf. The player \
+        character is controlled by a human who will have the chance to respond to the question themselves. Please return a description of the action performed and the outcome in a way that will be \
+        informative to the character who attempted the action and also suitable to be recorded in an events log that will be fed back to you as the game progresses."}]
+
+        response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+        event = response["choices"][0]["message"]["content"] 
+
+        messages = [{"role": "system", "content": "You are the game master for a murder mystery game."}]
+        messages += [{"role": "assistant", "content": f"This is a record of an event that occurred in the game as the result of an action that was performed by a player character: {event}."}]
+        messages += [{"role": "user", "content": "Extract (return) the part of the description of the event that will inform the user of the result of their action and nothing more. If a \
+        question was posed by one player character to another, make sure you include the question that was asked, but do not include the response of the player character that was asked the \
+        question as they are controlled by a human who will have the opportunity to respond themselves. The player characters are; 'Alfred Penrose','Captain Theodore Drake','Charlotte Fontain',\
+        'Detective Hugh Barrington','Dr. Horace Bellamy','Eleanor Winslow', 'Isabella Moretti','Lady Vivian Blackthorn','Percy Hargrove','Reginald Reggie Crowley'.If a non-player character is \
+        asked a question, you can include their response."}]
+
+        response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+        event2 = response["choices"][0]["message"]["content"]
+        
+        
+        messages = [{"role": "system", "content": "You are the game master for a murder mystery game."}]
+        messages += [{"role": "assistant", "content": f"This is a record of an event that occurred in the game as the result of an action that was performed by a player character: {event}."}]
+        messages += [{"role": "user", "content": "Extract (return) the part of the description of the event that will be suitable to be recorded in an events log that \
+        will later be fed back to you as the game progresses. There are 10 player characters in the game. If a question was posed by one player character to another, make sure you include \
+        the question that was asked, but do not include the response of the player character that was asked the question as they are controlled by a human who will have the opportunity to \
+        respond themselves. The player characters are; 'Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington','Dr. Horace Bellamy','Eleanor Winslow', \
+        'Isabella Moretti','Lady Vivian Blackthorn','Percy Hargrove','Reginald Reggie Crowley'. If a non-player character is asked a question, you can include their response. \
+        Try to do this with as few tokens as possible whilst retaining the important nuances of the event."}]
+
+        response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+        event = response["choices"][0]["message"]["content"]
+
+        return event,event2
 
 if 'character_index' not in st.session_state:
     st.session_state["character_index"] = 0
@@ -265,7 +398,7 @@ if st.session_state['loggedIn']:
 
             if start_game:
                 st.session_state['game_has_started'] = True
-                messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
+                messages = [{"role": "system", "content": "You are the game master for a murder mystery game."}]
                 messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
                 messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
                 messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
@@ -293,7 +426,7 @@ if st.session_state['loggedIn']:
                 
                 for character in character_desc_dict.keys():
                     for j in range(0,3):
-                            messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
+                            messages = [{"role": "system", "content": "You are the game master for a murder mystery game."}]
                             messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
                             messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
                             messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
@@ -338,7 +471,7 @@ if st.session_state['loggedIn']:
                 
                 for character in character_desc_dict.keys():
                     for j in range(0,3):
-                            messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
+                            messages = [{"role": "system", "content": "You are the game master for a murder mystery game."}]
                             messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
                             messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
                             messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
@@ -384,7 +517,7 @@ if st.session_state['loggedIn']:
 
                 for character in character_desc_dict.keys():
                     placeholder.write(f"Generating {character}'s 'Character Viewpoint'")
-                    messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
+                    messages = [{"role": "system", "content": "You are the game master for a murder mystery game."}]
                     messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
                     messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
                     messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
@@ -399,7 +532,9 @@ if st.session_state['loggedIn']:
                     messages += [{"role": "user", "content": f"In accordance with the backstory to the game and all other information you have about the \
                     narrative surrounding the game, please can you detail {character}'s 'Character Viewpoint' i.e. what information the character has about the \
                     events that have occurred in the game or any secrets this character knows that other characters might not. The response that you generate \
-                    will be visible to this particular character and appear in their 'Character Viewpoint' section. Please do not generate anything superfluous."}]
+                    will be visible to this particular character and appear in their 'Character Viewpoint' section. Be careful not to miss key details in the backstory that are relevant \
+                    to the player character e.g. if the character committed the murder, it is important that this appears in their 'Character Viewpoint'. Please do not generate anything \
+                    superfluous."}]
 
                     response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
                     viewpoint = response["choices"][0]["message"]["content"] 
@@ -540,92 +675,19 @@ if st.session_state['loggedIn']:
                 submit_action = st.button("Submit Action")
                 placeholder2 = st.empty()
                 if submit_action:
-                    ref = db.reference("backstories")
-                    games = ref.order_by_child("game_name").equal_to(st.session_state['game_name']).get() 
-
-                    for game_id,game_data in games.items():
-                        backstory = game_data["backstory"]
-
-                    ref = db.reference("items")
-                    items = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
-
-                    ref = db.reference("objectives")
-                    objectives = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
-
-                    ref = db.reference("character_viewpoints")
-                    viewpoints = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+                    event = submit_action(st.session_state['game_name'], st.session_state["user_character"],action)
                     
                     ref = db.reference("events")
-                    if ref:
-                        events = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
-                    
-                    messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
-                    messages += [{"role": "assistant", "content": f"Character: {char}"} for char in character_desc_dict.values()]
-                    messages += [{"role": "assistant", "content": f"Location: {location}"} for location in locations.values()]
-                    messages += [{"role": "assistant", "content": f"Game Rules: {game_rules}"}]
-                    messages += [{"role": "assistant", "content": f"Back story to the game (only you know this story. The players of the game don't.): {backstory}"}]
-
-                    if items is not None:
-                        for item_id,item_data in items.items():
-                            messages += [{"role": "assistant", "content": f"This is an item belonging to {item_data["character"]}: {item_data["item"]}"}]
-
-                    if objectives is not None:
-                        for objective_id,objectives_data in objectives.items():
-                            messages += [{"role": "assistant", "content": f"This is one of {objectives_data["character"]}'s objectives: {objectives_data["objective"]}"}]
-
-                    if viewpoints is not None:
-                        for viewpoint_id,viewpoints_data in viewpoints.items():
-                            messages += [{"role": "assistant", "content": f"This is the perspective of {viewpoints_data["character"]}: {viewpoints_data["viewpoint"]}"}]
-
-                    if events is not None:
-                        for event_id, events_data in events.items():
-                            messages += [{"role": "assistant", "content": f"This was an event involving {events_data["character"]} and performed in round {events_data["round"]}: {events_data["event"]}"}]
-
-                    
-                    messages += [{"role": "assistant", "content": f"{st.session_state['user_character']} has made a request to perform the following action: {action}."}]
-                    messages += [{"role": "user", "content": f"Please carefully assess the action that {st.session_state['user_character']} has requested to make, the backstory, the rules of the game, the events \
-                    that have occurred in the game up till this point and all other relevant information, decide whether the requested action is permissible within the rules of the game and determine a realistic outcome of the action. Be careful to  \
-                    check that the requested action will not take the character beyond the limits of what they are permitted. If a question is posed to one of the other 9 player characters, record the details of the question that was asked, but do not respond on the player character's behalf. The player \
-                    character is controlled by a human who will have the chance to respond to the question themselves. Please return a description of the action performed and the outcome in a way that will be \
-                    informative to the character who attempted the action and also suitable to be recorded in an events log that will be fed back to you as the game progresses."}]
-
-                    response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
-                    event = response["choices"][0]["message"]["content"] 
-
-                    messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
-                    messages += [{"role": "assistant", "content": f"This is a record of an event that occurred in the game as the result of an action that was performed by a player character: {event}."}]
-                    messages += [{"role": "user", "content": "Extract (return) the part of the description of the event that will inform the user of the result of their action and nothing more. If a \
-                    question was posed by one player character to another, make sure you include the question that was asked, but do not include the response of the player character that was asked the \
-                    question as they are controlled by a human who will have the opportunity to respond themselves. The player characters are; 'Alfred Penrose','Captain Theodore Drake','Charlotte Fontain',\
-                    'Detective Hugh Barrington','Dr. Horace Bellamy','Eleanor Winslow', 'Isabella Moretti','Lady Vivian Blackthorn','Percy Hargrove','Reginald Reggie Crowley'.If a non-player character is \
-                    asked a question, you can include their response."}]
-
-                    response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
-                    event2 = response["choices"][0]["message"]["content"]
-                    placeholder2.write(event2)
-                    
-                    messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
-                    messages += [{"role": "assistant", "content": f"This is a record of an event that occurred in the game as the result of an action that was performed by a player character: {event}."}]
-                    messages += [{"role": "user", "content": "Extract (return) the part of the description of the event that will be suitable to be recorded in an events log that \
-                    will later be fed back to you as the game progresses. There are 10 player characters in the game. If a question was posed by one player character to another, make sure you include \
-                    the question that was asked, but do not include the response of the player character that was asked the question as they are controlled by a human who will have the opportunity to \
-                    respond themselves. The player characters are; 'Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington','Dr. Horace Bellamy','Eleanor Winslow', \
-                    'Isabella Moretti','Lady Vivian Blackthorn','Percy Hargrove','Reginald Reggie Crowley'. If a non-player character is asked a question, you can include their response. \
-                    Try to do this with as few tokens as possible whilst retaining the important nuances of the event."}]
-
-                    response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
-                    event = response["choices"][0]["message"]["content"]
-                    
-                    ref = db.reference("events")
-                    new_event = {"game": st.session_state['game_name'], "character": st.session_state["user_character"], "round": st.session_state["round_number"],"event": event}
+                    new_event = {"game": st.session_state['game_name'], "character": st.session_state["user_character"], "round": st.session_state["round_number"],"event": event[0]}
                     ref.push(new_event)
+                    placeholder2.write(event[1])
 
         with st.expander("Events log"): 
             get_events_update = st.button("Get events update")
             events_placeholder = st.empty()
 
             if get_events_update:
-                messages = [{"role": "system", "content": "You are the game master for a murder myster game."}]
+                messages = [{"role": "system", "content": "You are the game master for a murder mystery game."}]
                 ref = db.reference("events")
                 if ref:
                     events = ref.order_by_child("game").equal_to(st.session_state['game_name']).get()
