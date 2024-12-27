@@ -549,7 +549,7 @@ if st.session_state['loggedIn']:
 
                 ref = db.reference(f"game_progression/{game_id}")
                 ref.update({"round": 1})
-elif st.session_state["user_is_host"]:
+elif "user_is_host" in st.session_state:
     generate_ai_character_moves = st.button("Generate AI character moves")
     
     if generate_ai_character_moves:
