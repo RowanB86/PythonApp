@@ -564,6 +564,7 @@ if st.session_state['loggedIn']:
                         game_characters.pop(player)
 
                 for i in range(0,len(game_characters)):
+                    st.write("Generating " + game_characters[i] + "'s actions.")
                     action = generate_action(st.session_state['game_name'],game_characters[i])
                     event = submit_action(st.session_state['game_name'],game_characters[i],action)
                     ref = db.reference("events")
