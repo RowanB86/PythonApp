@@ -19,12 +19,12 @@ openai.api_key = st.secrets["openai"]["api_key"]
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
 if 'player_character_list' not in st.session_state:
-st.session_state["player_character_list"] = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
+    st.session_state["player_character_list"] = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
                                             'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
                                             'Percy Hargrove','Reginald Reggie Crowley']
 
 if 'game_has_started' not in st.session_state:
-st.session_state["game_has_started"] = False
+    st.session_state["game_has_started"] = False
 
 game_rules = """
 Each character is allowed to explore locations and will each have 3 personal objectives \
@@ -121,33 +121,33 @@ locations = {
 }
 
 if 'loggedIn' not in st.session_state:
-st.session_state['loggedIn'] = False 
+    st.session_state['loggedIn'] = False 
 
 if 'player_in_game' not in st.session_state:
-st.session_state['player_in_game'] = False 
+    st.session_state['player_in_game'] = False 
 
 if 'player_character_chosen' not in st.session_state:
-st.session_state['player_character_chosen'] = False 
+    st.session_state['player_character_chosen'] = False 
 
 if "confirm_leave_action" not in st.session_state:
-st.session_state.confirm_action = False
+    st.session_state.confirm_action = False
 
 if 'leave_game_button' not in st.session_state:
-st.session_state['leave_game_button']  = False
+    st.session_state['leave_game_button']  = False
 
 if not firebase_admin._apps:
-# Initialize Firebase
-initialize_app(cred, {
-    'databaseURL': 'https://murder-mystery-eb53d-default-rtdb.europe-west1.firebasedatabase.app'
-})
+    # Initialize Firebase
+    initialize_app(cred, {
+        'databaseURL': 'https://murder-mystery-eb53d-default-rtdb.europe-west1.firebasedatabase.app'
+    })
 
 def UpdatePlayerCharacterList(game):
-player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
-                      'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
-                      'Percy Hargrove','Reginald Reggie Crowley']   
-
-ref = db.reference('player_characters')
-players = ref.order_by_child("game").equal_to(game).get() 
+    player_character_list = ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
+                          'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
+                          'Percy Hargrove','Reginald Reggie Crowley']   
+    
+    ref = db.reference('player_characters')
+    players = ref.order_by_child("game").equal_to(game).get() 
 
 if players:
     for player_id,player_data in players.items():
@@ -156,7 +156,7 @@ if players:
 return(player_character_list)
 
 def leave_game(game_name,username):
-st.session_state.confirm_action = True
+    st.session_state.confirm_action = True
 
 ref = db.reference("player_characters")
 player_characters = ref.get() 
