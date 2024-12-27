@@ -178,7 +178,7 @@ st.session_state['player_character_chosen'] = False
 st.session_state['player_in_game'] = False
 st.session_state["player_character_list"] = UpdatePlayerCharacterList(game_name)
 
-def generate_action(game,character,action):
+def generate_action(game,character):
     ref = db.reference("backstories")
     games = ref.order_by_child("game_name").equal_to(game).get() 
 
@@ -365,7 +365,6 @@ if st.session_state['loggedIn']:
         for game_ID,game in games.items():
             st.write("The game is in Round: " + str(game["round"]))
             st.session_state["round_number"] = game["round"]
-
     
     refresh_game = st.button("Refresh Game")
 
@@ -395,7 +394,7 @@ if st.session_state['loggedIn']:
     if 'user_is_host' in st.session_state and st.session_state["game_has_started"] == False:
         if st.session_state["user_is_host"]:
             start_game = st.button("Start_Game",key="start_game_as_host")
-
+                      
             if start_game:
                 st.session_state['game_has_started'] = True
                 messages = [{"role": "system", "content": "You are the game master for a murder mystery game."}]
@@ -550,7 +549,27 @@ if st.session_state['loggedIn']:
 
                 ref = db.reference(f"game_progression/{game_id}")
                 ref.update({"round": 1})
-                           
+
+            generate_ai_character_moves = st.button("Generate AI character moves")
+
+            if generate_ai_character_moves:
+                game_characters =   ['Alfred Penrose','Captain Theodore Drake','Charlotte Fontain','Detective Hugh Barrington', \
+                                      'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
+                                      'Percy Hargrove','Reginald Reggie Crowley']
+              
+                ref = db.reference("players_in_game")
+                players = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
+                for player_id,player in players.items():
+                    if player in game_characters:
+                        game_characters.pop(player)
+
+                for i in range(0,len(game_characters)):
+                    action = generate_action(st.session_state['game_name'],game_characters[i])
+                    event = submit_action(st.session_state['game_name'],game_characters[i],action)
+                    ref = db.reference("events")
+                    new_event = {"game": st.session_state['game_name'], "character": game_characters[i], "round": st.session_state["round_number"],"event": event}
+                    ref.push(new_event)
+                      
     ref = db.reference("players_in_game")
 
     if st.session_state['player_in_game']:
