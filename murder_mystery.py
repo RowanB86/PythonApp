@@ -229,9 +229,9 @@ def generate_action(game,character):
     items to interact with their environment. Please only describe the action that they attempt. Do not include any consequence of their action."}]
 
     response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
-    action = response["choices"][0]["message"]["content"] 
+    action_submitted = response["choices"][0]["message"]["content"] 
 
-    return action
+    return action_submitted
 
 def submit_action(game,character,action):
         ref = db.reference("backstories")
@@ -557,7 +557,7 @@ if st.session_state['loggedIn']:
                                   'Dr. Horace Bellamy','Eleanor Winslow','Isabella Moretti','Lady Vivian Blackthorn', \
                                   'Percy Hargrove','Reginald Reggie Crowley']
           
-            ref = db.reference("players_in_game")
+            ref = db.reference("player_characters")
             players = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
             for player_id,player in players.items():
                 if player in game_characters:
@@ -565,8 +565,8 @@ if st.session_state['loggedIn']:
         
             for i in range(0,len(game_characters)):
                 st.write("Generating " + game_characters[i] + "'s actions.")
-                action = generate_action(st.session_state['game_name'],game_characters[i])
-                event = submit_action(st.session_state['game_name'],game_characters[i],action)
+                action_submitted = generate_action(st.session_state['game_name'],game_characters[i])
+                event = submit_action(st.session_state['game_name'],game_characters[i],action_submitted)
                 ref = db.reference("events")
                 new_event = {"game": st.session_state['game_name'], "character": game_characters[i], "round": st.session_state["round_number"],"event": event}
                 ref.push(new_event)
