@@ -220,7 +220,6 @@ def generate_action(game,character):
         for event_id, events_data in events.items():
             messages += [{"role": "assistant", "content": f"This was an event involving {events_data["character"]} and performed in round {events_data["round"]}: {events_data["event"]}"}]
 
-    messages += [{"role": "assistant", "content": f"{character} has made a request to perform the following action: {action}."}]
     messages += [{"role": "user", "content": f"{character} is a character that I want you to control. Please carefully assess the events that have occurred in the game so \
     so far, the backstory, {character}'s items and objectives and describe an action that {character} could attempt to perform in order to help fulfil their objectives. \
     Pay close attention to events that have occurred that may have directly affected {character}, that they have not yet responded to e.g. if another player character has \
@@ -560,7 +559,7 @@ if st.session_state['loggedIn']:
             ref = db.reference("player_characters")
             players = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
             for player_id,player in players.items():
-                if player in game_characters:
+                if player["character"] in game_characters:
                     game_characters.pop(player)
         
             for i in range(0,len(game_characters)):
