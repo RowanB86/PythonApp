@@ -149,11 +149,11 @@ def UpdatePlayerCharacterList(game):
     ref = db.reference('player_characters')
     players = ref.order_by_child("game").equal_to(game).get() 
 
-if players:
-    for player_id,player_data in players.items():
-        player_character_list.pop(player_character_list.index(player_data["character"]))
-
-return(player_character_list)
+    if players:
+        for player_id,player_data in players.items():
+            player_character_list.pop(player_character_list.index(player_data["character"]))
+    
+    return(player_character_list)
 
 def leave_game(game_name,username):
     st.session_state.confirm_action = True
