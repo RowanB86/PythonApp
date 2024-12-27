@@ -560,7 +560,7 @@ if st.session_state['loggedIn']:
             players = ref.order_by_child("game").equal_to(st.session_state['game_name']).get() 
             for player_id,player in players.items():
                 if player["character"] in game_characters:
-                    game_characters.pop(player)
+                    game_characters.pop(player["character"])
         
             for i in range(0,len(game_characters)):
                 st.write("Generating " + game_characters[i] + "'s actions.")
