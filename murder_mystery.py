@@ -158,25 +158,25 @@ def UpdatePlayerCharacterList(game):
 def leave_game(game_name,username):
     st.session_state.confirm_action = True
 
-ref = db.reference("player_characters")
-player_characters = ref.get() 
-for player_id,player_data in player_characters.items():
-    if player_data["username"] == username:
-        ref = db.reference(f"player_characters/{player_id}")
-        ref.delete()
-        break
-
-ref = db.reference("players_in_game")
-players = ref.get()
-for player_id,player_data in players.items():
-    if player_data["player"] == username:
-        ref = db.reference(f"players_in_game/{player_id}")
-        ref.delete()
-        break                
-
-st.session_state['player_character_chosen'] = False
-st.session_state['player_in_game'] = False
-st.session_state["player_character_list"] = UpdatePlayerCharacterList(game_name)
+    ref = db.reference("player_characters")
+    player_characters = ref.get() 
+    for player_id,player_data in player_characters.items():
+        if player_data["username"] == username:
+            ref = db.reference(f"player_characters/{player_id}")
+            ref.delete()
+            break
+    
+    ref = db.reference("players_in_game")
+    players = ref.get()
+    for player_id,player_data in players.items():
+        if player_data["player"] == username:
+            ref = db.reference(f"players_in_game/{player_id}")
+            ref.delete()
+            break                
+    
+    st.session_state['player_character_chosen'] = False
+    st.session_state['player_in_game'] = False
+    st.session_state["player_character_list"] = UpdatePlayerCharacterList(game_name)
 
 def generate_action(game,character):
     ref = db.reference("backstories")
