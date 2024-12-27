@@ -691,9 +691,9 @@ if st.session_state['loggedIn']:
 
             with st.expander("Perform an action"):
                 action = st.text_input("Describe an action that you would like to perform")
-                submit_action = st.button("Submit Action")
+                submit_action_button = st.button("Submit Action")
                 placeholder2 = st.empty()
-                if submit_action:
+                if submit_action_button:
                     event = submit_action(st.session_state['game_name'], st.session_state["user_character"],action)
                     
                     ref = db.reference("events")
