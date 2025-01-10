@@ -14,7 +14,7 @@ cred = credentials.Certificate(firebase_credentials)
 if not firebase_admin._apps:
     # Initialize Firebase
     initialize_app(cred, {
-        'databaseURL': 'https://resourceplanning-f5a14-default-rtdb.europe-west1.firebasedatabase.app/'
+        'databaseURL': 'https://resourceplanning-f5a14-default-rtdb.europe-west1.firebasedatabase.app'
     })
 
 if 'logged_in' not in st.session_state:
