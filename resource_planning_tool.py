@@ -6,10 +6,9 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 import openai
-
+firebase_admin.delete_app()
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
-st.write(firebase_credentials)
 
 if not firebase_admin._apps:
     try:
@@ -20,6 +19,7 @@ if not firebase_admin._apps:
         st.write("Firebase initialized successfully.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 if 'logged_in' not in st.session_state:
     st.session_state["logged_in"] = False
