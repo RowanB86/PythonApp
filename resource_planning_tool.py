@@ -35,7 +35,7 @@ if not st.session_state["logged_in"]:
         if ref:
             account_exists = False
             accounts = ref.get()
-            if accounts not None:
+            if accounts is not None:
             
                 for account_id,account_data in accounts.items():
                     if account_data["username"] == st.session_state['username']:
