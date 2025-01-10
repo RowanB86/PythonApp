@@ -35,10 +35,12 @@ if not st.session_state["logged_in"]:
         if ref:
             account_exists = False
             accounts = ref.get()
-            for account_id,account_data in accounts.items():
-                if account_data["username"] == st.session_state['username']:
-                    account_exists = True 
-                    break
+            if accounts not None:
+            
+                for account_id,account_data in accounts.items():
+                    if account_data["username"] == st.session_state['username']:
+                        account_exists = True 
+                        break
                     
             if account_exists:
                 st.write(f"Account with username; {st.session_state['username']} already exists.")
