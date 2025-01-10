@@ -6,7 +6,6 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 import openai
-firebase_admin.delete_app()
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
