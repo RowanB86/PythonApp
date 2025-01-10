@@ -9,7 +9,6 @@ import openai
 
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
-cred = credentials.Certificate(firebase_credentials)
 
 try:
     cred = credentials.Certificate(firebase_credentials)
