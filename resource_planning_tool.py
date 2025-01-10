@@ -56,7 +56,13 @@ if not st.session_state["logged_in"]:
         
         if ref:
             access_granted = False
-            accounts = ref.get()
+            try:
+                ref = db.reference("accounts")
+                accounts = ref.get()
+                st.write("Accounts:", accounts)
+            except Exception as e:
+                st.error(f"Error: {e}")
+
             for account_id,account_data in accounts.items():
                 if account_data["username"] == st.session_state['username'] and account_data["password"] == st.session_state['password']:
                     access_granted = True 
