@@ -33,29 +33,23 @@ if not st.session_state["logged_in"]:
 
     if create_account:
         ref = db.reference("accounts")
-        
         if ref:
             account_exists = False
-
-        try:
-            accounts = ref.get()
-            st.write("Accounts:", accounts)
-        except Exception as e:
-            st.error(f"Error: {e}")
-
-            if accounts is not None:
             
-                for account_id,account_data in accounts.items():
-                    if account_data["username"] == st.session_state['username']:
-                        account_exists = True 
-                        break
-                    
-            if account_exists:
-                st.write(f"Account with username; {st.session_state['username']} already exists.")
-            else:
-                new_account = {"username": st.session_state['username'], "password": st.session_state['password']}
-                ref.push(new_account) 
-                st.write("New account created.")
+        accounts = ref.get()
+
+        if accounts is not None:
+            for account_id,account_data in accounts.items():
+                if account_data["username"] == st.session_state['username']:
+                    account_exists = True 
+                    break
+                
+        if account_exists:
+            st.write(f"Account with username; {st.session_state['username']} already exists.")
+        else:
+            new_account = {"username": st.session_state['username'], "password": st.session_state['password']}
+            ref.push(new_account) 
+            st.write("New account created.")
     
     if log_in:
         ref = db.reference("accounts")
