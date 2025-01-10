@@ -9,15 +9,15 @@ import openai
 
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
-
-try:
-    cred = credentials.Certificate(firebase_credentials)
-    initialize_app(cred, {
-        'databaseURL': 'https://resourceplanning-f5a14-default-rtdb.europe-west1.firebasedatabase.app'
-    })
-    st.write("Firebase initialized successfully.")
-except Exception as e:
-    st.error(f"Error initializing Firebase: {e}")
+if not firebase_admin._apps:
+    try:
+        cred = credentials.Certificate(firebase_credentials)
+        initialize_app(cred, {
+            'databaseURL': 'https://resourceplanning-f5a14-default-rtdb.europe-west1.firebasedatabase.app'
+        })
+        st.write("Firebase initialized successfully.")
+    except Exception as e:
+        st.error(f"Error initializing Firebase: {e}")
 
 if 'logged_in' not in st.session_state:
     st.session_state["logged_in"] = False
