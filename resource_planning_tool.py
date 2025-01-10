@@ -36,7 +36,13 @@ if not st.session_state["logged_in"]:
         
         if ref:
             account_exists = False
+
+        try:
             accounts = ref.get()
+            st.write("Accounts:", accounts)
+        except Exception as e:
+            st.error(f"Error: {e}")
+
             if accounts is not None:
             
                 for account_id,account_data in accounts.items():
