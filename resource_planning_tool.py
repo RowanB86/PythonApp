@@ -9,6 +9,8 @@ import openai
 
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
+st.write(firebase_credentials)
+
 if not firebase_admin._apps:
     try:
         cred = credentials.Certificate(firebase_credentials)
