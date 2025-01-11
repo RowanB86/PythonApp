@@ -143,25 +143,14 @@ else:
         "Friday": ["Project C", "Off", "Project A"],
     }
     df = pd.DataFrame(data)
-    st.write(df)
+    st.write("DataFrame Preview:")
+    st.write(df)  # Ensure DataFrame displays correctly
     
-    # Custom JS for cell color
-    cell_style = JsCode("""
-    function(params) {
-        if (params.value === "Off") {
-            return { 'backgroundColor': 'lightgray', 'color': 'black' };
-        } else if (params.value.includes("Project A")) {
-            return { 'backgroundColor': 'lightblue', 'color': 'black' };
-        }
-        return null;
-    }
-    """)
-
-
-    # Display editable grid with unsafe JS code enabled
-    
-    st.write("Editable Weekly Schedule")
+    # Grid options
     gb = GridOptionsBuilder.from_dataframe(df)
-    gb.configure_default_column(editable=True)  # Basic editable setup
+    gb.configure_default_column(editable=True)  # Simplified setup
     grid_options = gb.build()
-    AgGrid(df, gridOptions=grid_options, height=400, width='100%', allow_unsafe_jscode=True)
+    
+    # Display editable grid
+    st.write("Editable Weekly Schedule")
+    AgGrid(df, gridOptions=grid_options, height=400, width='100%')
