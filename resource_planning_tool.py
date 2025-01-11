@@ -143,7 +143,7 @@ else:
                 for employee_id,employee in accounts.items():
                     team_list.append(employee["first_name"] + ' ' +  employee["last_name"] + ' (' + employee_id + ')')
 
-        project = st.selectbox("Select opportunity",options=opportunities)
+        project = st.selectbox("Select opportunity",options=opportunities_list)
         employee = st.selectbox("Select team member to assign to opportunity",options=team_list)
         capability = st.text_input("Primary capability that team member will fulfil:")
         start_date = st.text_input("Opportunity start date (dd/mm/yyyy):")
