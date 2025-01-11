@@ -153,15 +153,19 @@ else:
         
     
     # Sample data for schedule
-    data = {
-        "Team Member": ["Alice", "Bob", "Charlie"],
-        "Monday": ["Project A", "Project B", "Off"],
-        "Tuesday": ["Project A", "Project C", "Project B"],
-        "Wednesday": ["Off", "Project A", "Project C"],
-        "Thursday": ["Project B", "Project A", "Off"],
-        "Friday": ["Project C", "Off", "Project A"],
-    }
-    df = pd.DataFrame(data)
+    if "grid_data" not in st.session_state:
+        st.session_state["grid_data"] = {
+            "Team Member": ["Alice", "Bob", "Charlie"],
+            "Monday": ["Project A", "Project B", "Off"],
+            "Tuesday": ["Project A", "Project C", "Project B"],
+            "Wednesday": ["Off", "Project A", "Project C"],
+            "Thursday": ["Project B", "Project A", "Off"],
+            "Friday": ["Project C", "Off", "Project A"],
+        }
+    
+    # Use session state data
+    df = pd.DataFrame(st.session_state["grid_data"])
+
     st.write("DataFrame Preview:")
     st.write(df)  # Ensure DataFrame displays correctly
     
