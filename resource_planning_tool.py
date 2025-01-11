@@ -1,3 +1,4 @@
+
 from st_aggrid import AgGrid, GridOptionsBuilder, JsCode
 import pandas as pd
 import streamlit as st
@@ -6,7 +7,7 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 import openai
-
+st.set_page_config(layout="wide")  # Wider view for Streamlit
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
 if not firebase_admin._apps:
@@ -166,6 +167,6 @@ else:
     grid_options = gb.build()
     
     # Display editable grid with unsafe JS code enabled
-    st.set_page_config(layout="wide")  # Wider view for Streamlit
+    
     st.write("Editable Weekly Schedule")
     AgGrid(df, gridOptions=grid_options, height=400, width='100%', allow_unsafe_jscode=True)
