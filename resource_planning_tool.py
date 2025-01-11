@@ -165,7 +165,7 @@ else:
 
     gb.configure_default_column(editable=True)
     grid_options = gb.build()
-    AgGrid(df, gridOptions=grid_options, height=400, width='50%')
+    AgGrid(df, gridOptions=grid_options, height=400, width='100%', allow_unsafe_jscode=True)
 
     # Display editable grid with unsafe JS code enabled
     
