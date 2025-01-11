@@ -78,77 +78,7 @@ if not st.session_state["logged_in"]:
                        
 else:
     
-    with st.sidebar.expander("Add Team Member"):
-        first_name = st.text_input("First Name:")
-        last_name = st.text_input("Last Name:")
-        select_grade = st.selectbox("Select Grade",options=['D1','D2','D3','D4','D5','D6','D7'])
-        primary_skill = st.text_input("Primary Capability:")
-        secondary_skill = st.text_input("Secondary Capability:")
-        
-        add_team_member = st.button("Add Team Member")
-        
-        if add_team_member:
-            ref = db.reference("team_members")
-            new_team_member = {"FirstName": first_name, "LastName": last_name, "Grade": select_grade, "PrimarySkill": primary_skill, "SecondarySkill": secondary_skill}
-            ref.push(new_team_member)
-            st.write("Team member added.")
-            
-        
-    with st.sidebar.expander("Add Opportunity"):
-        project_name = st.text_input("Enter Project Name:")
-        on_contract = st.selectbox("Set Contract Status",options=['On Contract','Not On Contract'])
-        
-        add_opportunity = st.button("Add Opportunity")
-        
-        if add_opportunity:
-            ref = db.reference("projects")
-            
-            if ref:
-                opportunities = ref.get()
-                opportunity_exists = False
-                
-                for opportunity_id,opportunity in opportunities.items():
-                    if opportunity["Project"] == project_name:
-                        opportunity_exists = True
-                        break
-            
-            
-            if opportunity_exists:
-                st.write("An opportunity with this name already exists.")
-            else:
-                new_project = {"Project": project_name, "Status": on_contract}
-                ref.push(new_project)
-                st.write("New opportunity added.")        
-                
-    with st.sidebar.expander("Assign Team Member to Opportunity"):
-        
-        ref = db.reference("projects")
-        
-        if ref:
-            opportunities = ref.get()
-            opportunity_list = []
 
-            if opportunities is not None:
-            
-                for opportunity_id,opportunity in opportunities.items():
-                    opportunity_list.append(opportunity["Project"])
-
-        ref = db.reference("team_members")
-        
-        if ref:
-            team_members = ref.get()
-            team_list = []
-
-            if team_members is not None:
-                for employee_id,employee in accounts.items():
-                    team_list.append(employee["first_name"] + ' ' +  employee["last_name"] + ' (' + employee_id + ')')
-
-        project = st.selectbox("Select opportunity",options=opportunity_list)
-        employee = st.selectbox("Select team member to assign to opportunity",options=team_list)
-        capability = st.text_input("Primary capability that team member will fulfil:")
-        start_date = st.text_input("Opportunity start date (dd/mm/yyyy):")
-        end_date = st.text_input("Opportunity end date (dd/mm/yyyy):")
-        st.markdown("<b>Working Hours:</b>", unsafe_allow_html=True)
         
         
     
