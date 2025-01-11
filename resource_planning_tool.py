@@ -156,18 +156,12 @@ else:
         return null;
     }
     """)
-    
-    # Grid options
-    gb = GridOptionsBuilder.from_dataframe(df)
-    #gb.configure_default_column(editable=True, cellStyle=cell_style)
-    #gb.configure_grid_options(domLayout='autoHeight')
-    #grid_options = gb.build()
 
-    gb.configure_default_column(editable=True)
-    grid_options = gb.build()
-    AgGrid(df, gridOptions=grid_options, height=400, width='100%', allow_unsafe_jscode=True)
 
     # Display editable grid with unsafe JS code enabled
     
     st.write("Editable Weekly Schedule")
-    #AgGrid(df, gridOptions=grid_options, height=800, width='100%', allow_unsafe_jscode=True)
+    gb = GridOptionsBuilder.from_dataframe(df)
+    gb.configure_default_column(editable=True)  # Basic editable setup
+    grid_options = gb.build()
+    AgGrid(df, gridOptions=grid_options, height=400, width='100%', allow_unsafe_jscode=True)
