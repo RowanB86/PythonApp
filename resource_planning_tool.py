@@ -170,4 +170,4 @@ else:
     # Display editable grid with unsafe JS code enabled
     
     st.write("Editable Weekly Schedule")
-    #AgGrid(df, gridOptions=grid_options, height=400, width='100%', allow_unsafe_jscode=True)
+    #AgGrid(df, gridOptions=grid_options, height=800, width='100%', allow_unsafe_jscode=True)
