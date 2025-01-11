@@ -158,11 +158,15 @@ else:
     
     # Grid options
     gb = GridOptionsBuilder.from_dataframe(df)
-    gb.configure_default_column(editable=True, cellStyle=cell_style)
-    gb.configure_grid_options(domLayout='autoHeight')
+    #gb.configure_default_column(editable=True, cellStyle=cell_style)
+    #gb.configure_grid_options(domLayout='autoHeight')
+    #grid_options = gb.build()
+
+    gb.configure_default_column(editable=True)
     grid_options = gb.build()
-    
+    AgGrid(df, gridOptions=grid_options, height=400, width='100%')
+
     # Display editable grid with unsafe JS code enabled
     
     st.write("Editable Weekly Schedule")
-    AgGrid(df, gridOptions=grid_options, height=400, width='100%', allow_unsafe_jscode=True)
+    #AgGrid(df, gridOptions=grid_options, height=400, width='100%', allow_unsafe_jscode=True)
