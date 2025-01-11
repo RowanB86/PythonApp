@@ -143,6 +143,7 @@ else:
         "Friday": ["Project C", "Off", "Project A"],
     }
     df = pd.DataFrame(data)
+    st.write(df)
     
     # Custom JS for cell color
     cell_style = JsCode("""
