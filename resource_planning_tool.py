@@ -148,7 +148,7 @@ else:
         capability = st.text_input("Primary capability that team member will fulfil:")
         start_date = st.text_input("Opportunity start date (dd/mm/yyyy):")
         end_date = st.text_input("Opportunity end date (dd/mm/yyyy):")
-        st.markdown("<html><b>Working Hours:</b></html>")
+        st.markdown("<b>Working Hours:</b>", unsafe_allow_html=True)
         
         
     
