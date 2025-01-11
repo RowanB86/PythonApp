@@ -126,9 +126,11 @@ else:
         if ref:
             opportunities = ref.get()
             opportunity_list = []
+
+            if opportunities is not None:
             
-            for opportunity_id,opportunity in opportunities.items():
-                opportunity_list.append(opportunity["Project"])
+                for opportunity_id,opportunity in opportunities.items():
+                    opportunity_list.append(opportunity["Project"])
             
             
 
