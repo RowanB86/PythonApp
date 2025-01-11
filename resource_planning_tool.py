@@ -79,10 +79,78 @@ if not st.session_state["logged_in"]:
 else:
     
 
+    with st.sidebar.expander("Add Team Member"):
+        first_name = st.text_input("First Name:")
+        last_name = st.text_input("Last Name:")
+        select_grade = st.selectbox("Select Grade",options=['D1','D2','D3','D4','D5','D6','D7'])
+        primary_skill = st.text_input("Primary Capability:")
+        secondary_skill = st.text_input("Secondary Capability:")
         
+        add_team_member = st.button("Add Team Member")
         
-    
-    # Sample data for schedule
+        if add_team_member:
+            ref = db.reference("team_members")
+            new_team_member = {"FirstName": first_name, "LastName": last_name, "Grade": select_grade, "PrimarySkill": primary_skill, "SecondarySkill": secondary_skill}
+            ref.push(new_team_member)
+            st.write("Team member added.")
+            
+        
+    with st.sidebar.expander("Add Opportunity"):
+        project_name = st.text_input("Enter Project Name:")
+        on_contract = st.selectbox("Set Contract Status",options=['On Contract','Not On Contract'])
+        
+        add_opportunity = st.button("Add Opportunity")
+        
+        if add_opportunity:
+            ref = db.reference("projects")
+            
+            if ref:
+                opportunities = ref.get()
+                opportunity_exists = False
+                
+                for opportunity_id,opportunity in opportunities.items():
+                    if opportunity["Project"] == project_name:
+                        opportunity_exists = True
+                        break
+            
+            
+            if opportunity_exists:
+                st.write("An opportunity with this name already exists.")
+            else:
+                new_project = {"Project": project_name, "Status": on_contract}
+                ref.push(new_project)
+                st.write("New opportunity added.")        
+                
+    with st.sidebar.expander("Assign Team Member to Opportunity"):
+        
+        ref = db.reference("projects")
+        
+        if ref:
+            opportunities = ref.get()
+            opportunity_list = []
+
+            if opportunities is not None:
+            
+                for opportunity_id,opportunity in opportunities.items():
+                    opportunity_list.append(opportunity["Project"])
+
+        ref = db.reference("team_members")
+        
+        if ref:
+            team_members = ref.get()
+            team_list = []
+
+            if team_members is not None:
+                for employee_id,employee in accounts.items():
+                    team_list.append(employee["first_name"] + ' ' +  employee["last_name"] + ' (' + employee_id + ')')
+
+        project = st.selectbox("Select opportunity",options=opportunity_list)
+        employee = st.selectbox("Select team member to assign to opportunity",options=team_list)
+        capability = st.text_input("Primary capability that team member will fulfil:")
+        start_date = st.text_input("Opportunity start date (dd/mm/yyyy):")
+        end_date = st.text_input("Opportunity end date (dd/mm/yyyy):")
+        st.markdown("<b>Working Hours:</b>", unsafe_allow_html=True)        
+
     if "grid_data" not in st.session_state:
         st.session_state["grid_data"] = {
             "Team Member": ["Alice", "Bob", "Charlie"],
@@ -92,18 +160,17 @@ else:
             "Thursday": ["Project B", "Project A", "Off"],
             "Friday": ["Project C", "Off", "Project A"],
         }
-    
-    # Use session state data
-    df = pd.DataFrame(st.session_state["grid_data"])
 
+    # Convert to DataFrame
+    df = pd.DataFrame(st.session_state["grid_data"])
     st.write("DataFrame Preview:")
-    st.write(df)  # Ensure DataFrame displays correctly
-    
-    # Grid options
+    st.write(df)
+
+    # Configure AgGrid
     gb = GridOptionsBuilder.from_dataframe(df)
-    gb.configure_default_column(editable=True)  # Simplified setup
+    gb.configure_default_column(editable=True)
     grid_options = gb.build()
-    
-    # Display editable grid
+
+    # Display AgGrid
     st.write("Editable Weekly Schedule")
     AgGrid(df, gridOptions=grid_options)
