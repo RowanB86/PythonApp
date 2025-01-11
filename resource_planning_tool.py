@@ -88,7 +88,7 @@ else:
         add_team_member = st.button("Add Team Member")
         
         if add_team_member:
-            ref = db.reference("Team Members")
+            ref = db.reference("team_members")
             new_team_member = {"FirstName": first_name, "LastName": last_name, "Grade": select_grade, "PrimarySkill": primary_skill, "SecondarySkill": secondary_skill}
             ref.push(new_team_member)
             st.write("Team member added.")
@@ -132,7 +132,26 @@ else:
             
                 for opportunity_id,opportunity in opportunities.items():
                     opportunity_list.append(opportunity["Project"])
-            
+
+        ref = db.reference("team_members")
+        
+        if ref:
+            team_members = ref.get()
+            team_list = []
+
+            if team_members is not None:
+                for employee_id,employee in accounts.items():
+                    team_list.append(employee["first_name"] + ' ' +  employee["last_name"] + ' (' + employee_id + ')')
+
+        project = st.selectbox("Select opportunity",options=opportunities)
+        employee = st.selectbox("Select team member to assign to opportunity",options=team_list)
+        capability = st.text_input("Primary capability that team member will fulfil:")
+        start_date = st.text_input("Opportunity start date (dd/mm/yyyy):")
+        end_date = st.text_input("Opportunity end date (dd/mm/yyyy):")
+        st.markdown("<b>Working Hours:</b>")
+        
+        
+    
     # Sample data for schedule
     data = {
         "Team Member": ["Alice", "Bob", "Charlie"],
