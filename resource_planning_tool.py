@@ -133,10 +133,6 @@ else:
                 for opportunity_id,opportunity in opportunities.items():
                     opportunity_list.append(opportunity["Project"])
             
-            
-
-    
-    #with st.expander("Create new game"):
     # Sample data for schedule
     data = {
         "Team Member": ["Alice", "Bob", "Charlie"],
