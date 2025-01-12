@@ -175,5 +175,5 @@ else:
         
         # Display editable grid
         st.write("Editable Weekly Schedule")
-        AgGrid(df, gridOptions=grid_options, height=400, width='100%')
+        AgGrid(df, gridOptions=grid_options, height=200, width='50%')
 
