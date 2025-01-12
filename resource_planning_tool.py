@@ -91,7 +91,7 @@ else:
         
         if add_team_member:
             ref = db.reference("team_members")
-            new_team_member = {"FirstName": first_name, "LastName": last_name, "Grade": select_grade, "PrimarySkill": primary_skill, "SecondarySkill": secondary_skill}
+            new_team_member = {"first_name": first_name, "last_name": last_name, "grade": select_grade, "primary_skill": primary_skill, "secondary_skill": secondary_skill}
             ref.push(new_team_member)
             st.write("Team member added.")
             
