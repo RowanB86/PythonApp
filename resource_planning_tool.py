@@ -7,7 +7,7 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 import openai
-#st.set_page_config(layout="wide")  # Wider view for Streamlit
+st.set_page_config(layout="wide")  # Wider view for Streamlit
 
 data = {
     "Team Member": ["Alice", "Bob", "Charlie"],
