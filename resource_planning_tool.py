@@ -108,11 +108,12 @@ else:
             if ref:
                 opportunities = ref.get()
                 opportunity_exists = False
-                
-                for opportunity_id,opportunity in opportunities.items():
-                    if opportunity["Project"] == project_name:
-                        opportunity_exists = True
-                        break
+
+                if opportunities is not None:
+                    for opportunity_id,opportunity in opportunities.items():
+                        if opportunity["Project"] == project_name:
+                            opportunity_exists = True
+                            break
             
             
             if opportunity_exists:
