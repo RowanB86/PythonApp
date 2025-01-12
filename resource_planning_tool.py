@@ -189,6 +189,7 @@ else:
 
         ref = db.reference("schedule")
 
+            
         if ref:
             entries = ref.get()
 
@@ -247,3 +248,5 @@ else:
                                 hourSum += working_hours[k]
 
                         df.iloc[nextRow,j] = hourSum
+
+            st.write(df)                
