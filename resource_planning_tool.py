@@ -28,7 +28,7 @@ grid_options = gb.build()
 
 # Display editable grid
 st.write("Editable Weekly Schedule")
-AgGrid(df, gridOptions=grid_options, height=400, width='80%')
+AgGrid(df, gridOptions=grid_options, height=200, width='50%')
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
