@@ -189,7 +189,6 @@ else:
 
         ref = db.reference("schedule")
 
-            
         if ref:
             entries = ref.get()
 
