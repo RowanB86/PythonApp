@@ -173,4 +173,28 @@ else:
         end_date = st.text_input("Opportunity end date (dd/mm/yyyy):")
         st.markdown("<b>Working Hours:</b>", unsafe_allow_html=True)        
 
+    container = st.container()
+
+    with container:
+        
+        data = {
+            "Team Member": ["Alice", "Bob", "Charlie"],
+            "Monday": ["Project A", "Project B", "Off"],
+            "Tuesday": ["Project A", "Project C", "Project B"],
+            "Wednesday": ["Off", "Project A", "Project C"],
+            "Thursday": ["Project B", "Project A", "Off"],
+            "Friday": ["Project C", "Off", "Project A"],
+        }
+        df = pd.DataFrame(data)
+        st.write("DataFrame Preview:")
+        st.write(df)  # Ensure DataFrame displays correctly
+        
+        # Grid options
+        gb = GridOptionsBuilder.from_dataframe(df)
+        gb.configure_default_column(editable=True)  # Simplified setup
+        grid_options = gb.build()
+        
+        # Display editable grid
+        st.write("Editable Weekly Schedule")
+        AgGrid(df, gridOptions=grid_options, height=200, width='50%')
 
