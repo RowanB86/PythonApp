@@ -215,7 +215,7 @@ else:
     
                 while current_date != wb_end_date:
                     columns.append(str(current_date))
-                    
+                    st.write(current_date)
                     current_date = current_date + pd.Timedelta(days=7)
                 
                 print(columns)
