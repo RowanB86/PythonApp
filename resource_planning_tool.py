@@ -217,4 +217,4 @@ else:
                     current_date = current_date + pd.Timedelta(days=7)
                     columns.append(str(current_date))
                 
-                print(columns)
+                st.write(columns)
