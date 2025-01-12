@@ -141,10 +141,12 @@ else:
         if ref:
             team_members = ref.get()
             team_list = []
+            row = 1
 
             if team_members is not None:
                 for employee_id,employee in team_members.items():
-                    team_list.append(employee["first_name"] + ' ' +  employee["last_name"] + ' (' + employee_id + ')')
+                    team_list.append(employee["first_name"] + ' ' +  employee["last_name"] + ' (' + row + ')')
+                    row += 1
 
         project = st.selectbox("Select opportunity",options=opportunity_list)
         employee = st.selectbox("Select team member to assign to opportunity",options=team_list)
@@ -165,7 +167,7 @@ else:
                 st.write("End date should be later than start date")
             else:
                 
-                new_entry = {"project": project, "employee": employee, "capability": capability, "start_date": start_date, \
+                new_entry = {"project": project, "capability": capability, "employee": employee, "start_date": start_date, \
                              "end_date": end_date, "monday": monday, "tuesday": tuesday, "wednesday": wednesday, "thursday": thursday, \
                             "friday": friday}
     
@@ -205,7 +207,6 @@ else:
                         
                     row += 1
 
-            
                 wb_start_date = (min_start_date - pd.Timedelta(days=min_start_date.weekday())).date()
                 wb_end_date = (max_end_date - pd.Timedelta(days=max_end_date.weekday())).date()
     
@@ -216,5 +217,33 @@ else:
                 while current_date != wb_end_date:
                     current_date = current_date + pd.Timedelta(days=7)
                     columns.append(str(current_date))
-                
-                st.write(columns)
+                    
+                df = pd.DataFrame(columns=columns)
+                    
+                for entry_id,entry in entries.items():
+                    nextRow = len(df)
+                    working_hours = [entry["monday"],entry["tuesday"],entry["wednesday"],entry["thursday"],entry["friday"]]
+                    
+                    df.loc[nextRow] = [None] * len(df.columns)
+                    df.iloc[nextRow,0] = entry["project"]
+                    df.iloc[nextRow,1] = entry["capability"]
+                    df.iloc[nextRow,2] = entry["employee"]
+
+                    project_start_date = pd.to_datetime(entry["start_date"],format = '%d/%m/%Y').date()
+                    project_end_date = pd.to_datetime(entry["end_date"],format = '%d/%m/%Y').date()
+    
+                    numCols = len(df.columns)
+                    withinRange = False
+                    
+                    for j in range(3,numCols):
+                        week_beginning = pd.to_datetime(df.columns[j],format = '%d/%m/%Y').date()
+                        week_beginning = week_beginning - pd.Timedelta(days=week_beginning.weekday())
+                        week_end = week_beginning + pd.Timedelta(days=4)
+                        hourSum = 0
+                        
+                        for k in range(0,5):
+                            current_date = week_beginning + pd.Timedelta(days=k)
+                            if project_start_date <= current_date <= project_end_date:
+                                hourSum += working_hours[k]
+
+                        df.iloc[nextRow,j] = hourSum
