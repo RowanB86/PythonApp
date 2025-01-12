@@ -160,14 +160,16 @@ else:
         assign_to_project = st.button("Assign team member to opportunity.")
 
         if assign_to_project:
-            if 
-            
-            new_entry = {"project": project, "employee": employee, "capability": capability, "start_date": start_date \
-                         "end_date",end_date, "monday": monday, "tuesday": tuesday, "wednesday": wednesday, "thursday": thursday \
-                        "friday": friday}
-
-            ref = db.reference("schedule")
-            ref.push(new_entry)
+            if pd.to_datetime(end_date, format='%d/%m/%Y') <= pd.to_datetime(start_date, format='%d/%m/%Y'):
+                st.write("End date should be later than start date")
+            else:
+                
+                new_entry = {"project": project, "employee": employee, "capability": capability, "start_date": start_date \
+                             "end_date",end_date, "monday": monday, "tuesday": tuesday, "wednesday": wednesday, "thursday": thursday \
+                            "friday": friday}
+    
+                ref = db.reference("schedule")
+                ref.push(new_entry)
         
     container = st.container()
 
@@ -182,9 +184,37 @@ else:
             "Friday": ["Project C", "Off", "Project A"],
         }
 
-        
+        ref = db.reference("schedule")
+
+        if ref:
+            entries = ref.get()
+
+            if entries is not None:
+                row = 0
+                for entry_id,entry in entries.items():
+                    if row = 0:
+                        min_start_date = pd.to_datetime(entry["start_date"],format = '%d/%m/%Y')
+                        max_end_date = pd.to_datetime(entry["end_date"],format = '%d/%m/%Y')
+                    else:
+                        if pd.to_datetime(entry["start_date"],format = '%d/%m/%Y') < min_start_date:
+                            min_start_date = pd.to_datetime(entry["start_date"],format = '%d/%m/%Y') 
+
+                        if pd.to_datetime(entry["end_date"],format = '%d/%m/%Y')  > max_end_date:
+                            max_end_date = pd.to_datetime(entry["end_date"],format = '%d/%m/%Y')                     
+                        
+                    row += 1
 
         
-        
-        
+            wb_start_date = (start_date - pd.Timedelta(start_date.weekday())).date()
+            wb_end_date = (end_date - pd.Timedelta(end_date.weekday())).date()
 
+            current_date = wb_start_date
+
+            columns = ["Opportunity","Capability","Team Member"]
+
+            while current_date != wb_end_date:
+                columnns.append(str(current_date))
+                
+                current_date = current_date + pd.Timedelta(days=7)
+            
+            print(columns)
