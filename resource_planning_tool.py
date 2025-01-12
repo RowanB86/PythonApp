@@ -236,7 +236,7 @@ else:
                     withinRange = False
                     
                     for j in range(3,numCols):
-                        week_beginning = pd.to_datetime(df.columns[j],format = '%d/%m/%Y').date()
+                        week_beginning = pd.to_datetime(df.columns[j]).date()
                         week_beginning = week_beginning - pd.Timedelta(days=week_beginning.weekday())
                         week_end = week_beginning + pd.Timedelta(days=4)
                         hourSum = 0
