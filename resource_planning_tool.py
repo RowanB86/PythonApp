@@ -9,29 +9,27 @@ import json
 import openai
 #st.set_page_config(layout="wide")  # Wider view for Streamlit
 
-if "grid_data" not in st.session_state:
-    st.session_state["grid_data"] = {
-        "Team Member": ["Alice", "Bob", "Charlie"],
-        "Monday": ["Project A", "Project B", "Off"],
-        "Tuesday": ["Project A", "Project C", "Project B"],
-        "Wednesday": ["Off", "Project A", "Project C"],
-        "Thursday": ["Project B", "Project A", "Off"],
-        "Friday": ["Project C", "Off", "Project A"],
-    }
-
-# Convert to DataFrame
-df = pd.DataFrame(st.session_state["grid_data"])
+data = {
+    "Team Member": ["Alice", "Bob", "Charlie"],
+    "Monday": ["Project A", "Project B", "Off"],
+    "Tuesday": ["Project A", "Project C", "Project B"],
+    "Wednesday": ["Off", "Project A", "Project C"],
+    "Thursday": ["Project B", "Project A", "Off"],
+    "Friday": ["Project C", "Off", "Project A"],
+}
+df = pd.DataFrame(data)
 st.write("DataFrame Preview:")
-st.write(df)
+st.write(df)  # Ensure DataFrame displays correctly
 
-# Configure AgGrid
+# Grid options
 gb = GridOptionsBuilder.from_dataframe(df)
-gb.configure_default_column(editable=True)
+gb.configure_default_column(editable=True)  # Simplified setup
 grid_options = gb.build()
 
-# Display AgGrid
+# Display editable grid
 st.write("Editable Weekly Schedule")
-AgGrid(df, gridOptions=grid_options)
+AgGrid(df, gridOptions=grid_options, height=400, width='100%')
+
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
 if not firebase_admin._apps:
