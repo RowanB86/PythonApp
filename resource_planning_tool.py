@@ -7,9 +7,7 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 import openai
-st.set_page_config(layout="wide")  # Wider view for Streamlit
-
-
+#st.set_page_config(layout="wide")  # Wider view for Streamlit
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
@@ -152,8 +150,25 @@ else:
         capability = st.text_input("Primary capability that team member will fulfil:")
         start_date = st.text_input("Opportunity start date (dd/mm/yyyy):")
         end_date = st.text_input("Opportunity end date (dd/mm/yyyy):")
-        st.markdown("<b>Working Hours:</b>", unsafe_allow_html=True)        
+        st.markdown("<b>Working Hours:</b>", unsafe_allow_html=True)   
+        monday = st.text_input("Monday:")
+        tuesday = st.text_input("Tuesday:")
+        wednesday = st.text_input("Wednesday:")
+        thursday = st.text_input("Thursday:")
+        friday = st.text_input("Friday:")
 
+        assign_to_project = st.button("Assign team member to opportunity.")
+
+        if assign_to_project:
+            if 
+            
+            new_entry = {"project": project, "employee": employee, "capability": capability, "start_date": start_date \
+                         "end_date",end_date, "monday": monday, "tuesday": tuesday, "wednesday": wednesday, "thursday": thursday \
+                        "friday": friday}
+
+            ref = db.reference("schedule")
+            ref.push(new_entry)
+        
     container = st.container()
 
     with container:
@@ -166,17 +181,10 @@ else:
             "Thursday": ["Project B", "Project A", "Off"],
             "Friday": ["Project C", "Off", "Project A"],
         }
-        df = pd.DataFrame(data)
-        st.write("Editable Weekly Schedule")
-        edited_df = st.data_editor(df, num_rows="dynamic")
-        st.write("Updated DataFrame:")
-        st.write(edited_df)
-        # Grid options
-        #gb = GridOptionsBuilder.from_dataframe(df)
-        #gb.configure_default_column(editable=True)  # Simplified setup
-        #grid_options = gb.build()
+
         
-        # Display editable grid
-        #st.write("Editable Weekly Schedule")
-        #AgGrid(df, gridOptions=grid_options, height=200, width='50%')
+
+        
+        
+        
 
