@@ -192,7 +192,7 @@ else:
             if entries is not None:
                 row = 0
                 for entry_id,entry in entries.items():
-                    if row = 0:
+                    if row == 0:
                         min_start_date = pd.to_datetime(entry["start_date"],format = '%d/%m/%Y')
                         max_end_date = pd.to_datetime(entry["end_date"],format = '%d/%m/%Y')
                     else:
