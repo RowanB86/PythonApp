@@ -244,7 +244,7 @@ else:
                         for k in range(0,5):
                             current_date = week_beginning + pd.Timedelta(days=k)
                             if project_start_date <= current_date <= project_end_date:
-                                hourSum += working_hours[k]
+                                hourSum += int(working_hours[k])
 
                         df.iloc[nextRow,j] = hourSum
 
