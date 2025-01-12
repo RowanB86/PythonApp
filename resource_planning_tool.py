@@ -205,16 +205,16 @@ else:
                     row += 1
 
             
-            wb_start_date = (min_start_date - pd.Timedelta(min_start_date.weekday())).date()
-            wb_end_date = (max_end_date - pd.Timedelta(max_end_date.weekday())).date()
-
-            current_date = wb_start_date
-
-            columns = ["Opportunity","Capability","Team Member"]
-
-            while current_date != wb_end_date:
-                columnns.append(str(current_date))
+                wb_start_date = (min_start_date - pd.Timedelta(min_start_date.weekday())).date()
+                wb_end_date = (max_end_date - pd.Timedelta(max_end_date.weekday())).date()
+    
+                current_date = wb_start_date
+    
+                columns = ["Opportunity","Capability","Team Member"]
+    
+                while current_date != wb_end_date:
+                    columnns.append(str(current_date))
+                    
+                    current_date = current_date + pd.Timedelta(days=7)
                 
-                current_date = current_date + pd.Timedelta(days=7)
-            
-            print(columns)
+                print(columns)
