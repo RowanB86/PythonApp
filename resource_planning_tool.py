@@ -142,7 +142,7 @@ else:
             team_list = []
 
             if team_members is not None:
-                for employee_id,employee in accounts.items():
+                for employee_id,employee in team_members.items():
                     team_list.append(employee["first_name"] + ' ' +  employee["last_name"] + ' (' + employee_id + ')')
 
         project = st.selectbox("Select opportunity",options=opportunity_list)
