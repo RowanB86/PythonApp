@@ -164,7 +164,7 @@ else:
                 st.write("End date should be later than start date")
             else:
                 
-                new_entry = {"project": project, "employee": employee, "capability": capability, "start_date": start_date \
+                new_entry = {"project": project, "employee": employee, "capability": capability, "start_date": start_date, \
                              "end_date": end_date, "monday": monday, "tuesday": tuesday, "wednesday": wednesday, "thursday": thursday \
                             "friday": friday}
     
