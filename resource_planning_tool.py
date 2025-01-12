@@ -247,7 +247,7 @@ else:
                                 hourSum += int(working_hours[k])
 
                         df.iloc[nextRow,j] = hourSum
-            edited_df = st.data_editor(df, num_rows="dynamic", cell_style=cell_style)
+            edited_df = st.data_editor(df, num_rows="dynamic")
             st.write("Updated DataFrame:")
             st.write(edited_df)
                        
