@@ -165,7 +165,7 @@ else:
             else:
                 
                 new_entry = {"project": project, "employee": employee, "capability": capability, "start_date": start_date \
-                             "end_date",end_date, "monday": monday, "tuesday": tuesday, "wednesday": wednesday, "thursday": thursday \
+                             "end_date": end_date, "monday": monday, "tuesday": tuesday, "wednesday": wednesday, "thursday": thursday \
                             "friday": friday}
     
                 ref = db.reference("schedule")
