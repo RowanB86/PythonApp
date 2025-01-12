@@ -167,11 +167,14 @@ else:
             "Friday": ["Project C", "Off", "Project A"],
         }
         df = pd.DataFrame(data)
-        
+        st.write("Editable Weekly Schedule")
+        edited_df = st.data_editor(df, num_rows="dynamic")
+        st.write("Updated DataFrame:")
+        st.write(edited_df)
         # Grid options
-        gb = GridOptionsBuilder.from_dataframe(df)
-        gb.configure_default_column(editable=True)  # Simplified setup
-        grid_options = gb.build()
+        #gb = GridOptionsBuilder.from_dataframe(df)
+        #gb.configure_default_column(editable=True)  # Simplified setup
+        #grid_options = gb.build()
         
         # Display editable grid
         st.write("Editable Weekly Schedule")
