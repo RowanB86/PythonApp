@@ -214,7 +214,7 @@ else:
                 columns = ["Opportunity","Capability","Team Member"]
     
                 while current_date != wb_end_date:
-                    columnns.append(str(current_date))
+                    columns.append(str(current_date))
                     
                     current_date = current_date + pd.Timedelta(days=7)
                 
