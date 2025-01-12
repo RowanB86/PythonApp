@@ -167,8 +167,6 @@ else:
             "Friday": ["Project C", "Off", "Project A"],
         }
         df = pd.DataFrame(data)
-        st.write("DataFrame Preview:")
-        st.write(df)  # Ensure DataFrame displays correctly
         
         # Grid options
         gb = GridOptionsBuilder.from_dataframe(df)
@@ -177,5 +175,5 @@ else:
         
         # Display editable grid
         st.write("Editable Weekly Schedule")
-        AgGrid(df, gridOptions=grid_options, height=200, width='50%')
+        AgGrid(df, gridOptions=grid_options, height=400, width='100%')
 
