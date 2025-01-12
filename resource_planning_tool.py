@@ -8,6 +8,30 @@ from firebase_admin import credentials, initialize_app, db
 import json
 import openai
 #st.set_page_config(layout="wide")  # Wider view for Streamlit
+
+if "grid_data" not in st.session_state:
+    st.session_state["grid_data"] = {
+        "Team Member": ["Alice", "Bob", "Charlie"],
+        "Monday": ["Project A", "Project B", "Off"],
+        "Tuesday": ["Project A", "Project C", "Project B"],
+        "Wednesday": ["Off", "Project A", "Project C"],
+        "Thursday": ["Project B", "Project A", "Off"],
+        "Friday": ["Project C", "Off", "Project A"],
+    }
+
+# Convert to DataFrame
+df = pd.DataFrame(st.session_state["grid_data"])
+st.write("DataFrame Preview:")
+st.write(df)
+
+# Configure AgGrid
+gb = GridOptionsBuilder.from_dataframe(df)
+gb.configure_default_column(editable=True)
+grid_options = gb.build()
+
+# Display AgGrid
+st.write("Editable Weekly Schedule")
+AgGrid(df, gridOptions=grid_options)
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
 if not firebase_admin._apps:
@@ -151,26 +175,4 @@ else:
         end_date = st.text_input("Opportunity end date (dd/mm/yyyy):")
         st.markdown("<b>Working Hours:</b>", unsafe_allow_html=True)        
 
-    if "grid_data" not in st.session_state:
-        st.session_state["grid_data"] = {
-            "Team Member": ["Alice", "Bob", "Charlie"],
-            "Monday": ["Project A", "Project B", "Off"],
-            "Tuesday": ["Project A", "Project C", "Project B"],
-            "Wednesday": ["Off", "Project A", "Project C"],
-            "Thursday": ["Project B", "Project A", "Off"],
-            "Friday": ["Project C", "Off", "Project A"],
-        }
 
-    # Convert to DataFrame
-    df = pd.DataFrame(st.session_state["grid_data"])
-    st.write("DataFrame Preview:")
-    st.write(df)
-
-    # Configure AgGrid
-    gb = GridOptionsBuilder.from_dataframe(df)
-    gb.configure_default_column(editable=True)
-    grid_options = gb.build()
-
-    # Display AgGrid
-    st.write("Editable Weekly Schedule")
-    AgGrid(df, gridOptions=grid_options)
