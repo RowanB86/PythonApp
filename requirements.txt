@@ -25,6 +25,7 @@ numpy==1.26.2      # Compatible with Python 3.12
 requests==2.31.0
 openai==0.28
 streamlit-aggrid
+plotly
 
 
 
