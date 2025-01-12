@@ -208,17 +208,13 @@ else:
             
                 wb_start_date = (min_start_date - pd.Timedelta(days=min_start_date.weekday())).date()
                 wb_end_date = (max_end_date - pd.Timedelta(days=max_end_date.weekday())).date()
-
-                st.write(wb_start_date)
-                st.write(wb_end_date)
     
                 current_date = wb_start_date
     
                 columns = ["Opportunity","Capability","Team Member"]
     
                 while current_date != wb_end_date:
-                    columns.append(str(current_date))
-                    st.write(current_date)
                     current_date = current_date + pd.Timedelta(days=7)
+                    columns.append(str(current_date))
                 
                 print(columns)
