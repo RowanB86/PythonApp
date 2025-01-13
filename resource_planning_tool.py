@@ -15,7 +15,6 @@ st.set_page_config(layout="wide")  # Wider view for Streamlit
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
-# Create HTML Table with Frozen Columns
 def dataframe_to_frozen_html_table(df):
     html_table = """
     <style>
@@ -45,24 +44,33 @@ def dataframe_to_frozen_html_table(df):
         background-color: black; /* Black background for the first three headers */
         color: white; /* White text for contrast */
         font-weight: bold; /* Bold text for better visibility */
+        z-index: 3;
     }
     .frozen-table td.frozen {
         background-color: #f2f2f2;
-    }
-    .frozen-table td:first-child,
-    .frozen-table td:nth-child(2),
-    .frozen-table td:nth-child(3),
-    .frozen-table th:first-child,
-    .frozen-table th:nth-child(2),
-    .frozen-table th:nth-child(3) {
-        position: sticky;
-        left: 0;
         z-index: 1;
     }
-    .frozen-table th:first-child,
+    /* Freeze the first three columns */
+    .frozen-table th:nth-child(1),
     .frozen-table th:nth-child(2),
+    .frozen-table th:nth-child(3),
+    .frozen-table td:nth-child(1),
+    .frozen-table td:nth-child(2),
+    .frozen-table td:nth-child(3) {
+        position: sticky;
+        left: 0;
+    }
+    .frozen-table th:nth-child(2) {
+        left: 80px; /* Adjust for first column width */
+    }
     .frozen-table th:nth-child(3) {
-        z-index: 3;
+        left: 160px; /* Adjust for first two column widths */
+    }
+    .frozen-table td:nth-child(2) {
+        left: 80px; /* Adjust for first column width */
+    }
+    .frozen-table td:nth-child(3) {
+        left: 160px; /* Adjust for first two column widths */
     }
     </style>
     <div class="table-container">
