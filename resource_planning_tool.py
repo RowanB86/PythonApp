@@ -250,20 +250,14 @@ else:
 
                         df.iloc[nextRow,j] = hourSum
 
-                       
-            # Convert DataFrame to Plotly Table
-            fig = go.Figure(data=[go.Table(
-                header=dict(values=list(df.columns),  # Table headers
-                            fill_color="paleturquoise",  # Header background color
-                            align="center",  # Align header text
-                            font=dict(color="black", size=18)),  # Header font
+                                   
+            # Define Dash app
+            app = Dash(__name__)
             
-                cells=dict(values=[df[col] for col in df.columns],  # Table data
-                           fill_color="white",  # Cell background color
-                           align="center",  # Align cell text
-                           font=dict(color="black", size=16))  # Cell font
-            )])
-            
-            # Display in Streamlit
-            st.write("Weekly Schedule")
-            st.plotly_chart(fig, use_container_width=False, width=7000)
+            app.layout = dash_table.DataTable(
+                data=df.to_dict("records"),
+                columns=[{"name": i, "id": i} for i in df.columns],
+                fixed_columns={"headers": True, "data": 2},  # Freeze first two columns
+                style_table={"overflowX": "auto"},  # Enable horizontal scrolling
+                style_cell={"minWidth": "100px", "width": "100px", "maxWidth": "200px"},
+            )
