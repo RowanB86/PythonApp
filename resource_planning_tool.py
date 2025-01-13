@@ -7,6 +7,8 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 import openai
+import plotly.graph_objects as go
+
 #st.set_page_config(layout="wide")  # Wider view for Streamlit
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
@@ -247,7 +249,21 @@ else:
                                 hourSum += int(working_hours[k])
 
                         df.iloc[nextRow,j] = hourSum
-            edited_df = st.data_editor(df, num_rows="dynamic")
-            st.write("Updated DataFrame:")
-            st.write(edited_df)
+
                        
+            # Convert DataFrame to Plotly Table
+            fig = go.Figure(data=[go.Table(
+                header=dict(values=list(df.columns),  # Table headers
+                            fill_color="paleturquoise",  # Header background color
+                            align="center",  # Align header text
+                            font=dict(color="black", size=14)),  # Header font
+            
+                cells=dict(values=[df[col] for col in df.columns],  # Table data
+                           fill_color="white",  # Cell background color
+                           align="center",  # Align cell text
+                           font=dict(color="black", size=12))  # Cell font
+            )])
+            
+            # Display in Streamlit
+            st.write("Weekly Schedule")
+            st.plotly_chart(fig, use_container_width=True)
