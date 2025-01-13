@@ -15,85 +15,88 @@ st.set_page_config(layout="wide")  # Wider view for Streamlit
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
-def generate_html_table_with_frozen_columns(dataframe):
-    html = """
+def dataframe_to_frozen_html_table(df):
+    html_table = """
     <style>
-        .table-container {
-            overflow-x: auto;
-            white-space: nowrap;
-            position: relative;
-        }
-        .frozen-table {
-            border-collapse: collapse;
-            table-layout: fixed; /* Ensure consistent column widths */
-            width: 100%;
-        }
-        .frozen-table th, .frozen-table td {
-            border: 1px solid black;
-            padding: 5px;
-            text-align: center;
-        }
-        .frozen-table th {
-            background-color: #003366;
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 2;
-        }
-        .frozen-table th.frozen {
-            background-color: black; /* Black background for the first three headers */
-            color: white; /* White text for contrast */
-            font-weight: bold; /* Bold text for better visibility */
-            z-index: 3;
-            width: 150px; /* Fixed width for frozen columns */
-        }
-        .frozen-table td.frozen {
-            background-color: #f2f2f2;
-            z-index: 1;
-            width: 150px; /* Fixed width for frozen columns */
-        }
-        /* Freeze the first three columns */
-        .frozen-table th:nth-child(1),
-        .frozen-table th:nth-child(2),
-        .frozen-table th:nth-child(3),
-        .frozen-table td:nth-child(1),
-        .frozen-table td:nth-child(2),
-        .frozen-table td:nth-child(3) {
-            position: sticky;
-            left: 0;
-        }
-        .frozen-table th:nth-child(2) {
-            left: 150px; /* Adjust for first column width */
-        }
-        .frozen-table th:nth-child(3) {
-            left: 300px; /* Adjust for second column width */
-        }
+    .table-container {
+        overflow-x: auto;
+        white-space: nowrap;
+        position: relative;
+    }
+    .frozen-table {
+        border-collapse: collapse;
+        table-layout: auto;
+        width: 100%;
+    }
+    .frozen-table th, .frozen-table td {
+        border: 1px solid black;
+        padding: 5px;
+        text-align: center;
+    }
+    .frozen-table th {
+        background-color: #003366;
+        color: white;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+    .frozen-table th.frozen {
+        background-color: black; /* Black background for the first three headers */
+        color: white; /* White text for contrast */
+        font-weight: bold; /* Bold text for better visibility */
+        z-index: 3;
+    }
+    .frozen-table td.frozen {
+        background-color: #f2f2f2;
+        z-index: 1;
+    }
+    /* Freeze the first three columns */
+    .frozen-table th:nth-child(1),
+    .frozen-table th:nth-child(2),
+    .frozen-table th:nth-child(3),
+    .frozen-table td:nth-child(1),
+    .frozen-table td:nth-child(2),
+    .frozen-table td:nth-child(3) {
+        position: sticky;
+        left: 0;
+    }
+    .frozen-table th:nth-child(2) {
+        left: 80px; /* Adjust for first column width */
+    }
+    .frozen-table th:nth-child(3) {
+        left: 160px; /* Adjust for first two column widths */
+    }
+    .frozen-table td:nth-child(2) {
+        left: 80px; /* Adjust for first column width */
+    }
+    .frozen-table td:nth-child(3) {
+        left: 160px; /* Adjust for first two column widths */
+    }
     </style>
     <div class="table-container">
         <table class="frozen-table">
             <thead>
                 <tr>
     """
-    # Add headers
-    for i, col in enumerate(dataframe.columns):
-        if i < 3:
-            html += f'<th class="frozen">{col}</th>'
+    # Add column headers with specific classes for the first three columns
+    for i, col in enumerate(df.columns):
+        if i < 3:  # First three columns
+            html_table += f"<th class='frozen'>{col}</th>"
         else:
-            html += f'<th>{col}</th>'
-    html += "</tr></thead><tbody>"
+            html_table += f"<th>{col}</th>"
+    html_table += "</tr></thead><tbody>"
 
-    # Add data rows
-    for _, row in dataframe.iterrows():
-        html += "<tr>"
+    # Add table rows with specific classes for the first three columns
+    for _, row in df.iterrows():
+        html_table += "<tr>"
         for i, cell in enumerate(row):
-            if i < 3:
-                html += f'<td class="frozen">{cell}</td>'
+            if i < 3:  # First three columns
+                html_table += f"<td class='frozen'>{cell}</td>"
             else:
-                html += f'<td>{cell}</td>'
-        html += "</tr>"
-
-    html += "</tbody></table></div>"
-    return html
+                html_table += f"<td>{cell}</td>"
+        html_table += "</tr>"
+    html_table += "</tbody></table></div>"
+    return html_table
 
 if not firebase_admin._apps:
     try:
@@ -334,7 +337,7 @@ else:
             
 
             # Convert DataFrame to HTML table with frozen columns
-            html_table = generate_html_table_with_frozen_columns(df)
+            html_table = dataframe_to_frozen_html_table(df)
             
             # Render HTML in Streamlit
             st.write("Weekly Schedule Table with Frozen Columns")
