@@ -266,4 +266,4 @@ else:
             
             # Display in Streamlit
             st.write("Weekly Schedule")
-            st.plotly_chart(fig, use_container_width=False, width=800)
+            st.plotly_chart(fig, use_container_width=False, width=7000)
