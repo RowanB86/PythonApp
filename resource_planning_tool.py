@@ -15,6 +15,7 @@ st.set_page_config(layout="wide")  # Wider view for Streamlit
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
+# Create HTML Table with Frozen Columns
 def dataframe_to_frozen_html_table(df):
     html_table = """
     <style>
@@ -39,6 +40,12 @@ def dataframe_to_frozen_html_table(df):
         position: sticky;
         top: 0;
         z-index: 2;
+    }
+    .frozen-table th:first-child,
+    .frozen-table th:nth-child(2),
+    .frozen-table th:nth-child(3) {
+        background-color: black; /* Set the background color to black */
+        color: white;
     }
     .frozen-table td:first-child,
     .frozen-table td:nth-child(2),
