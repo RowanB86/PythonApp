@@ -25,7 +25,7 @@ def generate_html_table_with_frozen_columns(dataframe):
         }
         .frozen-table {
             border-collapse: collapse;
-            table-layout: auto;
+            table-layout: fixed; /* Ensure consistent column widths */
             width: 100%;
         }
         .frozen-table th, .frozen-table td {
@@ -45,14 +45,12 @@ def generate_html_table_with_frozen_columns(dataframe):
             color: white; /* White text for contrast */
             font-weight: bold; /* Bold text for better visibility */
             z-index: 3;
-            min-width: 100px; /* Auto-size with a minimum width */
-            max-width: 200px; /* Prevent overly wide columns */
+            width: 150px; /* Fixed width for frozen columns */
         }
         .frozen-table td.frozen {
             background-color: #f2f2f2;
             z-index: 1;
-            min-width: 100px; /* Auto-size with a minimum width */
-            max-width: 200px; /* Prevent overly wide columns */
+            width: 150px; /* Fixed width for frozen columns */
         }
         /* Freeze the first three columns */
         .frozen-table th:nth-child(1),
@@ -65,10 +63,10 @@ def generate_html_table_with_frozen_columns(dataframe):
             left: 0;
         }
         .frozen-table th:nth-child(2) {
-            left: calc(var(--column-width) * 1); /* Adjust for first column width */
+            left: 150px; /* Adjust for first column width */
         }
         .frozen-table th:nth-child(3) {
-            left: calc(var(--column-width) * 2); /* Adjust for second column width */
+            left: 300px; /* Adjust for second column width */
         }
     </style>
     <div class="table-container">
