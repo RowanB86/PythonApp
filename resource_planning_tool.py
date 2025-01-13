@@ -255,6 +255,7 @@ else:
                                    
 
             # Build a Plotly Table
+            # Build a Plotly Table
             header_values = list(df.columns)
             cell_values = [df[col] for col in df.columns]
             
@@ -263,13 +264,14 @@ else:
                     go.Table(
                         header=dict(
                             values=header_values,
-                            align="left",
+                            align="center",
                             font=dict(size=12, color="white"),
                             fill=dict(color="darkblue"),
+                            height=40,
                         ),
                         cells=dict(
                             values=cell_values,
-                            align="left",
+                            align="center",
                             font=dict(size=11),
                             fill=dict(color="lightgray"),
                         ),
@@ -277,12 +279,12 @@ else:
                 ]
             )
             
-            # Add scroll functionality and freeze the first three columns
+            # Adjust the layout to improve readability
             fig.update_layout(
-                autosize=False,
-                width=1000,  # Adjust the width as needed
-                height=600,  # Adjust the height as needed
-                margin=dict(l=0, r=0, t=0, b=0),
+                autosize=True,
+                width=1200,  # Set a fixed width for the table
+                height=500,  # Set a fixed height for the table
+                margin=dict(l=20, r=20, t=20, b=20),
             )
             
             # Display the Plotly table in Streamlit
