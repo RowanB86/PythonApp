@@ -44,8 +44,9 @@ def dataframe_to_frozen_html_table(df):
     .frozen-table th:first-child,
     .frozen-table th:nth-child(2),
     .frozen-table th:nth-child(3) {
-        background-color: black; /* Set the background color to black */
-        color: white;
+        background-color: black; /* Black background for the first three headers */
+        color: white; /* White text for contrast */
+        font-weight: bold; /* Bold text for better visibility */
     }
     .frozen-table td:first-child,
     .frozen-table td:nth-child(2),
