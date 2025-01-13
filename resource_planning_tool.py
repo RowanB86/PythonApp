@@ -116,11 +116,14 @@ if 'logged_in' not in st.session_state:
 
 if not st.session_state["logged_in"]:
 
-    st.session_state['username'] = st.text_input("Enter your username:")
-    st.session_state['password']  = st.text_input("Enter game password:",key='game_password1',type='password')
-    
-    create_account = st.button("Create Account")
-    log_in = st.button("Log In")
+    col1, col2, col3 = st.columns([2, 1, 2])
+
+    with col2:
+        st.session_state['username'] = st.text_input("Enter your username:")
+        st.session_state['password']  = st.text_input("Enter game password:",key='game_password1',type='password')
+        
+        create_account = st.button("Create Account")
+        log_in = st.button("Log In")
 
     if create_account:
         ref = db.reference("accounts")
