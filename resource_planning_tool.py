@@ -314,9 +314,9 @@ else:
                         df.iloc[nextRow,j] = hourSum
             
 
-            # Convert DataFrame to HTML table
-            html_table = dataframe_to_html_table(df)
+            # Convert DataFrame to HTML table with frozen columns
+            html_table = dataframe_to_frozen_html_table(df)
             
             # Render HTML in Streamlit
-            st.write("Weekly Schedule Table")
+            st.write("Weekly Schedule Table with Frozen Columns")
             st.markdown(html_table, unsafe_allow_html=True)
