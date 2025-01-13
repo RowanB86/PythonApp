@@ -258,11 +258,11 @@ else:
                 <thead>
                     <tr style="background-color: #003366; color: white;">
             """
-            for col in data.keys():
+            for col in df.keys():
                 html_table += f"<th style='border: 1px solid black; padding: 5px;'>{col}</th>"
             html_table += "</tr></thead><tbody>"
             
-            for row in zip(*data.values()):
+            for row in zip(*df.values()):
                 html_table += "<tr>"
                 for cell in row:
                     html_table += f"<td style='border: 1px solid black; padding: 5px;'>{cell}</td>"
