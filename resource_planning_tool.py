@@ -265,7 +265,7 @@ else:
                 ref = db.reference("schedule")
                 ref.push(new_entry)
 
-    with st.sidebar.expander("Team Members"):
+    with st.expander("Team Members"):
         ref = db.reference("team_members")
         df = pd.DataFrame(columns=["Employee_ID","First_Name","Last_Name","Grade","Primary_Capability","Secondary_Capability"])
 
