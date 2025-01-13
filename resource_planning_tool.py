@@ -232,11 +232,19 @@ else:
         if ref:
             team_members = ref.get()
             team_list = []
+            team_list2 = []
             row = 1
 
             if team_members is not None:
                 for employee_id,employee in team_members.items():
-                    team_list.append(employee["first_name"] + ' ' +  employee["last_name"] + ' (' + str(row) + ')')
+                    count = team_list2.count(employee["first_name"] + ' ' +  employee["last_name"])
+
+                    if count == 0:
+                        team_list.append(employee["first_name"] + ' ' +  employee["last_name"])
+                    else:
+                        team_list.append(employee["first_name"] + ' ' +  employee["last_name"] + '(' + str(count+1) + ')')
+                    
+                    team_list2.append(employee["first_name"] + ' ' +  employee["last_name"])
                     row += 1
 
         project = st.selectbox("Select opportunity",options=opportunity_list)
@@ -276,7 +284,7 @@ else:
                 for employee_ID, employee in employees.items():
                     next_row = len(df)
                     df.loc[next_row] = [None]*len(df.columns)
-                    df.iloc[next_row,0] = employee_ID
+                    df.iloc[next_row,0] = next_row + 1
                     df.iloc[next_row,1] = employee["first_name"]
                     df.iloc[next_row,2] = employee["last_name"]
                     df.iloc[next_row,3] = employee["grade"]
