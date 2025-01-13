@@ -251,44 +251,18 @@ else:
                                 hourSum += int(working_hours[k])
 
                         df.iloc[nextRow,j] = hourSum
-
-                                   
-
-            # Build a Plotly Table
-            # Build a Plotly Table
-            header_values = list(df.columns)
-            cell_values = [df[col] for col in df.columns]
             
-            fig = go.Figure(
-                data=[
-                    go.Table(
-                        header=dict(
-                            values=header_values,
-                            align="center",
-                            font=dict(size=12, color="white"),
-                            fill=dict(color="darkblue"),
-                            height=40,
-                        ),
-                        cells=dict(
-                            values=cell_values,
-                            align="center",
-                            font=dict(size=11),
-                            fill=dict(color="lightgray"),
-                        ),
-                    )
-                ]
-            )
+            # Grid options
+            gb = GridOptionsBuilder.from_dataframe(df)
+            gb.configure_default_column(editable=True)
+            grid_options = gb.build()
             
-            # Adjust the layout to improve readability
-            fig.update_layout(
-                autosize=True,
-                width=1200,  # Set a fixed width for the table
-                height=500,  # Set a fixed height for the table
-                margin=dict(l=20, r=20, t=20, b=20),
-            )
-            
-            # Display the Plotly table in Streamlit
+            # Display Ag-Grid
             st.write("Weekly Schedule Table")
-            st.plotly_chart(fig, use_container_width=True)
-            
-
+            AgGrid(
+                df,
+                gridOptions=grid_options,
+                height=400,
+                fit_columns_on_grid_load=False,  # Prevents squeezing columns
+                enable_enterprise_modules=False,
+            )
