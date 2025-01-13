@@ -252,17 +252,23 @@ else:
 
                         df.iloc[nextRow,j] = hourSum
             
-            # Grid options
-            gb = GridOptionsBuilder.from_dataframe(df)
-            gb.configure_default_column(editable=True)
-            grid_options = gb.build()
+            # Create HTML Table
+            html_table = """
+            <table style="width:100%; border-collapse:collapse; overflow-x:auto; display:block;">
+                <thead>
+                    <tr style="background-color: #003366; color: white;">
+            """
+            for col in data.keys():
+                html_table += f"<th style='border: 1px solid black; padding: 5px;'>{col}</th>"
+            html_table += "</tr></thead><tbody>"
             
-            # Display Ag-Grid
+            for row in zip(*data.values()):
+                html_table += "<tr>"
+                for cell in row:
+                    html_table += f"<td style='border: 1px solid black; padding: 5px;'>{cell}</td>"
+                html_table += "</tr>"
+            html_table += "</tbody></table>"
+            
+            # Render HTML in Streamlit
             st.write("Weekly Schedule Table")
-            AgGrid(
-                df,
-                gridOptions=grid_options,
-                height=400,
-                fit_columns_on_grid_load=False,  # Prevents squeezing columns
-                enable_enterprise_modules=False,
-            )
+            st.markdown(html_table, unsafe_allow_html=True)
