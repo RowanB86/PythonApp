@@ -264,7 +264,18 @@ else:
     container = st.container()
 
     with container:
-        
+          # Use CSS to make the table container wider
+        st.markdown(
+            """
+            <style>
+            .schedule-container {
+                width: 100%; /* Full width for the schedule */
+                margin: 0 auto;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )      
         data = {
             "Team Member": ["Alice", "Bob", "Charlie"],
             "Monday": ["Project A", "Project B", "Off"],
