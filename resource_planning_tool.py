@@ -41,12 +41,13 @@ def dataframe_to_frozen_html_table(df):
         top: 0;
         z-index: 2;
     }
-    .frozen-table th:first-child,
-    .frozen-table th:nth-child(2),
-    .frozen-table th:nth-child(3) {
+    .frozen-table th.frozen {
         background-color: black; /* Black background for the first three headers */
         color: white; /* White text for contrast */
         font-weight: bold; /* Bold text for better visibility */
+    }
+    .frozen-table td.frozen {
+        background-color: #f2f2f2;
     }
     .frozen-table td:first-child,
     .frozen-table td:nth-child(2),
@@ -56,7 +57,6 @@ def dataframe_to_frozen_html_table(df):
     .frozen-table th:nth-child(3) {
         position: sticky;
         left: 0;
-        background-color: #f2f2f2;
         z-index: 1;
     }
     .frozen-table th:first-child,
@@ -70,16 +70,22 @@ def dataframe_to_frozen_html_table(df):
             <thead>
                 <tr>
     """
-    # Add column headers
-    for col in df.columns:
-        html_table += f"<th>{col}</th>"
+    # Add column headers with specific classes for the first three columns
+    for i, col in enumerate(df.columns):
+        if i < 3:  # First three columns
+            html_table += f"<th class='frozen'>{col}</th>"
+        else:
+            html_table += f"<th>{col}</th>"
     html_table += "</tr></thead><tbody>"
 
-    # Add table rows
+    # Add table rows with specific classes for the first three columns
     for _, row in df.iterrows():
         html_table += "<tr>"
-        for cell in row:
-            html_table += f"<td>{cell}</td>"
+        for i, cell in enumerate(row):
+            if i < 3:  # First three columns
+                html_table += f"<td class='frozen'>{cell}</td>"
+            else:
+                html_table += f"<td>{cell}</td>"
         html_table += "</tr>"
     html_table += "</tbody></table></div>"
     return html_table
