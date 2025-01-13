@@ -261,5 +261,4 @@ else:
             
             # Display the grid
             st.write("Editable Weekly Schedule (AgGrid)")
-            AgGrid(df, gridOptions=grid_options, height=400, width="100%")w_unsafe_jscode=True,  # Allow JS customization (if needed)
-                        )
+            AgGrid(df, gridOptions=grid_options, height=400, width="100%")
