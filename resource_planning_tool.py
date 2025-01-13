@@ -15,6 +15,27 @@ st.set_page_config(layout="wide")  # Wider view for Streamlit
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
+def dataframe_to_html_table(df):
+    html_table = """
+    <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; text-align:center; table-layout:auto;">
+            <thead>
+                <tr style="background-color: #003366; color: white;">
+    """
+    # Add column headers
+    for col in df.columns:
+        html_table += f"<th style='border: 1px solid black; padding: 5px;'>{col}</th>"
+    html_table += "</tr></thead><tbody>"
+
+    # Add table rows
+    for _, row in df.iterrows():
+        html_table += "<tr>"
+        for cell in row:
+            html_table += f"<td style='border: 1px solid black; padding: 5px;'>{cell}</td>"
+        html_table += "</tr>"
+    html_table += "</tbody></table></div>"
+    return html_table
+
 if not firebase_admin._apps:
     try:
         cred = credentials.Certificate(firebase_credentials)
@@ -252,22 +273,9 @@ else:
 
                         df.iloc[nextRow,j] = hourSum
             
-            # Create HTML Table
-            html_table = """
-            <table style="width:100%; border-collapse:collapse; overflow-x:auto; display:block;">
-                <thead>
-                    <tr style="background-color: #003366; color: white;">
-            """
-            for col in df.keys():
-                html_table += f"<th style='border: 1px solid black; padding: 5px;'>{col}</th>"
-            html_table += "</tr></thead><tbody>"
-            
-            for row in zip(*df.values()):
-                html_table += "<tr>"
-                for cell in row:
-                    html_table += f"<td style='border: 1px solid black; padding: 5px;'>{cell}</td>"
-                html_table += "</tr>"
-            html_table += "</tbody></table>"
+
+            # Convert DataFrame to HTML table
+            html_table = dataframe_to_html_table(df)
             
             # Render HTML in Streamlit
             st.write("Weekly Schedule Table")
