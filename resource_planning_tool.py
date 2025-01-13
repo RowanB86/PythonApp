@@ -21,13 +21,12 @@ def dataframe_to_frozen_html_table(df):
     .table-container {
         overflow-x: auto;
         white-space: nowrap;
-        width: 100%; /* Ensures the table spans the full width of the page */
-        margin: 0 auto; /* Center the table */
+        position: relative;
     }
     .frozen-table {
         border-collapse: collapse;
+        table-layout: auto;
         width: 100%;
-        table-layout: fixed; /* Ensures consistent column width */
     }
     .frozen-table th, .frozen-table td {
         border: 1px solid black;
@@ -98,6 +97,8 @@ def dataframe_to_frozen_html_table(df):
         html_table += "</tr>"
     html_table += "</tbody></table></div>"
     return html_table
+
+
 if not firebase_admin._apps:
     try:
         cred = credentials.Certificate(firebase_credentials)
