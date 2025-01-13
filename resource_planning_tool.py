@@ -253,15 +253,18 @@ else:
                         df.iloc[nextRow,j] = hourSum
 
                                    
-            # Define Dash app
-            app = Dash(__name__)
-            
-            app.layout = dash_table.DataTable(
-                data=df.to_dict("records"),
-                columns=[{"name": i, "id": i} for i in df.columns],
-                fixed_columns={"headers": True, "data": 2},  # Freeze first two columns
-                style_table={"overflowX": "auto"},  # Enable horizontal scrolling
-                style_cell={"minWidth": "100px", "width": "100px", "maxWidth": "200px"},
-            )
 
-            components.html(app._repr_html_(), height=400)
+            gb = GridOptionsBuilder.from_dataframe(df)
+            gb.configure_default_column(editable=True, resizable=True, sortable=True, filterable=True)
+            gb.configure_column("Team Member", pinned=True)  # Freeze the first column
+            grid_options = gb.build()
+            
+            # Display the grid
+            st.write("Editable Weekly Schedule (AgGrid)")
+            AgGrid(
+                df,
+                gridOptions=grid_options,
+                height=400,
+                width="100%",
+                allow_unsafe_jscode=True,  # Allow JS customization (if needed)
+            )
