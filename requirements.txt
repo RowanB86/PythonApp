@@ -26,6 +26,7 @@ requests==2.31.0
 openai==0.28
 streamlit-aggrid
 plotly
+dash
 
 
 
