@@ -374,6 +374,6 @@ else:
                 # Convert DataFrame to HTML table with frozen columns
                 html_table = dataframe_to_frozen_html_table(df)
             
-            # Render HTML in Streamlit
-            st.write("Weekly Schedule")
-            st.markdown(html_table, unsafe_allow_html=True)
+                # Render HTML in Streamlit
+                st.write("Weekly Schedule")
+                st.markdown(html_table, unsafe_allow_html=True)
