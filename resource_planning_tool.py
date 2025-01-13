@@ -105,7 +105,7 @@ if not firebase_admin._apps:
         initialize_app(cred, {
             'databaseURL': 'https://resourceplanning-f5a14-default-rtdb.europe-west1.firebasedatabase.app'
         })
-        st.write("Firebase initialized successfully.")
+
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
 
@@ -355,5 +355,5 @@ else:
             html_table = dataframe_to_frozen_html_table(df)
             
             # Render HTML in Streamlit
-            st.write("Weekly Schedule Table with Frozen Columns")
+            st.write("Weekly Schedule")
             st.markdown(html_table, unsafe_allow_html=True)
