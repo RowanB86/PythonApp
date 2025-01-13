@@ -289,6 +289,4 @@ else:
             st.write("Weekly Schedule Table")
             st.plotly_chart(fig, use_container_width=True)
             
-            # Display the grid
-            st.write("Editable Weekly Schedule (AgGrid)")
-            AgGrid(df, gridOptions=grid_options, height=400, width="100%")
+
