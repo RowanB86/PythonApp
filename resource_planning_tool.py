@@ -9,7 +9,7 @@ import json
 import openai
 import plotly.graph_objects as go
 
-#st.set_page_config(layout="wide")  # Wider view for Streamlit
+st.set_page_config(layout="wide")  # Wider view for Streamlit
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
