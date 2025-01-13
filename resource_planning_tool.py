@@ -283,7 +283,8 @@ else:
                     df.iloc[next_row,4] = employee["primary_skill"]
                     df.iloc[next_row,5] = employee["secondary_skill"]
 
-                st.table(df)
+                df_no_index = df.reset_index(drop=True)
+                st.table(df_no_index)
         
     container = st.container()
 
