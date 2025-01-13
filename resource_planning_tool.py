@@ -254,10 +254,40 @@ else:
 
                                    
 
-            # Configure AgGrid
-            gb = GridOptionsBuilder.from_dataframe(df)
-            gb.configure_default_column(editable=True, resizable=True, sortable=True, filterable=True)
-            grid_options = gb.build()
+            # Build a Plotly Table
+            header_values = list(df.columns)
+            cell_values = [df[col] for col in df.columns]
+            
+            fig = go.Figure(
+                data=[
+                    go.Table(
+                        header=dict(
+                            values=header_values,
+                            align="left",
+                            font=dict(size=12, color="white"),
+                            fill=dict(color="darkblue"),
+                        ),
+                        cells=dict(
+                            values=cell_values,
+                            align="left",
+                            font=dict(size=11),
+                            fill=dict(color="lightgray"),
+                        ),
+                    )
+                ]
+            )
+            
+            # Add scroll functionality and freeze the first three columns
+            fig.update_layout(
+                autosize=False,
+                width=1000,  # Adjust the width as needed
+                height=600,  # Adjust the height as needed
+                margin=dict(l=0, r=0, t=0, b=0),
+            )
+            
+            # Display the Plotly table in Streamlit
+            st.write("Weekly Schedule Table")
+            st.plotly_chart(fig, use_container_width=True)
             
             # Display the grid
             st.write("Editable Weekly Schedule (AgGrid)")
