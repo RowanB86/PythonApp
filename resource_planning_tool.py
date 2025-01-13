@@ -267,7 +267,7 @@ else:
 
     with team_members:
         ref = db.reference("team_members")
-        df = pd.DataFrame(columns=["Employee_ID","First_Name","Last_Name","Grade","Primary_Capability","Secondary_Capability"]
+        df = pd.DataFrame(columns=["Employee_ID","First_Name","Last_Name","Grade","Primary_Capability","Secondary_Capability"])
 
         if ref:
             employees = ref.get()
