@@ -287,7 +287,7 @@ else:
             styled_df = df.style.hide_index()
             
             # Render the styled table in Streamlit
-            st.markdown(styled_df.to_html(), unsafe_allow_html=True
+            st.markdown(styled_df.to_html(), unsafe_allow_html=True)
         
     container = st.container()
 
