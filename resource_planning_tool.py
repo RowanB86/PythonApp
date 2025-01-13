@@ -213,7 +213,7 @@ else:
                 new_project = {"Project": project_name, "Status": on_contract}
                 ref.push(new_project)
                 st.write("New opportunity added.")        
-                
+                    
     with st.sidebar.expander("Assign Team Member to Opportunity"):
         
         ref = db.reference("projects")
@@ -264,6 +264,26 @@ else:
     
                 ref = db.reference("schedule")
                 ref.push(new_entry)
+
+    with team_members:
+        ref = db.reference("team_members")
+        df = pd.DataFrame(columns=["Employee_ID","First_Name","Last_Name","Grade","Primary_Capability","Secondary_Capability"]
+
+        if ref:
+            employees = ref.get()
+
+            if employeees is not None:
+                for employee_ID, employee in employees.items():
+                    next_row = len(df)
+                    df.loc[next_row] = [None]*len(df.columns)
+                    df.iloc[next_row,0] = employee_ID
+                    df.iloc[next_row,1] = employee["first_name"]
+                    df.iloc[next_row,2] = employee["last_name"]
+                    df.iloc[next_row,3] = employee["grade"]
+                    df.iloc[next_row,4] = employee["primary_skill"]
+                    df.iloc[next_row,5] = employee["secondary_skill"]
+
+                st.table(df)
         
     container = st.container()
 
