@@ -272,7 +272,7 @@ else:
         if ref:
             employees = ref.get()
 
-            if employeees is not None:
+            if employees is not None:
                 for employee_ID, employee in employees.items():
                     next_row = len(df)
                     df.loc[next_row] = [None]*len(df.columns)
