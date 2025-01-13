@@ -283,12 +283,12 @@ else:
                     df.iloc[next_row,4] = employee["primary_skill"]
                     df.iloc[next_row,5] = employee["secondary_skill"]
                     
-            # Style the DataFrame and remove the index
-            styled_df = df.style.hide_index()
+             # Generate an HTML table without the index
+            html_table = df.to_html(index=False)
             
-            # Render the styled table in Streamlit
-            st.markdown(styled_df.to_html(), unsafe_allow_html=True)
-        
+            # Display the table in Streamlit
+            st.markdown(html_table, unsafe_allow_html=True)       
+            
     container = st.container()
 
     with container:
