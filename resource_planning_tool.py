@@ -256,12 +256,12 @@ else:
                 header=dict(values=list(df.columns),  # Table headers
                             fill_color="paleturquoise",  # Header background color
                             align="center",  # Align header text
-                            font=dict(color="black", size=14)),  # Header font
+                            font=dict(color="black", size=18)),  # Header font
             
                 cells=dict(values=[df[col] for col in df.columns],  # Table data
                            fill_color="white",  # Cell background color
                            align="center",  # Align cell text
-                           font=dict(color="black", size=12))  # Cell font
+                           font=dict(color="black", size=16))  # Cell font
             )])
             
             # Display in Streamlit
