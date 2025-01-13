@@ -336,7 +336,7 @@ else:
             
 
             # Convert DataFrame to HTML table with frozen columns
-            html_table = dataframe_to_frozen_html_table(df)
+            html_table = generate_html_table_with_frozen_columns(df)
             
             # Render HTML in Streamlit
             st.write("Weekly Schedule Table with Frozen Columns")
