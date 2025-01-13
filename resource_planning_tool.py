@@ -8,6 +8,8 @@ from firebase_admin import credentials, initialize_app, db
 import json
 import openai
 import plotly.graph_objects as go
+from dash import Dash, dash_table
+import streamlit.components.v1 as components
 
 st.set_page_config(layout="wide")  # Wider view for Streamlit
 
