@@ -45,10 +45,12 @@ def dataframe_to_frozen_html_table(df):
         color: white; /* White text for contrast */
         font-weight: bold; /* Bold text for better visibility */
         z-index: 3;
+        width: 150px; /* Fixed width for frozen columns */
     }
     .frozen-table td.frozen {
         background-color: #f2f2f2;
         z-index: 1;
+        width: 150px; /* Fixed width for frozen columns */
     }
     /* Freeze the first three columns */
     .frozen-table th:nth-child(1),
@@ -61,16 +63,16 @@ def dataframe_to_frozen_html_table(df):
         left: 0;
     }
     .frozen-table th:nth-child(2) {
-        left: 80px; /* Adjust for first column width */
+        left: 150px; /* Adjust for first column width */
     }
     .frozen-table th:nth-child(3) {
-        left: 160px; /* Adjust for first two column widths */
+        left: 300px; /* Adjust for first two column widths */
     }
     .frozen-table td:nth-child(2) {
-        left: 80px; /* Adjust for first column width */
+        left: 150px; /* Adjust for first column width */
     }
     .frozen-table td:nth-child(3) {
-        left: 160px; /* Adjust for first two column widths */
+        left: 300px; /* Adjust for first two column widths */
     }
     </style>
     <div class="table-container">
@@ -97,7 +99,6 @@ def dataframe_to_frozen_html_table(df):
         html_table += "</tr>"
     html_table += "</tbody></table></div>"
     return html_table
-
 
 if not firebase_admin._apps:
     try:
