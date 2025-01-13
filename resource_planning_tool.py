@@ -15,23 +15,63 @@ st.set_page_config(layout="wide")  # Wider view for Streamlit
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 
-def dataframe_to_html_table(df):
+def dataframe_to_frozen_html_table(df):
     html_table = """
-    <div style="overflow-x:auto;">
-        <table style="width:100%; border-collapse:collapse; text-align:center; table-layout:auto;">
+    <style>
+    .table-container {
+        overflow-x: auto;
+        white-space: nowrap;
+        position: relative;
+    }
+    .frozen-table {
+        border-collapse: collapse;
+        table-layout: auto;
+        width: 100%;
+    }
+    .frozen-table th, .frozen-table td {
+        border: 1px solid black;
+        padding: 5px;
+        text-align: center;
+    }
+    .frozen-table th {
+        background-color: #003366;
+        color: white;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+    .frozen-table td:first-child,
+    .frozen-table td:nth-child(2),
+    .frozen-table td:nth-child(3),
+    .frozen-table th:first-child,
+    .frozen-table th:nth-child(2),
+    .frozen-table th:nth-child(3) {
+        position: sticky;
+        left: 0;
+        background-color: #f2f2f2;
+        z-index: 1;
+    }
+    .frozen-table th:first-child,
+    .frozen-table th:nth-child(2),
+    .frozen-table th:nth-child(3) {
+        z-index: 3;
+    }
+    </style>
+    <div class="table-container">
+        <table class="frozen-table">
             <thead>
-                <tr style="background-color: #003366; color: white;">
+                <tr>
     """
     # Add column headers
     for col in df.columns:
-        html_table += f"<th style='border: 1px solid black; padding: 5px;'>{col}</th>"
+        html_table += f"<th>{col}</th>"
     html_table += "</tr></thead><tbody>"
 
     # Add table rows
     for _, row in df.iterrows():
         html_table += "<tr>"
         for cell in row:
-            html_table += f"<td style='border: 1px solid black; padding: 5px;'>{cell}</td>"
+            html_table += f"<td>{cell}</td>"
         html_table += "</tr>"
     html_table += "</tbody></table></div>"
     return html_table
