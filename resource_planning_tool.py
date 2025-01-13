@@ -90,6 +90,7 @@ def dataframe_to_frozen_html_table(df):
     html_table += "</tbody></table></div>"
     return html_table
 
+
 if not firebase_admin._apps:
     try:
         cred = credentials.Certificate(firebase_credentials)
