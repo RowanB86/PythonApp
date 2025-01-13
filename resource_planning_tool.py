@@ -263,3 +263,5 @@ else:
                 style_table={"overflowX": "auto"},  # Enable horizontal scrolling
                 style_cell={"minWidth": "100px", "width": "100px", "maxWidth": "200px"},
             )
+
+            components.html(app._repr_html_(), height=400)
