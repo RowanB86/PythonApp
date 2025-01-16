@@ -27,6 +27,6 @@ openai==0.28
 streamlit-aggrid
 plotly
 dash
-
+gpt4all
 
 
