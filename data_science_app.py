@@ -17,6 +17,9 @@ from funcs.functions import createAccount,logIn
 if 'logged_in' not in st.session_state:
     st.session_state["logged_in"] == False
 
+if 'page_selection' not in st.session_state:
+    st.session_state["page_selection"] = ''
+
 if st.session_state["logged_in"] == False:
 
     st.session_state['username'] = st.text_input("Enter your username:")
@@ -32,11 +35,30 @@ if st.session_state["logged_in"] == False:
     if login:
         result = logIn(st.session_state['username'],st.session_state['password'])
     
-        if result = "Accepted":
+        if result == "Accepted":
             st.session_state["logged_in"] = True
         else:
             st.write("Username or password is not recognised.")
             st.session_state["logged_in"] = False
 else:
 
-    
+    with st.sidebar:
+        st.session_state["page_selection"] = st.selectbox("Select page",options=["Create new dataset"])
+        
+    if st.session_state["page_selection"] == "Create new dataset":
+        with st.expander("Upload local file"):
+            Dataset_Upload = st.file_uploader("Upload data", type=["xlsx","xls","xlsm",'csv'])
+            file_type = uploaded_file.name.split(".")[-1] 
+
+            if file_type == "csv":
+                df = convertToDataFrame(uploaded_file)
+                st.dataframe(df)
+            else:
+                sheet_names = convertToDataFrame(uploaded_file)
+                sheet_name = st.selectbox("Select sheet",options=sheet_names)
+                create_dataframe = st.button("Create Dataframe")
+
+                if create_dataframe:
+                    df = pd.read_excel(excel_file, sheet_name=selected_sheet)
+                    st.dataframe(df)
+            
