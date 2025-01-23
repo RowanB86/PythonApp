@@ -15,7 +15,7 @@ import openai
 from funcs.functions import createAccount,logIn
 
 if 'logged_in' not in st.session_state:
-    st.session_state["logged_in"] == False
+    st.session_state["logged_in"] = False
 
 if 'page_selection' not in st.session_state:
     st.session_state["page_selection"] = ''
