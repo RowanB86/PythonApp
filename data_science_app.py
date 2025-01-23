@@ -55,7 +55,7 @@ else:
                 file_type = Dataset_Upload.name.split(".")[-1] 
     
                 if file_type == "csv":
-                    df = convertToDataFrame(uploaded_file)
+                    df = convertToDataFrame(Dataset_Upload)
                     st.dataframe(df)
                 else:
                     sheet_names = convertToDataFrame(uploaded_file)
