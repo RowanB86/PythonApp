@@ -23,4 +23,5 @@ create_account = st.button("Create account")
 login = st.button("Login")
 
 if create_account:
-    createAccount(st.session_state['username'],st.session_state['password'])
+    result = createAccount(st.session_state['username'],st.session_state['password'])
+    st.write(result)
