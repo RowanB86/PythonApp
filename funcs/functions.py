@@ -58,3 +58,16 @@ def logIn(username,password):
         result = "Denied"
     
     return result
+
+def convertToDataFrame(file):
+    file_type = uploaded_file.name.split(".")[-1]
+
+    if file_type == "csv":
+        df = pd.read_csv(uploaded_file)  
+        return df
+        
+    else:
+        excel_file = pd.ExcelFile(uploaded_file) 
+        sheet_names = excel_file.sheet_names
+
+        return sheet_names
