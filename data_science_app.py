@@ -50,17 +50,19 @@ else:
     if st.session_state["page_selection"] == "Create new dataset":
         with st.expander("Upload local file"):
             Dataset_Upload = st.file_uploader("Upload data", type=["xlsx","xls","xlsm",'csv'])
-            file_type = Dataset_Upload.name.split(".")[-1] 
 
-            if file_type == "csv":
-                df = convertToDataFrame(uploaded_file)
-                st.dataframe(df)
-            else:
-                sheet_names = convertToDataFrame(uploaded_file)
-                sheet_name = st.selectbox("Select sheet",options=sheet_names)
-                create_dataframe = st.button("Create Dataframe")
-
-                if create_dataframe:
-                    df = pd.read_excel(excel_file, sheet_name=selected_sheet)
+            if Dataset_Upload is not None:
+                file_type = Dataset_Upload.name.split(".")[-1] 
+    
+                if file_type == "csv":
+                    df = convertToDataFrame(uploaded_file)
                     st.dataframe(df)
+                else:
+                    sheet_names = convertToDataFrame(uploaded_file)
+                    sheet_name = st.selectbox("Select sheet",options=sheet_names)
+                    create_dataframe = st.button("Create Dataframe")
+    
+                    if create_dataframe:
+                        df = pd.read_excel(excel_file, sheet_name=selected_sheet)
+                        st.dataframe(df)
             
