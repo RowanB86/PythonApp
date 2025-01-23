@@ -60,14 +60,14 @@ def logIn(username,password):
     return result
 
 def convertToDataFrame(file):
-    file_type = uploaded_file.name.split(".")[-1]
+    file_type = file.name.split(".")[-1]
 
     if file_type == "csv":
-        df = pd.read_csv(uploaded_file)  
+        df = pd.read_csv(file)  
         return df
         
     else:
-        excel_file = pd.ExcelFile(uploaded_file) 
+        excel_file = pd.ExcelFile(file) 
         sheet_names = excel_file.sheet_names
 
         return sheet_names
