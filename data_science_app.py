@@ -12,7 +12,7 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 import openai
-from funcs.functions import createAccount,logIn
+from funcs.functions import createAccount,logIn,convertToDataFrame
 
 if 'logged_in' not in st.session_state:
     st.session_state["logged_in"] = False
