@@ -50,7 +50,7 @@ else:
     if st.session_state["page_selection"] == "Create new dataset":
         with st.expander("Upload local file"):
             Dataset_Upload = st.file_uploader("Upload data", type=["xlsx","xls","xlsm",'csv'])
-            file_type = uploaded_file.name.split(".")[-1] 
+            file_type = Dataset_Upload.name.split(".")[-1] 
 
             if file_type == "csv":
                 df = convertToDataFrame(uploaded_file)
