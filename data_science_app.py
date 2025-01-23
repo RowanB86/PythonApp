@@ -12,7 +12,7 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 import openai
-from pages.functions import createAccount
+from funcs.functions import createAccount
 
 
 st.session_state['username'] = st.text_input("Enter your username:")
