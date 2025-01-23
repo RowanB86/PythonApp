@@ -40,6 +40,8 @@ if st.session_state["logged_in"] == False:
         else:
             st.write("Username or password is not recognised.")
             st.session_state["logged_in"] = False
+
+        st.rerun()
 else:
 
     with st.sidebar:
