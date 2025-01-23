@@ -30,14 +30,16 @@ def createAccount(username,password):
     accounts = ref.get()
     account_exists = False
 
-    for account_id,account in accounts.items():
-        if st.session_state['username'] == account["username"] and st.session_state['password'] == account["password"]: 
-            account_exists = True
-
-        if account_exists:
-            result = f"An account with the username; {st.session_state['username']} already exists."
-        else:
-            new_account = {"username": st.session_state['username'], "password": st.session_state['password']}
-            ref.push(new_account)
-            result = "Account created."
+    if accounts is not None:
+        for account_id,account in accounts.items():
+            if st.session_state['username'] == account["username"] and st.session_state['password'] == account["password"]: 
+                account_exists = True
+    
+    if account_exists:
+        result = f"An account with the username; {st.session_state['username']} already exists."
+    else:
+        new_account = {"username": st.session_state['username'], "password": st.session_state['password']}
+        ref.push(new_account)
+        result = "Account created."
+    
     return result
