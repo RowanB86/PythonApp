@@ -25,7 +25,7 @@ if not firebase_admin._apps:
     })
     
     
-def create_account(username,password):
+def createAccount(username,password):
     ref = db.reference("accounts")
     new_account = {"username": st.session_state['username'], "password": st.session_state['password']}
     ref.push(new_account)
