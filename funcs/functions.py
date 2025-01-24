@@ -105,5 +105,5 @@ def load_dataframe(df_name):
 
     if df is not None:
         return pd.DataFrame(df)
-    else
+    else:
         return pd.DataFrame()
