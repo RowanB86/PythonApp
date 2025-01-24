@@ -123,7 +123,7 @@ else:
             st.dataframe(df)
             
             delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\" and press the \"delete table\" button.",value=st.session_state["user_input"])
-            delete_table = st.button("Delete table",on_click=clear_text,, args=(delete_acknowledgement, selected_dataset))
+            delete_table = st.button("Delete table",on_click=clear_text,args=(delete_acknowledgement, selected_dataset))
 
 
 
