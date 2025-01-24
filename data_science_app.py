@@ -12,7 +12,7 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 import openai
-from funcs.functions import createAccount,logIn,convertToDataFrame,save_dataframe_to_firebase
+from funcs.functions import createAccount,logIn,convertToDataFrame,save_dataframe_to_firebase,load_dataframe
 
 if 'logged_in' not in st.session_state:
     st.session_state["logged_in"] = False
@@ -83,3 +83,21 @@ else:
                         else:
                             result = save_dataframe_to_firebase(df, df_name)
                             st.write(result)
+                            
+        with st.expander("Datasets"):
+            ref = db.reference("datasets")
+            datasets = ref.get()
+            dataset_list = []
+
+            if datasets is not None:
+                for dataset_id,dataset in datasets.items():
+                    dataset_list.append(dataset["dataset"])
+
+            dataset_list = sort(dataset_list)
+
+            selected_dataset = st.selectbox("Select dataset",options=dataset_list)
+
+            df = load_dataframe(selected_dataset)
+            st.dataframe(df)
+            
+        
