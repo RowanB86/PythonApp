@@ -49,7 +49,7 @@ else:
         
     if st.session_state["page_selection"] == "Create new dataset":
         with st.expander("Upload local file"):
-            Dataset_Upload = st.file_uploader("Upload data", type=["xlsx","xls","xlsm",'csv'])
+            Dataset_Upload = st.file_uploader("Upload dataset", type=["xlsx","xls","xlsm",'csv'])
 
             if Dataset_Upload is not None:
                 file_type = Dataset_Upload.name.split(".")[-1] 
