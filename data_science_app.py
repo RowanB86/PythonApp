@@ -28,7 +28,7 @@ if 'login_result' not in st.session_state:
 if "user_input" not in st.session_state:
     st.session_state.user_input = ""
 
-def clear_text(delete_acknowledgement):
+def clear_text(delete_acknowledgement,selected_dataset):
     if delete_acknowledgement == "I want to delete this table.":
         ref = db.reference(selected_dataset)
         ref.delete()
@@ -122,7 +122,7 @@ else:
             st.dataframe(df)
             
             delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\" and press the \"delete table\" button.",value=st.session_state["user_input"])
-            delete_table = st.button("Delete table",on_click=clear_text(delete_acknowledgement))
+            delete_table = st.button("Delete table",on_click=clear_text(delete_acknowledgement,selected_dataset))
 
 
 
