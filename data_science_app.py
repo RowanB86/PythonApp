@@ -42,6 +42,7 @@ def clear_text(delete_acknowledgement,selected_dataset):
             ref = db.reference(f"Datasets/{datasetID}")
             ref.delete()
         st.session_state["user_input"] = ''
+        st.rerun()
 
 if st.session_state["logged_in"] == False:
 
