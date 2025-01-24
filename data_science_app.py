@@ -104,11 +104,14 @@ else:
             df = load_dataframe(selected_dataset)
             st.dataframe(df)
             
-            delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\" and press the \"delete table\" button.",st.session_state["user_input"])
+            delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\" and press the \"delete table\" button.",key="user_input")
             delete_table = st.button("Delete table")
 
             if delete_table and delete_acknowledgement == "I want to delete this table.":
                 ref = db.reference(selected_dataset)
                 ref.delete()
+                ref = db.reference("Datasets")
+                datasets = ref.order_by_child("dataset").equal_to(game).get() 
+                
                 st.session_state["user_input"] = ''
                 st.rerun()
