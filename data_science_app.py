@@ -53,10 +53,13 @@ else:
 
             if Dataset_Upload is not None:
                 file_type = Dataset_Upload.name.split(".")[-1] 
+                dataframe_created = False
     
                 if file_type == "csv":
                     df = convertToDataFrame(Dataset_Upload)
                     st.dataframe(df)
+                    dataframe_created = True
+                    
                 else:
                     sheet_names = convertToDataFrame(uploaded_file)
                     sheet_name = st.selectbox("Select sheet",options=sheet_names)
@@ -65,4 +68,14 @@ else:
                     if create_dataframe:
                         df = pd.read_excel(excel_file, sheet_name=selected_sheet)
                         st.dataframe(df)
-            
+                        dataframe_created = True
+
+                if dataframe_created:
+                    df_name = st.text_input("Enter dataframe name:")
+                    save_df = st.button("Save dataframe")
+                    if save_df:
+                        if len(df_name) == 0:
+                            st.write("Please enter a name for the dataframe.")
+                        else:
+                            result = save_dataframe_to_firebase(df, df_name)
+                            st.write(result)
