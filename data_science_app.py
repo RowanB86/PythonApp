@@ -14,8 +14,20 @@ import json
 import openai
 from funcs.functions import createAccount,logIn,convertToDataFrame,save_dataframe_to_firebase,load_dataframe
 
-def clear_text():
-    st.session_state["user_input"] = ''
+def clear_text(delete_acknowledgement):
+    if delete_acknowledgement == "I want to delete this table.":
+        ref = db.reference(selected_dataset)
+        ref.delete()
+        ref = db.reference("Datasets")
+        datasets = ref.order_by_child("dataset").equal_to(selected_dataset).get() 
+    
+        if datasets is not None:
+            for dataset_id,dataset in datasets.items():
+                datasetID = dataset_id
+    
+            ref = db.reference(f"Datasets/{datasetID}")
+            ref.delete()
+        st.session_state["user_input"] = ''
 
 if 'logged_in' not in st.session_state:
     st.session_state["logged_in"] = False
@@ -108,19 +120,9 @@ else:
             st.dataframe(df)
             
             delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\" and press the \"delete table\" button.",key="user_input")
-            delete_table = st.button("Delete table",on_click=clear_text)
+            delete_table = st.button("Delete table",on_click=clear_text(delete_acknowledgement))
 
             if delete_table and delete_acknowledgement == "I want to delete this table.":
-                ref = db.reference(selected_dataset)
-                ref.delete()
-                ref = db.reference("Datasets")
-                datasets = ref.order_by_child("dataset").equal_to(selected_dataset).get() 
 
-                if datasets is not None:
-                    for dataset_id,dataset in datasets.items():
-                        datasetID = dataset_id
-
-                    ref = db.reference(f"Datasets/{datasetID}")
-                    ref.delete()
 
                 
