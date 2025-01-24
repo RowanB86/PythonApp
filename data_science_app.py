@@ -14,6 +14,20 @@ import json
 import openai
 from funcs.functions import createAccount,logIn,convertToDataFrame,save_dataframe_to_firebase,load_dataframe
 
+
+
+if 'logged_in' not in st.session_state:
+    st.session_state["logged_in"] = False
+
+if 'page_selection' not in st.session_state:
+    st.session_state["page_selection"] = ''
+
+if 'login_result' not in st.session_state:
+    st.session_state["login_result"] = ''
+
+if "user_input" not in st.session_state:
+    st.session_state.user_input = ""
+
 def clear_text(delete_acknowledgement):
     if delete_acknowledgement == "I want to delete this table.":
         ref = db.reference(selected_dataset)
@@ -28,18 +42,6 @@ def clear_text(delete_acknowledgement):
             ref = db.reference(f"Datasets/{datasetID}")
             ref.delete()
         st.session_state["user_input"] = ''
-
-if 'logged_in' not in st.session_state:
-    st.session_state["logged_in"] = False
-
-if 'page_selection' not in st.session_state:
-    st.session_state["page_selection"] = ''
-
-if 'login_result' not in st.session_state:
-    st.session_state["login_result"] = ''
-
-if "user_input" not in st.session_state:
-    st.session_state.user_input = ""
 
 if st.session_state["logged_in"] == False:
 
