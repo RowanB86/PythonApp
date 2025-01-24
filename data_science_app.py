@@ -103,7 +103,7 @@ else:
             df = load_dataframe(selected_dataset)
             st.dataframe(df)
             
-            delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\"",st.session_state["user_input"])
+            delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\" and press the \"delete table\" button.",st.session_state["user_input"])
             delete_table = st.button("Delete table")
 
             if delete_table and delete_acknowledgement == "I want to delete this table.":
