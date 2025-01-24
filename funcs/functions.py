@@ -94,7 +94,7 @@ def save_dataframe_to_firebase(df, df_name):
             df.replace(np.nan, None, inplace=True)
             ref.set(df.to_dict(orient="records"))
             ref = db.reference("Datasets")
-            new_dataset = {dataset: df_name}
+            new_dataset = {"dataset": df_name}
             ref.push(new_dataset)
     
             return "Dataframe saved."
