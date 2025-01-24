@@ -37,7 +37,7 @@ if st.session_state["logged_in"] == False:
         result = createAccount(st.session_state['username'],st.session_state['password'])
     
     if login:
-        st.session_state["login_result"] = logIn(st.session_state['username'],st.session_state['password'])
+        result = logIn(st.session_state['username'],st.session_state['password'])
     
         if result == "Accepted":
             st.session_state["logged_in"] = True
