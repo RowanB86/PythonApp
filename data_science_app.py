@@ -14,6 +14,9 @@ import json
 import openai
 from funcs.functions import createAccount,logIn,convertToDataFrame,save_dataframe_to_firebase,load_dataframe
 
+def clear_text():
+    st.session_state["user_input"] = ''
+
 if 'logged_in' not in st.session_state:
     st.session_state["logged_in"] = False
 
@@ -104,7 +107,8 @@ else:
             df = load_dataframe(selected_dataset)
             st.dataframe(df)
             
-            delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\" and press the \"delete table\" button.",key="user_input")
+            delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\" and press the \"delete table\" button.",key="user_input"\
+                                                  on_change=clear_text )
             delete_table = st.button("Delete table")
 
             if delete_table and delete_acknowledgement == "I want to delete this table.":
@@ -120,5 +124,5 @@ else:
                     ref = db.reference(f"Datasets/{datasetID}")
                     ref.delete()
                 
-                st.session_state["user_input"] = ''
+                
                 st.rerun()
