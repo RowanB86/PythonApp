@@ -99,3 +99,11 @@ def save_dataframe_to_firebase(df, df_name):
     
             return "Dataframe saved."
     
+def load_dataframe(df_name):
+    ref = db.reference(df_name)
+    df = ref.get()
+
+    if df is not None:
+        return pd.DataFrame(df)
+    else
+        return pd.DataFrame()
