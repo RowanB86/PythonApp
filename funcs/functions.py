@@ -88,7 +88,7 @@ def save_dataframe_to_firebase(df, df_name):
 
         
         ref = db.reference(df_name)
-        if ref:
+        if ref.get is not None:
             return f"A dataframe named; {df_name} already exists."
         else:
             ref.set(df.to_dict(orient="records"))
