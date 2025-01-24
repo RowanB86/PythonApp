@@ -79,7 +79,7 @@ def save_dataframe_to_firebase(df, df_name):
     valid = True
 
     for i in range(0,len(disallowed_chars)):
-        if re.search(disallowed_chars[i],x):
+        if re.search(disallowed_chars[i],df_name):
             valid = False
 
     if not valid:
