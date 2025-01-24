@@ -122,7 +122,7 @@ else:
             delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\" and press the \"delete table\" button.",key="user_input")
             delete_table = st.button("Delete table",on_click=clear_text(delete_acknowledgement))
 
-            if delete_table and delete_acknowledgement == "I want to delete this table.":
+
 
 
                 
