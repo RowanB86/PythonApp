@@ -86,6 +86,7 @@ else:
                         else:
                             result = save_dataframe_to_firebase(df, df_name)
                             st.write(result)
+                            st.rerun()
                             
         with st.expander("Datasets"):
             ref = db.reference("datasets")
