@@ -40,7 +40,7 @@ if st.session_state["logged_in"] == False:
     if login:
         st.session_state["login_result"] = logIn(st.session_state['username'],st.session_state['password'])
     
-        if result == "Accepted":
+        if st.session_state["login_result"] == "Accepted":
             st.session_state["logged_in"] = True
         else:
             st.write("Username or password is not recognised.")
