@@ -12,6 +12,7 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 import openai
+import re
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
@@ -71,3 +72,26 @@ def convertToDataFrame(file):
         sheet_names = excel_file.sheet_names
 
         return sheet_names
+
+def save_dataframe_to_firebase(df, df_name):
+
+    disallowed_chars = [r"\\",r"\.",r"/",r"#",r"\$",r"\[",r"\]",r"\*"," "]
+    valid = True
+
+    for i in range(0,len(disallowed_chars)):
+        if re.search(disallowed_chars[i],x):
+            valid = False
+
+    if not valid:
+        return "Dataframe name must not include any of the following characters; \"\,/,.,#,$,[,],*\" or spaces."
+    else:
+
+        
+        ref = db.reference(df_name)
+        if ref:
+            return f"A dataframe named; {df_name} already exists."
+        else:
+            ref.set(df.to_dict(orient="records"))
+    
+            return "Dataframe saved."
+    
