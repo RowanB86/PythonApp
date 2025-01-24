@@ -14,7 +14,8 @@ import json
 import openai
 from funcs.functions import createAccount,logIn,convertToDataFrame,save_dataframe_to_firebase,load_dataframe
 
-
+if "reset_input" not in st.session_state:
+    st.session_state["reset_input"] = False  # ✅ Flag to track reset
 
 if 'logged_in' not in st.session_state:
     st.session_state["logged_in"] = False
@@ -29,7 +30,7 @@ if "user_input" not in st.session_state:
     st.session_state.user_input = ""
 
 def clear_text(delete_acknowledgement,selected_dataset):
-    if delete_acknowledgement == "I want to delete this table.":
+    if st.session_state["user_input"] == "I want to delete this table.":
         ref = db.reference(selected_dataset)
         ref.delete()
         ref = db.reference("Datasets")
@@ -41,7 +42,8 @@ def clear_text(delete_acknowledgement,selected_dataset):
     
             ref = db.reference(f"Datasets/{datasetID}")
             ref.delete()
-        st.session_state["user_input"] = ''
+
+        st.session_state["reset_input"] = True 
         st.rerun()
         
 if st.session_state["logged_in"] == False:
@@ -121,9 +123,15 @@ else:
 
             df = load_dataframe(selected_dataset)
             st.dataframe(df)
+
+            if st.session_state["reset_input"]:
+                st.session_state["user_input"] = ""  # Reset input field
+                st.session_state["reset_input"] = False  # ✅ Reset flag
+                st.rerun()  # ✅ Force one more rerun to clear input properly
             
-            delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\" and press the \"delete table\" button.",value=st.session_state["user_input"])
-            delete_table = st.button("Delete table",on_click=clear_text,args=(delete_acknowledgement, selected_dataset))
+            delete_acknowledgement = st.text_input("To delete this table, enter \"I want to delete this table.\" and press the \"Delete Table\" button.",
+            key="user_input")
+            st.button("Delete table",on_click=clear_text,args=(delete_acknowledgement, selected_dataset))
 
 
 
