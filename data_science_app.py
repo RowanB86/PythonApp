@@ -117,7 +117,7 @@ else:
                     for dataset_id,dataset in datasets.items():
                         datasetID = dataset_id
 
-                    ref = db.reference(f"Datasets\{datasetID}")
+                    ref = db.reference(f"Datasets/{datasetID}")
                     ref.delete()
                 
                 st.session_state["user_input"] = ''
