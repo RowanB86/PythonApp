@@ -87,7 +87,7 @@ else:
         with st.expander("Datasets"):
             ref = db.reference("datasets")
             datasets = ref.get()
-            dataset_list = ["training_set"]
+            dataset_list = []
 
             if datasets is not None:
                 for dataset_id,dataset in datasets.items():
