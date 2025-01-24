@@ -100,4 +100,11 @@ else:
             df = load_dataframe(selected_dataset)
             st.dataframe(df)
             
-        
+            delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\")
+            delete_table = st.button("Delete table")
+
+            if delete_table and delete_acknowledgement == "I want to delete this table.":
+                ref = db.reference(selected_dataset)
+                ref.delete()
+                delete_acknowledgement = ''
+                st.rerun()
