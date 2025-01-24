@@ -111,7 +111,7 @@ else:
                 ref = db.reference(selected_dataset)
                 ref.delete()
                 ref = db.reference("Datasets")
-                datasets = ref.order_by_child("dataset").equal_to(game).get() 
+                datasets = ref.order_by_child("dataset").equal_to(selected_dataset).get() 
 
                 if datasets is not None:
                     for dataset_id,dataset in datasets.items():
