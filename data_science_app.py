@@ -89,7 +89,7 @@ else:
                             st.rerun()
                             
         with st.expander("Datasets"):
-            ref = db.reference("datasets")
+            ref = db.reference("Datasets")
             datasets = ref.get()
             dataset_list = []
 
