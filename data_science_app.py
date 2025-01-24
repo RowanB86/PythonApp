@@ -93,7 +93,7 @@ else:
                 for dataset_id,dataset in datasets.items():
                     dataset_list.append(dataset["dataset"])
 
-            dataset_list = sort(dataset_list)
+            dataset_list = sorted(dataset_list)
 
             selected_dataset = st.selectbox("Select dataset",options=dataset_list)
 
