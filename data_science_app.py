@@ -20,6 +20,9 @@ if 'logged_in' not in st.session_state:
 if 'page_selection' not in st.session_state:
     st.session_state["page_selection"] = ''
 
+if 'login_result' not in st.session_state:
+    st.session_state["login_result"] = ''
+
 if st.session_state["logged_in"] == False:
 
     st.session_state['username'] = st.text_input("Enter your username:")
@@ -27,20 +30,22 @@ if st.session_state["logged_in"] == False:
     
     create_account = st.button("Create account")
     login = st.button("Login")
+
+    st.write(st.session_state["login_result"])
     
     if create_account:
         result = createAccount(st.session_state['username'],st.session_state['password'])
         st.write(result)
     
     if login:
-        result = logIn(st.session_state['username'],st.session_state['password'])
+        st.session_state["login_result"] = logIn(st.session_state['username'],st.session_state['password'])
     
         if result == "Accepted":
             st.session_state["logged_in"] = True
         else:
             st.write("Username or password is not recognised.")
             st.session_state["logged_in"] = False
-
+        
         st.rerun()
 else:
 
