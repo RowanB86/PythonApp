@@ -91,7 +91,7 @@ def save_dataframe_to_firebase(df, df_name):
         if ref.get() is not None:
             return f"A dataframe named; {df_name} already exists."
         else:
-            df = df.where(pd.notna(df), None)
+            df= df.fillna(None)
             ref.set(df.to_dict(orient="records"))
     
             return "Dataframe saved."
