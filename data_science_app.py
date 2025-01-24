@@ -23,6 +23,9 @@ if 'page_selection' not in st.session_state:
 if 'login_result' not in st.session_state:
     st.session_state["login_result"] = ''
 
+if "user_input" not in st.session_state:
+    st.session_state.user_input = ""
+
 if st.session_state["logged_in"] == False:
 
     st.session_state['username'] = st.text_input("Enter your username:")
@@ -100,11 +103,11 @@ else:
             df = load_dataframe(selected_dataset)
             st.dataframe(df)
             
-            delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\"")
+            delete_acknowledgement = st.text_input("To delete this table enter \"I want to delete this table.\"",st.session_state["user_input"])
             delete_table = st.button("Delete table")
 
             if delete_table and delete_acknowledgement == "I want to delete this table.":
                 ref = db.reference(selected_dataset)
                 ref.delete()
-                delete_acknowledgement = ''
+                st.session_state["user_input"] = ''
                 st.rerun()
