@@ -112,6 +112,13 @@ else:
                 ref.delete()
                 ref = db.reference("Datasets")
                 datasets = ref.order_by_child("dataset").equal_to(game).get() 
+
+                if datasets is not None:
+                    for dataset_id,dataset in datasets.items():
+                        datasetID = dataset_id
+
+                    ref = db.reference(f"Datasets\{datasetID}")
+                    ref.delete()
                 
                 st.session_state["user_input"] = ''
                 st.rerun()
