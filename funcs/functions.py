@@ -114,23 +114,6 @@ def load_dataframe(df_name):
         return pd.DataFrame()
 
 def SQLTransform(SQL_code):
-    code_start = textwrap.dedent("""
-    import pandas as pd
-    import sqlite3
-    import json  # ✅ Import JSON
-    import firebase_admin
-    from firebase_admin import credentials, initialize_app, db
-    import streamlit as st  # ✅ Ensure Streamlit is imported
-    
-    firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
-    cred = credentials.Certificate(firebase_credentials)
-    
-    if not firebase_admin._apps:
-        # Initialize Firebase
-        initialize_app(cred, {
-            'databaseURL': 'https://data-science-d6833-default-rtdb.europe-west1.firebasedatabase.app/'
-        })
-    """)
 
     conn = sqlite3.connect(":memory:")
     ref = db.reference("Datasets")
@@ -146,11 +129,8 @@ def SQLTransform(SQL_code):
 
     code = code_start + SQL_code + "\n"
 
-    code += f"df = pd.read_sql_query(code, conn) \n"
-    
-    code += "conn.close()"
-
-    #df = pd.read_sql_query(code, conn)
+    df = pd.read_sql_query(code, conn)
+    conn.close()
     
     return code
 
