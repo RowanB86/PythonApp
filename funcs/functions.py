@@ -122,7 +122,7 @@ def SQLTransform(SQL_code):
     ref = db.reference("Datasets")
     datasets = ref.get()
     
-    for dataset_id,dataset in data.items():
+    for dataset_id,dataset in dataset.items():
         code_start += f"{dataset["dataset"]} = pd.DataFrame({dataset["dataset"]})\n"
         
     code_start += """conn = sqlite3.connect(":memory:")\n"""
