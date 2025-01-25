@@ -13,6 +13,7 @@ from firebase_admin import credentials, initialize_app, db
 import json
 import openai
 import re
+import sqlite3
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
@@ -110,3 +111,31 @@ def load_dataframe(df_name):
             return pd.DataFrame()
     else:
         return pd.DataFrame()
+
+def SQLTransform(SQL_code):
+    code_start = """
+    import pandas as pd
+    import sqlite3
+
+    """
+
+    ref = db.reference("Datasets")
+    datasets = ref.get()
+    
+    for dataset_id,dataset in data.items():
+        code_start += f"{dataset["dataset"]} = pd.DataFrame({dataset["dataset"]})\n"
+        
+    code_start += """conn = sqlite3.connect(":memory:")\n"""
+
+    for dataset_id,dataset in data.items():
+        code_start += f"{dataset["dataset"]}.to_sql(\"users\", conn, index=False, if_exists\"replace\")\n"
+
+    code = code_start + SQL_code + "\n"
+
+    code += f"df = pd.read_sql_query(code, conn) \n"
+    
+    code += "conn.close()"
+
+    return code
+
+    
