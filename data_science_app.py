@@ -175,6 +175,6 @@ else:
                     st.session_state['sql_code'] = updated_code
                     st.rerun()
     
-                sql_code = SQLTransform(st.session_state['sql_code'])
+                df = SQLTransform(st.session_state['sql_code'])
                 
-                st_ace(value=sql_code, language='sql', theme='monokai', key='ace-editor2')
+                st.DataFrame(df)
