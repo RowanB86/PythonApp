@@ -14,6 +14,7 @@ import json
 import openai
 import re
 import sqlite3
+import textwrap
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
