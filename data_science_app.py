@@ -4,7 +4,6 @@ Created on Wed Jan 22 09:37:12 2025
 
 @author: RowanBarua
 """
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -12,7 +11,7 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, db
 import json
 import openai
-from funcs.functions import createAccount,logIn,convertToDataFrame,save_dataframe_to_firebase,load_dataframe
+from funcs.functions import createAccount,logIn,convertToDataFrame,save_dataframe_to_firebase,load_dataframe,SQLTransform
 
 if "reset_input" not in st.session_state:
     st.session_state["reset_input"] = False  # ✅ Flag to track reset
@@ -29,6 +28,18 @@ if 'login_result' not in st.session_state:
 if "user_input" not in st.session_state:
     st.session_state.user_input = ""
 
+if 'sql_code' not in st.session_state:
+    st.session_state["sql_code"] = textwrap.dedent("""
+
+    #Write your SQL code below. Use the dataset names as table names.:
+
+    SELECT * 
+    FROM
+    Table_Name
+    
+    
+    """)
+    
 def clear_text(delete_acknowledgement,selected_dataset):
     if st.session_state["user_input"] == "I want to delete this table.":
         ref = db.reference(selected_dataset)
@@ -72,9 +83,9 @@ if st.session_state["logged_in"] == False:
 else:
 
     with st.sidebar:
-        st.session_state["page_selection"] = st.selectbox("Select page",options=["Create new dataset"])
-        
-    if st.session_state["page_selection"] == "Create new dataset":
+        st.session_state["page_selection"] = st.selectbox("Select page",options=["Create New Dataset","Transform Datasets"])
+            
+    if st.session_state["page_selection"] == "Create New Dataset":
         with st.expander("Upload local file"):
             Dataset_Upload = st.file_uploader("Upload dataset", type=["xlsx","xls","xlsm",'csv'])
 
@@ -133,7 +144,35 @@ else:
             key="user_input")
             st.button("Delete table",on_click=clear_text,args=(delete_acknowledgement, selected_dataset))
 
+    elif st.session_state["page_selection"] == "Transform Datasets":
 
+        with st.expander("Datasets"):
+            ref = db.reference("Datasets")
+            datasets = ref.get()
+            dataset_list = []
 
+            if datasets is not None:
+                for dataset_id,dataset in datasets.items():
+                    dataset_list.append(dataset["dataset"])
 
+            dataset_list = sorted(dataset_list)
+
+            selected_dataset = st.selectbox("Select dataset",options=dataset_list)
+
+            df = load_dataframe(selected_dataset)
+            st.dataframe(df)    
+
+        with st.expander("Transform datasets using SQLite"):
+            updated_code = st_ace(value=st.session_state['sql_code'], language='sql', theme='monokai', key='ace-editor')
+
+            perform_transform = st.button("Perform_Transform")
+
+            if perform_transform:
+            
+                if updated_code != st.session_state['sql_code']:
+                    st.session_state['sql_code'] = updated_code
+                    st.rerun()
+    
+                sql_code = SQLTransform(st.session_state['sql_code'])
                 
+                st_ace(value=sql_code, language='sql', theme='monokai', key='ace-editor')
