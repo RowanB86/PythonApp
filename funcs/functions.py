@@ -127,7 +127,7 @@ def SQLTransform(SQL_code):
         
     code_start += """conn = sqlite3.connect(":memory:")\n"""
 
-    for dataset_id,dataset in data.items():
+    for dataset_id,dataset in datasetas.items():
         code_start += f"{dataset["dataset"]}.to_sql(\"users\", conn, index=False, if_exists\"replace\")\n"
 
     code = code_start + SQL_code + "\n"
