@@ -177,4 +177,5 @@ else:
     
                 code = SQLTransform(st.session_state['sql_code'])
                 
-                st_ace(value=code, language='sql', theme='monokai', key='ace-editor2')
+                #st_ace(value=code, language='sql', theme='monokai', key='ace-editor2')
+                st.DataFrame(code)
