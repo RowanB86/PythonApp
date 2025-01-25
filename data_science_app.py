@@ -12,6 +12,7 @@ from firebase_admin import credentials, initialize_app, db
 import json
 import openai
 import textwrap
+from streamlit_ace import st_ace
 from funcs.functions import createAccount,logIn,convertToDataFrame,save_dataframe_to_firebase,load_dataframe,SQLTransform
 
 if "reset_input" not in st.session_state:
