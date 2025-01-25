@@ -113,9 +113,10 @@ def SQLTransform(SQL_code):
     import pandas as pd
     import sqlite3
     conn = sqlite3.connect(":memory:")
+
+    """)
     ref = db.reference("Datasets")
     datasets = ref.get()
-    """)
     
     for dataset_id,dataset in datasets.items():
         code_start = f"ref = db.reference(\"{dataset["dataset"]}\")\n"
