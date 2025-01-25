@@ -126,10 +126,12 @@ def SQLTransform(SQL_code):
     for dataset_id,dataset in datasets.items():
         code += f"{dataset["dataset"]}.to_sql(\"users\", conn, index=False, if_exists\"replace\")\n"
 
-    code = code + SQL_code + "\n"
-
+    
+    code = code + f"SQL_code = {SQL_code}" + "\n"
+    
+    
     code = code + textwrap.dedent("""
-    df = pd.read_sql_query(code, conn)
+    df = pd.read_sql_query(SQL_code, conn)
     conn.close()
     """)
 
