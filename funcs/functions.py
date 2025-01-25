@@ -117,6 +117,11 @@ def SQLTransform(SQL_code):
     code_start = textwrap.dedent("""
     import pandas as pd
     import sqlite3
+    import json  # ✅ Import JSON
+    import firebase_admin
+    from firebase_admin import credentials, initialize_app, db
+    import streamlit as st  # ✅ Ensure Streamlit is imported
+    
     firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
     cred = credentials.Certificate(firebase_credentials)
     
