@@ -117,16 +117,24 @@ def SQLTransform(SQL_code):
     code_start = textwrap.dedent("""
     import pandas as pd
     import sqlite3
-
+    firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
+    cred = credentials.Certificate(firebase_credentials)
+    
+    if not firebase_admin._apps:
+        # Initialize Firebase
+        initialize_app(cred, {
+            'databaseURL': 'https://data-science-d6833-default-rtdb.europe-west1.firebasedatabase.app/'
+        })
     """)
 
     conn = sqlite3.connect(":memory:")
     ref = db.reference("Datasets")
     datasets = ref.get()
-
     
     for dataset_id,dataset in datasets.items():
-        code_start += textwrap.dedent(f"{dataset["dataset"]} = pd.DataFrame({dataset["dataset"]})\n")
+        code_start += f"ref = db.reference(dataset["dataset"])\n"
+        code_start += "df = ref.get()\n"
+        code_start += textwrap.dedent(f"{dataset["dataset"]} = pd.DataFrame(df)\n")
         
     for dataset_id,dataset in datasets.items():
         code_start += f"{dataset["dataset"]}.to_sql(\"users\", conn, index=False, if_exists\"replace\")\n"
@@ -135,11 +143,9 @@ def SQLTransform(SQL_code):
 
     code += f"df = pd.read_sql_query(code, conn) \n"
     
-
+    code += "conn.close()"
 
     df = pd.read_sql_query(code, conn)
-
-    conn.close()
     
     return code
 
