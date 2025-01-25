@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Jan 23 10:18:09 2025
++++6Created on Thu Jan 23 10:18:09 2025
 
 @author: RowanBarua
 """
@@ -114,10 +113,13 @@ def load_dataframe(df_name):
         return pd.DataFrame()
 
 def SQLTransform(SQL_code):
-
+    code_start = textwrap.dedent("""
+    import pandas as pd
+    import sqlite3
     conn = sqlite3.connect(":memory:")
     ref = db.reference("Datasets")
     datasets = ref.get()
+    """)
     
     for dataset_id,dataset in datasets.items():
         code_start = f"ref = db.reference(\"{dataset["dataset"]}\")\n"
@@ -129,8 +131,8 @@ def SQLTransform(SQL_code):
 
     code = code_start + SQL_code + "\n"
 
-    #df = pd.read_sql_query(code, conn)
-    #conn.close()
+    df = pd.read_sql_query(code, conn)
+    conn.close()
     
     return code
 
