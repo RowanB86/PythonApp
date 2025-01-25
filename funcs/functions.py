@@ -119,7 +119,7 @@ def SQLTransform(SQL_code):
     datasets = ref.get()
     
     for dataset_id,dataset in datasets.items():
-        code = f"ref = db.reference(\"{dataset["dataset"]}\")\n"
+        code += f"ref = db.reference(\"{dataset["dataset"]}\")\n"
         code += "df = ref.get()\n"
         code += textwrap.dedent(f"{dataset["dataset"]} = pd.DataFrame(df)\n")
         
