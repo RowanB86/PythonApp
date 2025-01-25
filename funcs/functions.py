@@ -135,9 +135,11 @@ def SQLTransform(SQL_code):
 
     code += f"df = pd.read_sql_query(code, conn) \n"
     
-    code += "conn.close()"
+
 
     df = pd.read_sql_query(code, conn)
+
+    conn.close()
     
     return code
 
