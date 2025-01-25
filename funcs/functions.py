@@ -113,7 +113,15 @@ def SQLTransform(SQL_code):
     import pandas as pd
     import sqlite3
     conn = sqlite3.connect(":memory:")
-
+    firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
+    cred = credentials.Certificate(firebase_credentials)
+    
+    if not firebase_admin._apps:
+        # Initialize Firebase
+        initialize_app(cred, {
+            'databaseURL': 'https://data-science-d6833-default-rtdb.europe-west1.firebasedatabase.app/'
+        })
+        
     """)
     ref = db.reference("Datasets")
     datasets = ref.get()
