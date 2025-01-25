@@ -177,4 +177,4 @@ else:
     
                 sql_code = SQLTransform(st.session_state['sql_code'])
                 
-                st_ace(value=sql_code, language='sql', theme='monokai', key='ace-editor')
+                st_ace(value=sql_code, language='sql', theme='monokai', key='ace-editor2')
