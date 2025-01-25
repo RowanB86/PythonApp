@@ -124,7 +124,7 @@ def SQLTransform(SQL_code):
         code += textwrap.dedent(f"{dataset["dataset"]} = pd.DataFrame(df)\n")
         
     for dataset_id,dataset in datasets.items():
-        code_start += f"{dataset["dataset"]}.to_sql(\"users\", conn, index=False, if_exists\"replace\")\n"
+        code += f"{dataset["dataset"]}.to_sql(\"users\", conn, index=False, if_exists\"replace\")\n"
 
     code = code + SQL_code + "\n"
 
