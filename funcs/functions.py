@@ -109,7 +109,7 @@ def load_dataframe(df_name):
         return pd.DataFrame()
 
 def SQLTransform(SQL_code):
-    code_start = textwrap.dedent("""
+    code = textwrap.dedent("""
     import pandas as pd
     import sqlite3
     conn = sqlite3.connect(":memory:")
@@ -119,17 +119,20 @@ def SQLTransform(SQL_code):
     datasets = ref.get()
     
     for dataset_id,dataset in datasets.items():
-        code_start = f"ref = db.reference(\"{dataset["dataset"]}\")\n"
-        code_start += "df = ref.get()\n"
-        code_start += textwrap.dedent(f"{dataset["dataset"]} = pd.DataFrame(df)\n")
+        code = f"ref = db.reference(\"{dataset["dataset"]}\")\n"
+        code += "df = ref.get()\n"
+        code += textwrap.dedent(f"{dataset["dataset"]} = pd.DataFrame(df)\n")
         
     for dataset_id,dataset in datasets.items():
         code_start += f"{dataset["dataset"]}.to_sql(\"users\", conn, index=False, if_exists\"replace\")\n"
 
-    code = code_start + SQL_code + "\n"
+    code = code + SQL_code + "\n"
 
-    df = pd.read_sql_query(code, conn)
-    conn.close()
+    code = code + 
+    textwrap.dedent("""df = pd.read_sql_query(code, conn)
+    conn.close()""")
+
+    
     
     return code
 
