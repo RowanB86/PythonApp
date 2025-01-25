@@ -127,7 +127,7 @@ def SQLTransform(SQL_code):
         code += f"{dataset["dataset"]}.to_sql(\"users\", conn, index=False, if_exists=\"replace\")\n"
 
     
-    code = code + f"SQL_code = """{SQL_code}"""" + "\n"
+    code = code + f"SQL_code = \"\"\"{SQL_code}\"\"\"" + "\n"
     
     
     code = code + textwrap.dedent("""
