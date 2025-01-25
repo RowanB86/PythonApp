@@ -120,14 +120,14 @@ def SQLTransform(SQL_code):
 
     """)
 
+    conn = sqlite3.connect(":memory:")
     ref = db.reference("Datasets")
     datasets = ref.get()
+
     
     for dataset_id,dataset in datasets.items():
         code_start += textwrap.dedent(f"{dataset["dataset"]} = pd.DataFrame({dataset["dataset"]})\n")
         
-    code_start += """conn = sqlite3.connect(":memory:")\n"""
-
     for dataset_id,dataset in datasets.items():
         code_start += f"{dataset["dataset"]}.to_sql(\"users\", conn, index=False, if_exists\"replace\")\n"
 
@@ -137,7 +137,7 @@ def SQLTransform(SQL_code):
     
     code += "conn.close()"
 
-    #df = pd.read_sql_query(code, conn)
+    df = pd.read_sql_query(code, conn)
     
     return code
 
