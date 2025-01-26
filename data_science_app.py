@@ -118,7 +118,7 @@ else:
                         if len(df_name) == 0:
                             st.write("Please enter a name for the dataframe.")
                         else:
-                            result = save_dataframe_to_firebase(df, df_name)
+                            result = save_dataframe_to_firebase(df, df_name,False)
                             st.write(result)
                             st.rerun()
                             
@@ -165,7 +165,7 @@ else:
             df = load_dataframe(selected_dataset)
             st.dataframe(df)    
 
-        with st.expander("Transform datasets using SQLite"):
+        with st.expander("Transform datasets using PostgreSQL"):
             updated_code = st_ace(value=st.session_state['sql_code'], language='sql', theme='monokai', key='ace-editor')
 
             perform_transform = st.button("Perform_Transform")
@@ -181,6 +181,12 @@ else:
                     exec(code,{},local_namespace)
                     df = local_namespace.get("df")
                     st.dataframe(df)
+                    allow_overwrite = st.radio("Allow dataset overwrites.")
+                    df_name = st.text_input("Enter dataset name:")
+                    save_dataset = st.button("Save dataset")
+                    if save_dataset:
+                        save_dataframe_to_firebase(df, df_name,allow_overwrite)
+                
       
                 except duckdb.Error as e:
                     st.error(f"SQL Execution Error: {str(e)}")  
