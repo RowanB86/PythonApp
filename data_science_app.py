@@ -33,7 +33,7 @@ if "user_input" not in st.session_state:
 if 'sql_code' not in st.session_state:
     st.session_state["sql_code"] = textwrap.dedent("""
 
-    #Write your SQL code below. Use the dataset names as table names.:
+    --Write your SQL code below. Use the dataset names as table names.:
 
     SELECT * 
     FROM
