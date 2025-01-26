@@ -174,9 +174,7 @@ else:
         with st.expander("Transform datasets using PostgreSQL"):
             updated_code = st_ace(value=st.session_state['sql_code'], language='sql', theme='monokai', key='ace-editor')
 
-            perform_transform = st.button("Perform_Transform")
-
-            if perform_transform:
+            if st.button("Perform_Transform"):
                 
                 st.session_state["save_transform_result"] = ''
                 
@@ -201,8 +199,8 @@ else:
             if st.session_state["transform_created"]:
                 allow_overwrite = st.radio("Allow dataset overwrites.",["Yes","No"],index=1)
                 df_name = st.text_input("Enter dataset name:")
-                save_dataset = st.button("Save dataset")
-                if save_dataset:
+
+                if st.button("Save dataset"):
                     if 'df_transform' not in st.session_state:
                         st.session_state["save_transform_result"] = "No dataset has been created."
                     else:
