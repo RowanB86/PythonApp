@@ -178,7 +178,7 @@ def DuckDBTransform(SQL_code):
     code = code + f"SQL_code = \"\"\"{SQL_code}\"\"\"" + "\n"
     
     code = code + textwrap.dedent("""
-    df = duckdb.query(SQL_code).df()
+    df = duckdb.query(SQL_code).df(training_set=training_set)
     """)
 
     return code
