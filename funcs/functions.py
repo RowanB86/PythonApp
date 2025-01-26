@@ -83,14 +83,20 @@ def save_dataframe_to_firebase(df, df_name,allow_overwrite):
 
         
         ref = db.reference(df_name)
-        if ref.get() is not None and allow_overwrite == "No":
+        if ref.get() is not None:
+            account_exists = True
+        else:
+            account_exists = False
+        
+        if account_exists and allow_overwrite == "No":
             return f"A dataframe named; {df_name} already exists."
         else:
             df.replace(np.nan, None, inplace=True)
             ref.set(df.to_dict(orient="records"))
-            ref = db.reference("Datasets")
-            new_dataset = {"dataset": df_name}
-            ref.push(new_dataset)
+            if not account_exists:
+                ref = db.reference("Datasets")
+                new_dataset = {"dataset": df_name}
+                ref.push(new_dataset)
     
             return "Dataframe saved."
     
