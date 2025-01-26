@@ -177,7 +177,9 @@ else:
             perform_transform = st.button("Perform_Transform")
 
             if perform_transform:
-            
+                
+                st.session_state["save_transform_result"] = ''
+                
                 if updated_code != st.session_state['sql_code']:
                     st.session_state['sql_code'] = updated_code
 
@@ -185,7 +187,7 @@ else:
                     code = DuckDBTransform(st.session_state['sql_code'])
                     local_namespace = {}
                     exec(code,{},local_namespace)
-                    df = local_namespace.get("df")
+                    st.session_state["df_transform"] = local_namespace.get("df")
                     st.dataframe(df)
                     st.session_state["transform_created"] = True
 
@@ -200,9 +202,12 @@ else:
                 df_name = st.text_input("Enter dataset name:")
                 save_dataset = st.button("Save dataset")
                 if save_dataset:
-                    st.session_state["save_transform_result"] = save_dataframe_to_firebase(df, df_name,allow_overwrite)
-                    st.session_state["transform_created"] = False
-                    st.rerun()
+                    if 'df_transform' not in st.session_state:
+                        st.session_state["save_transform_result"] = "No dataset has been created."
+                    else:
+                        st.session_state["save_transform_result"] = save_dataframe_to_firebase(df, df_name,allow_overwrite)
+                        st.session_state["transform_created"] = False
+                        st.rerun()
 
             transform_result = st.empty()
             transform_result.text(st.session_state["save_transform_result"])
