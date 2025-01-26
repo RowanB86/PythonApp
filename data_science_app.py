@@ -13,7 +13,7 @@ import json
 import openai
 import textwrap
 from streamlit_ace import st_ace
-from funcs.functions import createAccount,logIn,convertToDataFrame,save_dataframe_to_firebase,load_dataframe,SQLTransform
+from funcs.functions import createAccount,logIn,convertToDataFrame,save_dataframe_to_firebase,load_dataframe,SQLTransform,DuckDBTransform
 
 if "reset_input" not in st.session_state:
     st.session_state["reset_input"] = False  # ✅ Flag to track reset
