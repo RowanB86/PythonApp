@@ -183,18 +183,20 @@ else:
 
                 try:
                     
-                    code = DuckDBTransform(st.session_state['sql_code'])
                     local_namespace = {}
                     exec(code,{},local_namespace)
                     st.session_state["df_transform"] = local_namespace.get("df")
-                    st.dataframe(st.session_state["df_transform"])
+                    
                     st.session_state["transform_created"] = True
 
       
                 except duckdb.Error as e:
                     st.error(f"SQL Execution Error: {str(e)}")  
                 except Exception as e:
-                    st.error(f"Unexpected Error: {str(e)}")             
+                    st.error(f"Unexpected Error: {str(e)}")      
+
+            if 'df_transform' in st.session_state:
+                st.dataframe(st.session_state["df_transform"])
 
             if st.session_state["transform_created"]:
                 allow_overwrite = st.radio("Allow dataset overwrites.",["Yes","No"],index=1)
