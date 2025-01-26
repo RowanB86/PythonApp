@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -139,17 +137,51 @@ def SQLTransform(SQL_code):
     for dataset_id,dataset in datasets.items():
         code += f"{dataset["dataset"]}.to_sql(\"{dataset["dataset"]}\", conn, index=False, if_exists=\"replace\")\n"
 
-    
     code = code + f"SQL_code = \"\"\"{SQL_code}\"\"\"" + "\n"
-    
     
     code = code + textwrap.dedent("""
     df = pd.read_sql_query(SQL_code, conn)
     conn.close()
     """)
 
-    
-    
     return code
 
+def DuckDBTransform(SQL_code):
+    code = textwrap.dedent("""
+    import pandas as pd
+    import duckdb
+    import firebase_admin
+    from firebase_admin import credentials, initialize_app, db
+    import json
+    import streamlit as st
     
+    # Load Firebase credentials from Streamlit secrets
+    firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
+    cred = credentials.Certificate(firebase_credentials)
+    
+    # Initialize Firebase if not already initialized
+    if not firebase_admin._apps:
+        initialize_app(cred, {
+            'databaseURL': 'https://data-science-d6833-default-rtdb.europe-west1.firebasedatabase.app/'
+        })
+        
+    """)
+
+    ref = db.reference("Datasets")
+    datasets = ref.get()
+    
+    for dataset_id,dataset in datasets.items():
+        code += f"ref = db.reference(\"{dataset["dataset"]}\")\n"
+        code += "df = ref.get()\n"
+        code += textwrap.dedent(f"{dataset["dataset"]} = pd.DataFrame(df)\n")
+        
+    for dataset_id,dataset in datasets.items():
+        code += f"{dataset["dataset"]}.to_sql(\"{dataset["dataset"]}\", conn, index=False, if_exists=\"replace\")\n"
+
+    code = code + f"SQL_code = \"\"\"{SQL_code}\"\"\"" + "\n"
+    
+    code = code + textwrap.dedent("""
+    df = duckdb.query(SQL_code).df()
+    """)
+
+    return code
