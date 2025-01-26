@@ -180,4 +180,4 @@ else:
                 local_namespace = {}
                 exec(code,{},local_namespace)
                 df = local_namespace.get("df")
-                st.DataFrame(df)
+                st.dataframe(df)
