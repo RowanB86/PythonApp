@@ -185,8 +185,9 @@ else:
                     df_name = st.text_input("Enter dataset name:")
                     save_dataset = st.button("Save dataset")
                     if save_dataset:
-                        save_dataframe_to_firebase(df, df_name,allow_overwrite)
-                
+                        result = save_dataframe_to_firebase(df, df_name,allow_overwrite)
+                        st.write(result)
+                        st.rerun()
       
                 except duckdb.Error as e:
                     st.error(f"SQL Execution Error: {str(e)}")  
