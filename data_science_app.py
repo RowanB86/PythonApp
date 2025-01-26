@@ -173,11 +173,12 @@ else:
             
                 if updated_code != st.session_state['sql_code']:
                     st.session_state['sql_code'] = updated_code
-                    st.rerun()
-    
+                    
                 code = SQLTransform(st.session_state['sql_code'])
-                #st_ace(value=code, language='sql', theme='monokai', key='ace-editor2')
+                st_ace(value=code, language='sql', theme='monokai', key='ace-editor2')
                 local_namespace = {}
                 exec(code,{},local_namespace)
                 df = local_namespace.get("df")
                 st.dataframe(df)
+                st.rerun()
+                
