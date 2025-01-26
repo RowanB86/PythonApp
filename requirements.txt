@@ -30,4 +30,5 @@ dash
 gpt4all
 streamlit_ace
 sqlalchemy
-
+duckdb
+pyarrow
