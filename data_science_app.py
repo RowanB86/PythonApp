@@ -181,7 +181,7 @@ else:
                     exec(code,{},local_namespace)
                     df = local_namespace.get("df")
                     st.dataframe(df)
-                    allow_overwrite = st.radio("Allow dataset overwrites.")
+                    allow_overwrite = st.radio("Allow dataset overwrites.",["Yes","No"])
                     df_name = st.text_input("Enter dataset name:")
                     save_dataset = st.button("Save dataset")
                     if save_dataset:
