@@ -175,8 +175,6 @@ def DuckDBTransform(SQL_code):
         code += "df = ref.get()\n"
         code += textwrap.dedent(f"{dataset["dataset"]} = pd.DataFrame(df)\n")
         
-    for dataset_id,dataset in datasets.items():
-        code += f"{dataset["dataset"]}.to_sql(\"{dataset["dataset"]}\", conn, index=False, if_exists=\"replace\")\n"
 
     code = code + f"SQL_code = \"\"\"{SQL_code}\"\"\"" + "\n"
     
