@@ -176,8 +176,8 @@ else:
                     st.rerun()
     
                 code = SQLTransform(st.session_state['sql_code'])
-                st_ace(value=code, language='sql', theme='monokai', key='ace-editor2')
-                #local_namespace = {}
-                #exec(code,{},local_namespace)
-                #df = local_namespace.get("df")
-                #st.DataFrame(df)
+                #st_ace(value=code, language='sql', theme='monokai', key='ace-editor2')
+                local_namespace = {}
+                exec(code,{},local_namespace)
+                df = local_namespace.get("df")
+                st.DataFrame(df)
