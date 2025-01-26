@@ -68,7 +68,7 @@ def convertToDataFrame(file):
 
         return sheet_names
 
-def save_dataframe_to_firebase(df, df_name):
+def save_dataframe_to_firebase(df, df_name,allow_overwrite):
 
     disallowed_chars = [r"\\",r"\.",r"/",r"#",r"\$",r"\[",r"\]",r"\*"," "]
     valid = True
@@ -83,7 +83,7 @@ def save_dataframe_to_firebase(df, df_name):
 
         
         ref = db.reference(df_name)
-        if ref.get() is not None:
+        if ref.get() is not None and allow_overwrite == "No":
             return f"A dataframe named; {df_name} already exists."
         else:
             df.replace(np.nan, None, inplace=True)
