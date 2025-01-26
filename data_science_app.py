@@ -181,11 +181,11 @@ else:
                 if updated_code != st.session_state['sql_code']:
                     st.session_state['sql_code'] = updated_code
 
-                st_ace(value=code, language='sql', theme='monokai', key='ace-editor4')
+                
                 try:
                     
                     local_namespace = {}
-                    
+                    code = DuckDBTransform(st.session_state['sql_code'])
                     exec(code,{},local_namespace)
                     st.session_state["df_transform"] = local_namespace.get("df")
                     
