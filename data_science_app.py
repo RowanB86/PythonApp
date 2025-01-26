@@ -203,5 +203,6 @@ else:
                     st.session_state["save_transform_result"] = save_dataframe_to_firebase(df, df_name,allow_overwrite)
                     st.session_state["transform_created"] = False
                     st.rerun()
-                
-            transform_result = placeholder.text(st.session_state["save_transform_result"])
+
+            transform_result = st.empty()
+            transform_result.text(st.session_state["save_transform_result"])
