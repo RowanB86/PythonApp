@@ -190,7 +190,7 @@ else:
                     local_namespace = {}
                     exec(code,{},local_namespace)
                     st.session_state["df_transform"] = local_namespace.get("df")
-                    st.dataframe(df)
+                    st.dataframe(st.session_state["df_transform"])
                     st.session_state["transform_created"] = True
 
       
@@ -207,7 +207,7 @@ else:
                     if 'df_transform' not in st.session_state:
                         st.session_state["save_transform_result"] = "No dataset has been created."
                     else:
-                        st.session_state["save_transform_result"] = save_dataframe_to_firebase(df, df_name,allow_overwrite)
+                        st.session_state["save_transform_result"] = save_dataframe_to_firebase(st.session_state["df_transform"], df_name,allow_overwrite)
                         st.session_state["transform_created"] = False
                         st.rerun()
 
