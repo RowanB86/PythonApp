@@ -92,9 +92,9 @@ if st.session_state["logged_in"] == False:
 else:
 
     with st.sidebar:
-        st.session_state["page_selection"] = st.selectbox("Select page",options=["Create New Dataset","Transform Datasets"])
+        st.session_state["page_selection"] = st.selectbox("Select page",options=["Create / Delete Datasets","Transform Datasets"])
             
-    if st.session_state["page_selection"] == "Create New Dataset":
+    if st.session_state["page_selection"] == "Create / Delete Datasets":
         with st.expander("Upload local file"):
             Dataset_Upload = st.file_uploader("Upload dataset", type=["xlsx","xls","xlsm",'csv'])
 
