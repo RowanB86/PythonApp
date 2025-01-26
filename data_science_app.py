@@ -31,8 +31,8 @@ if 'login_result' not in st.session_state:
 if "user_input" not in st.session_state:
     st.session_state.user_input = ""
 
-if "save_transform_result" not in st.session_state:
-    st.session_state["save_transform_result"] = '' 
+if "transform_created" not in st.session_state:
+    st.session_state["transform_created"] = False
 
 if 'sql_code' not in st.session_state:
     st.session_state["sql_code"] = textwrap.dedent("""
@@ -167,7 +167,7 @@ else:
 
             df = load_dataframe(selected_dataset)
             st.dataframe(df)    
-
+        
         with st.expander("Transform datasets using PostgreSQL"):
             updated_code = st_ace(value=st.session_state['sql_code'], language='sql', theme='monokai', key='ace-editor')
 
@@ -184,16 +184,21 @@ else:
                     exec(code,{},local_namespace)
                     df = local_namespace.get("df")
                     st.dataframe(df)
-                    allow_overwrite = st.radio("Allow dataset overwrites.",["Yes","No"],index=1)
-                    df_name = st.text_input("Enter dataset name:")
-                    save_dataset = st.button("Save dataset")
-                    if save_dataset:
-                        st.session["save_transform_result"] = save_dataframe_to_firebase(df, df_name,allow_overwrite)
-                        st.rerun()
+                    st.session_state["transform_created"] = True
+
       
                 except duckdb.Error as e:
                     st.error(f"SQL Execution Error: {str(e)}")  
                 except Exception as e:
                     st.error(f"Unexpected Error: {str(e)}")             
 
-            st.write(st.session_state["save_transform_result"])
+            if st.session_state["transform_created"]:
+                allow_overwrite = st.radio("Allow dataset overwrites.",["Yes","No"],index=1)
+                df_name = st.text_input("Enter dataset name:")
+                save_dataset = st.button("Save dataset")
+                if save_dataset:
+                    result = save_dataframe_to_firebase(df, df_name,allow_overwrite)
+                    st.write(result)
+                    st.rerun()
+
+        
