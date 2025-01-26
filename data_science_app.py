@@ -173,12 +173,15 @@ else:
             
                 if updated_code != st.session_state['sql_code']:
                     st.session_state['sql_code'] = updated_code
-                    
-                #code = SQLTransform(st.session_state['sql_code'])
-                code = DuckDBTransform(st.session_state['sql_code'])
-                local_namespace = {}
-                exec(code,{},local_namespace)
-                df = local_namespace.get("df")
-                st.dataframe(df)
+
+                try:
+                    code = DuckDBTransform(st.session_state['sql_code'])
+                    local_namespace = {}
+                    exec(code,{},local_namespace)
+                    df = local_namespace.get("df")
+                    st.dataframe(df)
       
-              
+                except duckdb.Error as e:
+                    st.error(f"SQL Execution Error: {str(e)}")  
+                except Exception as e:
+                    st.error(f"Unexpected Error: {str(e)}")             
