@@ -115,6 +115,7 @@ def SQLTransform(SQL_code):
     import firebase_admin
     from firebase_admin import credentials, initialize_app, db
     import json
+    import streamlit as st
     
     conn = sqlite3.connect(":memory:")
     firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
