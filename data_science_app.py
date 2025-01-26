@@ -184,6 +184,7 @@ else:
                     st.session_state['sql_code'] = updated_code
 
                 try:
+                    st_ace(value=st.session_state['sql_code'], language='sql', theme='monokai', key='ace-editor2')
                     code = DuckDBTransform(st.session_state['sql_code'])
                     local_namespace = {}
                     exec(code,{},local_namespace)
