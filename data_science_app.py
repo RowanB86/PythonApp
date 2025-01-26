@@ -184,6 +184,7 @@ else:
                 try:
                     
                     local_namespace = {}
+                    st_ace(value=code, language='sql', theme='monokai', key='ace-editor4')
                     exec(code,{},local_namespace)
                     st.session_state["df_transform"] = local_namespace.get("df")
                     
