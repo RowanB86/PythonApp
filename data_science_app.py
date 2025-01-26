@@ -188,7 +188,7 @@ else:
                     st.session_state["df_transform"] = local_namespace.get("df")
                     
                     st.session_state["transform_created"] = True
-
+                    st.session_state["save_transform_result"] = ''
       
                 except duckdb.Error as e:
                     st.error(f"SQL Execution Error: {str(e)}")  
