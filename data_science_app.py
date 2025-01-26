@@ -180,5 +180,5 @@ else:
                 exec(code,{},local_namespace)
                 df = local_namespace.get("df")
                 st.dataframe(df)
-                st.rerun()
+                #st.rerun()
                 
