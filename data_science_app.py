@@ -92,7 +92,7 @@ if st.session_state["logged_in"] == False:
 else:
 
     with st.sidebar:
-        st.session_state["page_selection"] = st.selectbox("Select page",options=["Create / Delete Datasets","Transform Datasets"])
+        st.session_state["page_selection"] = st.selectbox("Select page",options=["Create / Delete Datasets","Transform Datasets","Statistical Modelling"])
             
     if st.session_state["page_selection"] == "Create / Delete Datasets":
         with st.expander("Upload local file"):
@@ -152,7 +152,7 @@ else:
             delete_acknowledgement = st.text_input("To delete this table, enter \"I want to delete this table.\" and press the \"Delete Table\" button.",
             key="user_input")
             st.button("Delete table",on_click=clear_text,args=(delete_acknowledgement, selected_dataset))
-
+    
     elif st.session_state["page_selection"] == "Transform Datasets":
 
         with st.expander("Datasets"):
@@ -181,7 +181,6 @@ else:
                 if updated_code != st.session_state['sql_code']:
                     st.session_state['sql_code'] = updated_code
 
-                
                 try:
                     
                     local_namespace = {}
@@ -214,3 +213,47 @@ else:
 
             transform_result = st.empty()
             transform_result.text(st.session_state["save_transform_result"])
+    
+    elif st.session_state["page_selection"] == "Statistical Modelling":  
+
+        with st.expander("Datasets"):
+            ref = db.reference("Datasets")
+            datasets = ref.get()
+            dataset_list = []
+
+            if datasets is not None:
+                for dataset_id,dataset in datasets.items():
+                    dataset_list.append(dataset["dataset"])
+
+            dataset_list = sorted(dataset_list)
+
+            selected_dataset = st.selectbox("Select dataset",options=dataset_list)
+
+            df = load_dataframe(selected_dataset)
+            st.dataframe(df)    
+
+         with st.expander("Define and fit model using statsmodel syntax e.g. 'SalesPrice ~ LotArea + OverallQual + OverallCond'"):
+             Model_Definition = st.text_input(
+
+             st.markdown("""**Model Definition Guidelines:**
+             A model should be defined in the form; Target_Variable ~ Feature1 + Feature2 + Feature3
+             Example: SalePrice ~ LotArea + OverallQual + OverallCond
+
+            Target_Variable = The thing that you're trying to predict.
+            Feature1, Feature2, ...  = The factors (explanatory variables) that affect the target variable (e.g. number of bedrooms in a house can affect the sales price).""")
+            
+         with st.expander("Define and fit model interactively"):
+             selected_dataset = st.selectbox("Select dataset to fit model to",options=dataset_list)
+             df = load_dataframe(selected_dataset)   
+             variables = list(df.columns)
+             if 'interaction_terms' not in st.session_state:
+                 st.session_state["interaction_terms"] = []
+
+             if 'higher_order_terms' not in st.session_state:
+                 st.session_state["higher_order_terms"] = []
+            
+             target_variable = st.selectbox("Select target variable (what you're trying to predict)",options=variables)
+             explanatory_variables = st.selectbox("Select explanatory variables (the variables you think affect the target variable)",options=variables + st.session_state["interaction_terms"] + st.session_state["higher_order_terms"])
+
+             interaction_terms = st.multiselect("Select 
+             
