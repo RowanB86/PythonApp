@@ -255,5 +255,16 @@ else:
              target_variable = st.selectbox("Select target variable (what you're trying to predict)",options=variables)
              explanatory_variables = st.selectbox("Select explanatory variables (the variables you think affect the target variable)",options=variables + st.session_state["interaction_terms"] + st.session_state["higher_order_terms"])
 
-             interaction_terms = st.multiselect("Select 
+             interaction_term = st.multiselect("Select explanatory variables to combine to create interaction terms",options=variables)
+             if st.button("Create interaction term"):
+                 if interaction_term not in st.session_state("interaction_terms"):
+                     st.session_state("interaction_terms").append(interaction_term)
+
+             higher_order 
+   
+
+             
+
+        
+             
              
