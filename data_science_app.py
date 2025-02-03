@@ -261,7 +261,14 @@ else:
 
             st.markdown("""**Create higher order terms**""")
             higher_order_term =  st.selectbox("Select variable",options=variables)
-            order_of_term = int(st.text_input("Enter power to raise term by e.g. 2 = squared term, 3 = cubic term"))
+            order_of_term = st.text_input("Enter power to raise term by e.g. 2 = squared term, 3 = cubic term")
+
+            if order_of_term is not None:
+            try:
+                order_of_term = int(order_of_term)
+            except:
+                st.write("Please enter numeric value for order of term."
+            
             if st.button("Create higher order term"):
                 st.session_state("higher_order_terms").append('I(' + higher_order_term + '^' + str(order_of_term) + ')')
              
