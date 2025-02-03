@@ -232,7 +232,7 @@ else:
             df = load_dataframe(selected_dataset)
             st.dataframe(df)    
 
-         with st.expander("Define and fit model using statsmodel syntax e.g. 'SalesPrice ~ LotArea + OverallQual + OverallCond'"):
+        with st.expander("Define and fit model using statsmodel syntax e.g. 'SalesPrice ~ LotArea + OverallQual + OverallCond'"):
             st.markdown("""**Model Definition Guidelines:**
             A model should be defined in the form; Target_Variable ~ Feature1 + Feature2 + Feature3
             Example: SalePrice ~ LotArea + OverallQual + OverallCond
