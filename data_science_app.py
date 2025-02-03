@@ -246,9 +246,11 @@ else:
             variables = list(df.columns)
             if 'interaction_terms' not in st.session_state:
                 st.session_state["interaction_terms"] = []
+                st.session_state["interaction_term_update_message"] = ''
 
             if 'higher_order_terms' not in st.session_state:
                 st.session_state["higher_order_terms"] = []
+                st.session_state["higher_order_term_update_message"] = ''
             
             target_variable = st.selectbox("Select target variable (what you're trying to predict)",options=variables)
             explanatory_variables = st.selectbox("Select explanatory variables (the variables you think affect the target variable)",options=variables + st.session_state["interaction_terms"] + st.session_state["higher_order_terms"])
@@ -257,9 +259,14 @@ else:
             interaction_term = st.multiselect("Select explanatory variables to combine to create interaction terms",options=variables)
             if st.button("Create interaction term"):
                 new_interaction_term = ('*').join(interaction_term)
-                if new_interaction_term not in st.session_state["interaction_terms"] and new_interaction_term is not None:
+                if new_interaction_term not in st.session_state["interaction_terms"]:
                     st.session_state["interaction_terms"].append(new_interaction_term)
-                    st.write('Interaction term; ' + new_interaction_term + ' has been created.')
+                    st.session_state["interaction_term_update_message"] = 'Interaction term; ' + new_interaction_term + ' has been created.'
+                else:
+                    st.session_state["interaction_term_update_message"] = 'Interaction term; ' + new_interaction_term + ' already exists.'
+
+            interaction_term_added_message = st.empty()
+            interaction_term_added_message = st.session_state["interaction_term_update_message"]
 
             st.markdown("""**Create higher order terms**""")
             higher_order_term =  st.selectbox("Select variable",options=variables)
@@ -275,7 +282,10 @@ else:
                 new_higher_order_term = 'I(' + higher_order_term + '^' + str(order_of_term) + ')'
                 if new_higher_order_term not in st.session_state:
                     st.session_state["higher_order_terms"].append(new_higher_order_term)
-
+                    st.session_state["higher_order_term_update_message"]  = 'Higher order term; ' + new_higher_order_term + ' has been created.'
+                else:
+                    st.session_state["higher_order_term_update_message"]  = 'Higher order term; ' + new_higher_order_term + ' already exists.'
         
-             
-             
+            higher_order_term_added_message = st.empty()
+            higher_order_term_added_message  = st.session_state["higher_order_term_update_message"]             
+            
