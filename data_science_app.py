@@ -265,6 +265,8 @@ else:
                 else:
                     st.session_state["interaction_term_update_message"] = 'Interaction term; ' + new_interaction_term + ' already exists.'
 
+                st.rerun()
+
             interaction_term_added_message = st.empty()
             interaction_term_added_message = st.session_state["interaction_term_update_message"]
 
@@ -285,6 +287,8 @@ else:
                     st.session_state["higher_order_term_update_message"]  = 'Higher order term; ' + new_higher_order_term + ' has been created.'
                 else:
                     st.session_state["higher_order_term_update_message"]  = 'Higher order term; ' + new_higher_order_term + ' already exists.'
+
+                st.rerun()
         
             higher_order_term_added_message = st.empty()
             higher_order_term_added_message  = st.session_state["higher_order_term_update_message"]             
