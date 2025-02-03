@@ -267,7 +267,7 @@ else:
                 try:
                     order_of_term = int(order_of_term)
                 except:
-                    st.write("Please enter numeric value for order of term."
+                    st.write("Please enter numeric value for order of term.")
             
             if st.button("Create higher order term"):
                 st.session_state("higher_order_terms").append('I(' + higher_order_term + '^' + str(order_of_term) + ')')
