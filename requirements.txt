@@ -32,3 +32,4 @@ streamlit_ace
 sqlalchemy
 duckdb
 pyarrow
+sympy
