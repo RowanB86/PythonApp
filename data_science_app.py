@@ -267,8 +267,8 @@ else:
 
                 st.rerun()
 
-            interaction_term_added_message = st.empty()
-            interaction_term_added_message = st.session_state["interaction_term_update_message"]
+            if "interaction_term_update_message" in st.session_state:
+                st.success(st.session_state["interaction_term_update_message"])
 
             st.markdown("""**Create higher order terms**""")
             higher_order_term =  st.selectbox("Select variable",options=variables)
@@ -290,6 +290,6 @@ else:
 
                 st.rerun()
         
-            higher_order_term_added_message = st.empty()
-            higher_order_term_added_message  = st.session_state["higher_order_term_update_message"]             
+            if "higher_order_term_update_message" in st.session_state:
+                st.success(st.session_state["higher_order_term_update_message"])           
             
