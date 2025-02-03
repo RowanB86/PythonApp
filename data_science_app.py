@@ -282,7 +282,7 @@ else:
             
             if st.button("Create higher order term"):
                 new_higher_order_term = 'I(' + higher_order_term + '^' + str(order_of_term) + ')'
-                if new_higher_order_term not in st.session_state:
+                if new_higher_order_term not in st.session_state["higher_order_terms"]:
                     st.session_state["higher_order_terms"].append(new_higher_order_term)
                     st.session_state["higher_order_term_update_message"]  = 'Higher order term; ' + new_higher_order_term + ' has been created.'
                 else:
