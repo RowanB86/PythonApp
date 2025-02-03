@@ -256,7 +256,7 @@ else:
             st.markdown("""**Create interaction terms**""")
             interaction_term = st.multiselect("Select explanatory variables to combine to create interaction terms",options=variables)
             if st.button("Create interaction term"):
-                if interaction_term not in st.session_state("interaction_terms"):
+                if interaction_term not in st.session_state["interaction_terms"]:
                     st.session_state("interaction_terms").append(('*').join(interaction_term))
 
             st.markdown("""**Create higher order terms**""")
