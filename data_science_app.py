@@ -240,7 +240,7 @@ else:
             Target_Variable = The thing that you're trying to predict.
             Feature1, Feature2, ...  = The factors (explanatory variables) that affect the target variable (e.g. number of bedrooms in a house can affect the sales price).""")
             
-         with st.expander("Define and fit model interactively"):
+        with st.expander("Define and fit model interactively"):
             selected_dataset = st.selectbox("Select dataset to fit model to",options=dataset_list)
             df = load_dataframe(selected_dataset)   
             variables = list(df.columns)
