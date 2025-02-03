@@ -256,8 +256,10 @@ else:
             st.markdown("""**Create interaction terms**""")
             interaction_term = st.multiselect("Select explanatory variables to combine to create interaction terms",options=variables)
             if st.button("Create interaction term"):
-                if interaction_term not in st.session_state["interaction_terms"]:
-                    st.session_state["interaction_terms"].append(('*').join(interaction_term))
+                new_interaction_term = st.session_state["interaction_terms"].append(('*').join(interaction_term))
+                if new_interaction_term not in st.session_state["interaction_terms"]:
+                    st.session_state["interaction_terms"].append(new_interaction_term)
+                    st.write('Interaction term; ' + new_interaction_term + ' has been created.')
 
             st.markdown("""**Create higher order terms**""")
             higher_order_term =  st.selectbox("Select variable",options=variables)
@@ -270,7 +272,9 @@ else:
                     st.write("Please enter numeric value for order of term.")
             
             if st.button("Create higher order term"):
-                st.session_state["higher_order_terms"].append('I(' + higher_order_term + '^' + str(order_of_term) + ')')
+                new_higher_order_term = 'I(' + higher_order_term + '^' + str(order_of_term) + ')'
+                if new_higher_order_term not in st.session_state:
+                    st.session_state["higher_order_terms"].append(new_higher_order_term)
              
 
         
