@@ -233,7 +233,7 @@ else:
             st.dataframe(df)    
 
          with st.expander("Define and fit model using statsmodel syntax e.g. 'SalesPrice ~ LotArea + OverallQual + OverallCond'"):
-             #Model_Definition = st.text_input(
+            #Model_Definition = st.text_input(
 
             st.markdown("""**Model Definition Guidelines:**
             A model should be defined in the form; Target_Variable ~ Feature1 + Feature2 + Feature3
