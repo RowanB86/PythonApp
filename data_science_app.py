@@ -233,7 +233,7 @@ else:
             st.dataframe(df)    
 
          with st.expander("Define and fit model using statsmodel syntax e.g. 'SalesPrice ~ LotArea + OverallQual + OverallCond'"):
-             Model_Definition = st.text_input(
+             #Model_Definition = st.text_input(
 
              st.markdown("""**Model Definition Guidelines:**
              A model should be defined in the form; Target_Variable ~ Feature1 + Feature2 + Feature3
@@ -255,14 +255,17 @@ else:
              target_variable = st.selectbox("Select target variable (what you're trying to predict)",options=variables)
              explanatory_variables = st.selectbox("Select explanatory variables (the variables you think affect the target variable)",options=variables + st.session_state["interaction_terms"] + st.session_state["higher_order_terms"])
 
+             st.markdown("""**Create interaction terms**""")
              interaction_term = st.multiselect("Select explanatory variables to combine to create interaction terms",options=variables)
              if st.button("Create interaction term"):
                  if interaction_term not in st.session_state("interaction_terms"):
-                     st.session_state("interaction_terms").append(interaction_term)
+                     st.session_state("interaction_terms").append(('*').join(interaction_term))
 
-             higher_order 
-   
-
+             st.markdown("""**Create higher order terms**""")
+             higher_order_term =  st.selectbox("Select variable",options=variables)
+             order_of_term = int(st.text_input("Enter power to raise term by e.g. 2 = squared term, 3 = cubic term"))
+             if st.button("Create higher order term"):
+                 st.session_state("higher_order_terms").append('I(' + higher_order_term + '^' + str(order_of_term) + ')')
              
 
         
