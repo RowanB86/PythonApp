@@ -235,37 +235,37 @@ else:
          with st.expander("Define and fit model using statsmodel syntax e.g. 'SalesPrice ~ LotArea + OverallQual + OverallCond'"):
              #Model_Definition = st.text_input(
 
-             st.markdown("""**Model Definition Guidelines:**
-             A model should be defined in the form; Target_Variable ~ Feature1 + Feature2 + Feature3
-             Example: SalePrice ~ LotArea + OverallQual + OverallCond
+            st.markdown("""**Model Definition Guidelines:**
+            A model should be defined in the form; Target_Variable ~ Feature1 + Feature2 + Feature3
+            Example: SalePrice ~ LotArea + OverallQual + OverallCond
 
             Target_Variable = The thing that you're trying to predict.
             Feature1, Feature2, ...  = The factors (explanatory variables) that affect the target variable (e.g. number of bedrooms in a house can affect the sales price).""")
             
          with st.expander("Define and fit model interactively"):
-             selected_dataset = st.selectbox("Select dataset to fit model to",options=dataset_list)
-             df = load_dataframe(selected_dataset)   
-             variables = list(df.columns)
-             if 'interaction_terms' not in st.session_state:
-                 st.session_state["interaction_terms"] = []
+            selected_dataset = st.selectbox("Select dataset to fit model to",options=dataset_list)
+            df = load_dataframe(selected_dataset)   
+            variables = list(df.columns)
+            if 'interaction_terms' not in st.session_state:
+                st.session_state["interaction_terms"] = []
 
-             if 'higher_order_terms' not in st.session_state:
-                 st.session_state["higher_order_terms"] = []
+            if 'higher_order_terms' not in st.session_state:
+                st.session_state["higher_order_terms"] = []
             
-             target_variable = st.selectbox("Select target variable (what you're trying to predict)",options=variables)
-             explanatory_variables = st.selectbox("Select explanatory variables (the variables you think affect the target variable)",options=variables + st.session_state["interaction_terms"] + st.session_state["higher_order_terms"])
+            target_variable = st.selectbox("Select target variable (what you're trying to predict)",options=variables)
+            explanatory_variables = st.selectbox("Select explanatory variables (the variables you think affect the target variable)",options=variables + st.session_state["interaction_terms"] + st.session_state["higher_order_terms"])
 
-             st.markdown("""**Create interaction terms**""")
-             interaction_term = st.multiselect("Select explanatory variables to combine to create interaction terms",options=variables)
-             if st.button("Create interaction term"):
-                 if interaction_term not in st.session_state("interaction_terms"):
-                     st.session_state("interaction_terms").append(('*').join(interaction_term))
+            st.markdown("""**Create interaction terms**""")
+            interaction_term = st.multiselect("Select explanatory variables to combine to create interaction terms",options=variables)
+            if st.button("Create interaction term"):
+                if interaction_term not in st.session_state("interaction_terms"):
+                    st.session_state("interaction_terms").append(('*').join(interaction_term))
 
-             st.markdown("""**Create higher order terms**""")
-             higher_order_term =  st.selectbox("Select variable",options=variables)
-             order_of_term = int(st.text_input("Enter power to raise term by e.g. 2 = squared term, 3 = cubic term"))
-             if st.button("Create higher order term"):
-                 st.session_state("higher_order_terms").append('I(' + higher_order_term + '^' + str(order_of_term) + ')')
+            st.markdown("""**Create higher order terms**""")
+            higher_order_term =  st.selectbox("Select variable",options=variables)
+            order_of_term = int(st.text_input("Enter power to raise term by e.g. 2 = squared term, 3 = cubic term"))
+            if st.button("Create higher order term"):
+                st.session_state("higher_order_terms").append('I(' + higher_order_term + '^' + str(order_of_term) + ')')
              
 
         
