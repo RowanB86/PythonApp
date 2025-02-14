@@ -219,6 +219,10 @@ if LTDChartButton:
     fig.set_tight_layout(True)
     ax2 = axe.twinx() 
     st.write('Plot area initialised')
+
+    st.write(f"Data size: {len(data)}")
+    st.write(f"Min: {np.min(data)}, Max: {np.max(data)}")
+    st.write(f"Mean: {np.mean(data)}, Std Dev: {np.std(data)}")
     
     pdfVals = X.pdf(x)
     st.write('PDF Calculated')
