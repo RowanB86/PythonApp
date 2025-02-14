@@ -201,6 +201,7 @@ if LTDChartButton:
     for i in range(0,1000):
         LT = random.sample(list(st.session_state.LTData),1)
         data[i] = np.sum(random.sample(list(st.session_state.UsageData),LT[0]))
+        st.write(i)
     
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
