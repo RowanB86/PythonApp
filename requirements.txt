@@ -33,3 +33,4 @@ sqlalchemy
 duckdb
 pyarrow
 sympy
+scipy
