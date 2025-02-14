@@ -212,7 +212,7 @@ if LTDChartButton:
     
     inc = 1
     #x = np.arange(0, max(data)+ 3*np.std(data), inc)
-    x = np.linspace(0, max(data) + 3 * np.std(data), 200)
+    x = np.linspace(0, max(data) + 3 * np.std(data), 100)
     st.write('Data arranged')
     
     fig, axe = plt.subplots(figsize=(10, 6)) 
