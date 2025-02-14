@@ -117,7 +117,7 @@ if UsageDist == 'Normal':
         AvgMean = float(UsageMean)
         UsageStDev2 = float(UsageStDev)
         data = np.random.normal(AvgMean, UsageStDev2, 1000)
-        st.session_state.AvgMean = AvgMean
+        st.session_state.AvgUsage = AvgMean
         st.session_state.UsageStDev2 = UsageStDev2
     except:
         pass
