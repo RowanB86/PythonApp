@@ -227,7 +227,8 @@ if LTDChartButton:
     
     pdfVals = X.pdf(x)
     st.write('PDF Calculated')
-    cdfVals = X.cdf(x)
+    #cdfVals = X.cdf(x)
+    cdfVals = np.array([kde.integrate_box_1d(0, xi) for xi in x])
     st.write('CDF Calculated')
     Quantile = 1 - ProbStockout
 
