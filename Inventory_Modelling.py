@@ -207,7 +207,7 @@ if LTDChartButton:
 
     
     for i in range(0,1000):
-        LT = random.sample(list(st.session_state.LTData),1
+        LT = random.sample(list(st.session_state.LTData),1)
         LT_int = int(LT[0])                  
         data[i] = np.sum(random.sample(list(st.session_state.UsageData),LT_int))
     
