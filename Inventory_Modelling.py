@@ -208,6 +208,8 @@ if LTDChartButton:
     
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
+    st.write('Kernel density generated')
+    
     inc = 1
     x = np.arange(0, max(data)+ 3*np.std(data), inc)
     fig, axe = plt.subplots(figsize=(10, 6)) 
