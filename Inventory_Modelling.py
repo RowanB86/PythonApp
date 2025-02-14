@@ -207,7 +207,7 @@ if LTDChartButton:
     st.write('Sampling complete')
     
     #kde = stats.gaussian_kde(data)
-    kde = stats.gaussian_kde(data, bw_method=0.2) 
+    kde = stats.gaussian_kde(data, bw_method=0.1) 
     X = KDEDist(kde)
     st.write('Kernel density generated')
     
