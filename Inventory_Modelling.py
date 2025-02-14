@@ -198,46 +198,31 @@ if LTDChartButton:
     
     data = [None] * 1000
 
-    st.write('Sampling')
     
     for i in range(0,1000):
         LT = random.sample(list(st.session_state.LTData),1)
         data[i] = np.sum(random.sample(list(st.session_state.UsageData),LT[0]))
-        
-    st.write('Sampling complete')
     
     #kde = stats.gaussian_kde(data)
     kde = stats.gaussian_kde(data, bw_method=0.1) 
     X = KDEDist(kde)
-    st.write('Kernel density generated')
     
     inc = 1
     #x = np.arange(0, max(data)+ 3*np.std(data), inc)
     x = np.linspace(0, max(data) + 3 * np.std(data), 100)
-    st.write('Data arranged')
     
     fig, axe = plt.subplots(figsize=(10, 6)) 
     fig.set_tight_layout(True)
     ax2 = axe.twinx() 
-    st.write('Plot area initialised')
 
-    st.write(f"Data size: {len(data)}")
-    st.write(f"Min: {np.min(data)}, Max: {np.max(data)}")
-    st.write(f"Mean: {np.mean(data)}, Std Dev: {np.std(data)}")
     
     pdfVals = X.pdf(x)
-    st.write('PDF Calculated')
     #cdfVals = X.cdf(x)
     cdfVals = np.array([kde.integrate_box_1d(0, xi) for xi in x])
-    st.write('CDF Calculated')
     Quantile = 1 - ProbStockout
 
-    
-    
     min_val = min(i for i in cdfVals if i > (1-ProbStockout))   
     min_val_ind = cdfVals.tolist().index(min_val)
-
-    st.write('Index Searched')
     
     UB1 = x[min_val_ind]
     LB1 = x[min_val_ind-1]
