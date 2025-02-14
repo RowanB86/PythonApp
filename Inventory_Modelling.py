@@ -212,14 +212,20 @@ if LTDChartButton:
     
     inc = 1
     x = np.arange(0, max(data)+ 3*np.std(data), inc)
+    st.write('Data arranged')
+    
     fig, axe = plt.subplots(figsize=(10, 6)) 
     fig.set_tight_layout(True)
     ax2 = axe.twinx() 
+    st.write('Plot area initialised')
+    
     pdfVals = X.pdf(x)
-    cdfVals = X.cdf(x)    
+    st.write('PDF Calculated')
+    cdfVals = X.cdf(x)
+    st.write('CDF Calculated')
     Quantile = 1 - ProbStockout
 
-    st.write('Kernel Density Generated')
+    
     
     min_val = min(i for i in cdfVals if i > (1-ProbStockout))   
     min_val_ind = cdfVals.tolist().index(min_val)
