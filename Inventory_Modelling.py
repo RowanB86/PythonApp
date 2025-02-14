@@ -197,11 +197,14 @@ if LTDChartButton:
     #data = np.multiply(st.session_state.LTData,st.session_state.UsageData)
     
     data = [None] * 1000
+
+    st.write('Sampling')
     
     for i in range(0,1000):
         LT = random.sample(list(st.session_state.LTData),1)
         data[i] = np.sum(random.sample(list(st.session_state.UsageData),LT[0]))
-        st.write(i)
+        
+    st.write('Sampling complete')
     
     kde = stats.gaussian_kde(data)
     X = KDEDist(kde)
@@ -213,9 +216,13 @@ if LTDChartButton:
     pdfVals = X.pdf(x)
     cdfVals = X.cdf(x)    
     Quantile = 1 - ProbStockout
+
+    st.write('Kernel Density Generated')
     
     min_val = min(i for i in cdfVals if i > (1-ProbStockout))   
     min_val_ind = cdfVals.tolist().index(min_val)
+
+    st.write('Index Searched')
     
     UB1 = x[min_val_ind]
     LB1 = x[min_val_ind-1]
