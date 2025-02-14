@@ -68,8 +68,8 @@ if LTChartButton:
         fig.set_tight_layout(True)
         #ax2 = axe.twinx() 
         pdfVals = X.pdf(x)
-        cdfVals = X.cdf(x)
-        
+        #cdfVals = X.cdf(x)
+        cdfVals = np.array([kde.integrate_box_1d(0, xi) for xi in x])
         
         if LTChart == 'PDF':
             axe.plot(x, X.pdf(x),color='r',label='PDF')
@@ -77,8 +77,9 @@ if LTChartButton:
         else:
             axe.plot(x, X.cdf(x),color='r',label='CDF')
             plt.title("CDF of Lead Time")
-        
-        st.plotly_chart(fig)
+
+        st.session_state["fig"] = fig
+        #st.plotly_chart(st.session_state["fig"])
     else:
         
         st.session_state.LTData = data
@@ -100,8 +101,10 @@ if LTChartButton:
             
         plt.xlabel('Lead Time (Days)', fontsize=14)
         plt.ylabel('Probability', fontsize=14)
-        
-        st.plotly_chart(fig)        
+        st.session_state["fig"] = fig
+
+if 'fig' in st.session_state:
+    st.plotly_chart(st.session_state["fig"])        
 
 
 st.header('Usage Modelling')
@@ -145,8 +148,8 @@ if UsageChartButton:
         fig.set_tight_layout(True)
         #ax2 = axe.twinx() 
         pdfVals = X.pdf(x)
-        cdfVals = X.cdf(x)
-        
+        #cdfVals = X.cdf(x)
+        cdfVals = np.array([kde.integrate_box_1d(0, xi) for xi in x])
         
         if UsageChart == 'PDF':
             axe.plot(x, X.pdf(x),color='r',label='PDF')
@@ -154,6 +157,8 @@ if UsageChartButton:
         else:
             axe.plot(x, X.cdf(x),color='r',label='CDF')
             plt.title("CDF of Usage")
+
+        st.session_state["fig2"] = fig
     else:
         st.session_state.UsageData = data
         x = st.session_state.x
@@ -175,8 +180,10 @@ if UsageChartButton:
             
         plt.xlabel('Usage (Days)', fontsize=14)
         plt.ylabel('Probability', fontsize=14)
-        
-        st.plotly_chart(fig)    
+        st.session_state["fig2"] = fig
+
+if 'fig2' in st.session_state:
+    st.plotly_chart(st.session_state["fig2"])    
 
 st.header('Lead Time Demand Modelling')
 
