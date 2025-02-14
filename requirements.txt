@@ -34,3 +34,4 @@ duckdb
 pyarrow
 sympy
 scipy
+matplotlib
