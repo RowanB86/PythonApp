@@ -36,4 +36,4 @@ sympy
 scipy
 matplotlib
 pygame
-PIL
+pillow
