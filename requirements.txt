@@ -35,3 +35,5 @@ pyarrow
 sympy
 scipy
 matplotlib
+pygame
+PIL
