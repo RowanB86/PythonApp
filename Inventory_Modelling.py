@@ -63,7 +63,7 @@ if LTChartButton:
         kde = stats.gaussian_kde(data)
         X = KDEDist(kde)
         inc = 1
-        x = np.arange(0, max(data), inc)
+        x = np.arange(0, max(data)+6, inc)
         fig, axe = plt.subplots() 
         fig.set_tight_layout(True)
         #ax2 = axe.twinx() 
