@@ -73,11 +73,14 @@ if LTChartButton:
         
         if LTChart == 'PDF':
             axe.plot(x, X.pdf(x),color='r',label='PDF')
+            axe.set_ylabel("Probability Density")
             plt.title("PDF of Lead Time")
         else:
             axe.plot(x, X.cdf(x),color='r',label='CDF')
+            axe.set_ylabel("Cumulative Probability")
             plt.title("CDF of Lead Time")
 
+        axe.set_xlabel("Hours")
         st.session_state["fig"] = fig
         #st.plotly_chart(st.session_state["fig"])
     else:
@@ -153,11 +156,15 @@ if UsageChartButton:
         
         if UsageChart == 'PDF':
             axe.plot(x, X.pdf(x),color='r',label='PDF')
+            axe.set_xlabel("Rounds Fired")
+            axe.set_ylabel("Probability Density")
             plt.title("PDF of Usage")
         else:
             axe.plot(x, X.cdf(x),color='r',label='CDF')
+            axe.set_ylabel("Cumulative Probaility")
             plt.title("CDF of Usage")
 
+        axe.set_xlabel("Rounds Fired")
         st.session_state["fig2"] = fig
     else:
         st.session_state.UsageData = data
