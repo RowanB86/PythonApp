@@ -212,7 +212,7 @@ if LTDChartButton:
         data[i] = np.sum(random.sample(list(st.session_state.UsageData),LT_int))
     
     #kde = stats.gaussian_kde(data)
-    kde = stats.gaussian_kde(data, bw_method="scott") 
+    kde = stats.gaussian_kde(data, bw_method=0.7) 
     X = KDEDist(kde)
     
     inc = 1
