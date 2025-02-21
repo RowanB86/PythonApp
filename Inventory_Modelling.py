@@ -211,13 +211,13 @@ if LTDChartButton:
         LT_int = int(LT[0])                  
         data[i] = np.sum(random.sample(list(st.session_state.UsageData),LT_int))
     
-    kde = stats.gaussian_kde(data)
-    #kde = stats.gaussian_kde(data, bw_method=0.1) 
+    #kde = stats.gaussian_kde(data)
+    kde = stats.gaussian_kde(data, bw_method=0.3) 
     X = KDEDist(kde)
     
     inc = 1
     #x = np.arange(0, max(data)+ 3*np.std(data), inc)
-    x = np.linspace(0, max(data) + 3 * np.std(data), 10000)
+    x = np.linspace(0, max(data) + 3 * np.std(data), 100)
     
     fig, axe = plt.subplots(figsize=(10, 6)) 
     fig.set_tight_layout(True)
