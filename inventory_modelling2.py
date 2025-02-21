@@ -250,17 +250,12 @@ if LTDChartButton:
         axe.plot(x, pdfVals,color='r',label='PDF')
         plt.title("PDF of Lead Time Demand")
         axe.set_ylabel("Probability Density")
-        axe.set_xlabel("Rounds Fired")
     else:
         axe.plot(x, cdfVals,color='r',label='CDF')
         axe.set_ylabel("Cumulative Probability")
         plt.title("CDF of Lead Time Demand")
-        axe.set_xlabel("Rounds Fired")
-
-    axe.set_xlabel("Lead Time Demand")
-    
-    
-  
+        
+    axe.set_xlabel("Rounds Fired")
     ax2.axvline(x=ROP,color='m',label='Re-Order Point')
     ax2.axvline(x=MSL,color='y',label='Max Stock Level')
     # Adjust the subplot parameters to make room for the legend
