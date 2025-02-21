@@ -195,7 +195,7 @@ if 'fig2' in st.session_state:
 st.header('Lead Time Demand Modelling')
 
 try:
-    ROF = int(st.text_input("Enter Re-Order Frequency (orders / year):",key="ROF"))
+    ROF = int(st.text_input("Enter Re-Order Frequency (orders / day):",key="ROF"))
 except:
     pass
 
@@ -250,7 +250,7 @@ if LTDChartButton:
     Rng2 = UB2 - LB2
     Factor = (Quantile-LB2) / Rng2
     ROP = LB1 + (Factor*Rng1)
-    ROQ = (365 / ROF) * st.session_state.AvgUsage
+    ROQ = (24 / ROF) * st.session_state.AvgUsage
     MSL = ROP + ROQ
 
     if LTDChart == 'PDF':
