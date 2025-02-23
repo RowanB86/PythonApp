@@ -210,10 +210,10 @@ LTDChartButton = st.button("Generate Chart",key="LTDChartButton")
 if LTDChartButton:
     #data = np.multiply(st.session_state.LTData,st.session_state.UsageData)
     
-    data = [None] * 10000
+    data = [None] * 1000
 
     
-    for i in range(0,10000):
+    for i in range(0,1000):
         LT = random.sample(list(st.session_state.LTData),1)
         LT_int = int(LT[0])                  
         data[i] = np.sum(random.sample(list(st.session_state.UsageData),LT_int))
