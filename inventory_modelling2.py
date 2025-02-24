@@ -26,7 +26,7 @@ class KDEDist(stats.rv_continuous):
 
 st.title('Max Stock Holding / Re-Order Point Estimation')
 
-Chart_Types = ['PDF','CDF']
+Chart_Types = ['PDF','CDF','PMF']
 Distributions = ['Poisson','Normal']
 
 st.header('Lead Time Modelling')
@@ -93,7 +93,7 @@ if LTChartButton:
         fig.set_tight_layout(True)
         #ax2 = axe.twinx() 
         
-        if LTChart == 'PDF':
+        if LTChart == 'PMF':
             axe.plot(x, pmf,'o-',color='r',label='PDF')
 
             plt.title("Probability Mass Function of Lead Time")
@@ -129,7 +129,7 @@ else:
         UsageMean = st.text_input("Enter Usage Mean:",key="UsageMean")
         AvgUsage = float(UsageMean)
         data = np.random.poisson(AvgUsage, 1000)
-        st.session_state.x = np.arange(0,AvgUsage + ((AvgUsage**0.5)*3))
+        st.session_state.x = np.arange(0, max(10, int(AvgUsage + 4 * np.sqrt(AvgUsage))))
         st.session_state.pmf = poisson.pmf(st.session_state.x, AvgUsage)
         st.session_state.AvgUsage = AvgUsage
         
@@ -176,18 +176,23 @@ if UsageChartButton:
         fig.set_tight_layout(True)
         #ax2 = axe.twinx() 
         
-        if UsageChart == 'PDF':
-            axe.plot(x, pmf,'o-',color='r',label='PDF')
+        if UsageChart == 'PMF':
 
-            plt.title("Probability Mass Function of Usage")
+            pmf_vals = poisson.pmf(x, AvgUsage)
+            axe.bar(x, pmf_vals, color='skyblue', edgecolor='black')
+            axe.set_title("Probability Mass Function of Usage", fontsize=14)
+            axe.set_ylabel('Probability', fontsize=14)
+
         else:
-            cdf_vals = poisson.cdf(x,AvgUsage)
-            axe.plot(x, cdf_vals,'o-',color='r',label='CDF')
-            plt.title("Cumulative Distribution Function of Usage")
+            cdf_vals = poisson.cdf(x, AvgUsage)
+            axe.bar(x, cdf_vals, color='lightgreen', edgecolor='black')
+            axe.set_title("Cumulative Distribution Function of Usage", fontsize=14)
+            axe.set_ylabel('Cumulative Probability', fontsize=14)
+
+        axe.set_xlabel('Usage (Rounds per Minute)', fontsize=14)
+        axe.set_xticks(x)
+        st.pyplot(fig)
             
-        plt.xlabel('Usage (Days)', fontsize=14)
-        plt.ylabel('Probability', fontsize=14)
-        st.session_state["fig2"] = fig
 
 if 'fig2' in st.session_state:
     st.plotly_chart(st.session_state["fig2"])    
