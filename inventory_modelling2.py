@@ -80,7 +80,7 @@ if LTChartButton:
             axe.set_ylabel("Cumulative Probability")
             plt.title("CDF of Lead Time")
 
-        axe.set_xlabel("Hours")
+        axe.set_xlabel("Minutes")
         st.session_state["fig"] = fig
         #st.plotly_chart(st.session_state["fig"])
     else:
@@ -195,6 +195,11 @@ if 'fig2' in st.session_state:
 st.header('Lead Time Demand Modelling')
 
 try:
+    combat_hours = int(st.text_input("How many hours a day will be spent in combat?:",key="combat_hours"))
+except:
+    pass
+
+try:
     ROF = int(st.text_input("Enter Re-Order Frequency (orders / day):",key="ROF"))
 except:
     pass
@@ -250,7 +255,7 @@ if LTDChartButton:
     Rng2 = UB2 - LB2
     Factor = (Quantile-LB2) / Rng2
     ROP = LB1 + (Factor*Rng1)
-    ROQ = (24 / ROF) * st.session_state.AvgUsage
+    ROQ = ((combat_hours*60) / ROF) * st.session_state.AvgUsage
     MSL = ROP + ROQ
 
     if LTDChart == 'PDF':
