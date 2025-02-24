@@ -285,6 +285,7 @@ if LTDChartButton:
     plt.savefig('adjusted_plot.png')
 
     st.pyplot(fig)
-    
+
+    st.write('Re-Order Quantity: ' + str(round(ROQ)))
     st.write('Re-Order Point: ' + str(round(ROP)))
     st.write('Max Stock Level: ' + str(round(MSL)))
