@@ -38,13 +38,13 @@ s3 = boto3.client(
     aws_secret_access_key=st.secrets["AWS_SECRET_ACCESS_KEY"],
 )
 
-LOCAL_MODEL_PATH =  "mistral-7b-instruct-v0.1.Q4_0.gguf"
+
 # Function to download the model from S3 if not present
 def download_models():
     for key, value in models.items():
         if not os.path.exists(value):
             with st.spinner("Downloading model from S3..."):
-                s3.download_file(S3_BUCKET, S3_MODEL_KEY, value)
+                s3.download_file(S3_BUCKET, S3_MODEL_KEY, os.path.join("/tmp", value))
             st.success("Model downloaded successfully!")
 
 # Download model at startup
