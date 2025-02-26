@@ -71,7 +71,7 @@ if select_model:
 # ✅ Use the correct local model path
 gpt = AutoModelForCausalLM.from_pretrained(
     model_path,  # ✅ Load the model from /tmp/
-    model_type="mistral"
+    model_type="auto"
 )
 
 st.session_state["query"] = st.text_input("Enter query")
