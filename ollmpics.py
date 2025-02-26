@@ -1,108 +1,35 @@
 import streamlit as st
-import boto3
-import os
-from ctransformers import AutoModelForCausalLM
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
 
-# AWS S3 Configuration (Set these in Streamlit Secrets)
-S3_BUCKET = st.secrets["S3_BUCKET"]
-S3_MODEL_KEY = st.secrets["S3_MODEL_KEY"]
+# Set the model name (Change if needed)
+MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.1"  # ✅ Load from Hugging Face
 
-models = {
-    "Mistral Instruct": "mistral-7b-instruct-v0.1.Q4_0.gguf"
-}
+# Load tokenizer & model
+@st.cache_resource  # Cache the model so it doesn't reload every time
+def load_model():
+    st.write("🔄 Loading Mistral model from Hugging Face...")
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_NAME,
+        torch_dtype=torch.float16,  # ✅ Use float16 to save memory
+        device_map="auto"  # ✅ Automatically use GPU if available
+    )
+    st.success("✅ Model loaded successfully!")
+    return tokenizer, model
 
-model_descriptions = {
-    "Mistral Instruct": """
-- Fast Responses
-- Trained by Mistral AI   
-- Uncensored 
-- Licensed for commercial use                               
----
-                                                  
-**📌 Specifications:**  
-- **📁 File size:** 3.83 GB  
-- **💾 RAM required:** 8 GB  
-- **🔢 Parameters:** 7 billion  
-- **🛠 Quantisation:** `q4_0`  
-- **🔠 Type:** `Mistral`  
-"""
-}
-
-# Initialize S3 client
-s3 = boto3.client(
-    "s3",
-    aws_access_key_id=st.secrets["AWS_ACCESS_KEY_ID"],
-    aws_secret_access_key=st.secrets["AWS_SECRET_ACCESS_KEY"],
-)
-
-
-def download_models():
-    local_model_path = os.path.join("/tmp", models["Mistral Instruct"])  
-
-    if not os.path.exists(local_model_path):
-        with st.spinner(f"Downloading {models['Mistral Instruct']} from S3..."):
-            s3.download_file(S3_BUCKET, S3_MODEL_KEY, local_model_path)
-        st.success(f"Model {models['Mistral Instruct']} downloaded successfully!")
-
-    # ✅ Debugging: Print file size and confirm it's readable
-    if os.path.exists(local_model_path):
-        file_size = os.path.getsize(local_model_path) / (1024 * 1024 * 1024)  # Convert bytes to GB
-        st.write(f"✅ Model found at: {local_model_path} (Size: {file_size:.2f} GB)")
-    else:
-        st.error(f"❌ Model file missing after download: {local_model_path}")
-
-    return local_model_path
-# Download the model and get its local path
-model_path = download_models()
+tokenizer, model = load_model()
 
 # Streamlit UI
-st.title("GPT4All Chatbot")
+st.title("Mistral Chatbot")
 user_input = st.text_area("Enter your prompt:")
 
-model_list = list(models.keys())
+if st.button("Generate Response"):
+    with st.spinner("Generating response..."):
+        input_ids = tokenizer(user_input, return_tensors="pt").input_ids.to("cuda" if torch.cuda.is_available() else "cpu")
 
-select_model = st.selectbox("Select Model", options=model_list)
-model_description = st.empty()
+        output = model.generate(input_ids, max_length=100)
+        response_text = tokenizer.decode(output[0], skip_special_tokens=True)
 
-if select_model:
-    with st.expander("Model information"):
-        model_description.markdown(model_descriptions[select_model])
-
-# ✅ Use the correct local model path
-gpt = AutoModelForCausalLM.from_pretrained(
-    model_path,  # ✅ Load the model from /tmp/
-    model_type="auto"
-)
-
-st.session_state["query"] = st.text_input("Enter query")
-st.session_state["max_tokens"] = st.text_input("Enter token limit (including input and output):")
-st.session_state["temp"] = st.text_input("Enter temperature (the higher the temperature, the more diverse the response):")
-st.session_state["top_p"] = st.text_input("Enter top-p sampling (controls how many words are considered before choosing one):")
-st.session_state["repeat_penalty"] = st.text_input("Enter repeat penalty (higher values reduce repetition):")
-
-assess_bid = st.button("Submit query")
-
-if assess_bid:
-    prompt = f"""
-    <|im_start|>system
-    You are an AI specializing in quick, efficient responses. :
-    <|im_end|>
-
-    <|im_start|>user
-    {st.session_state["query"]}
-    <|im_end|>
-
-    <|im_start|>assistant
-    """
-
-    # Generate Response
-    response = gpt.generate(
-        prompt,
-        max_tokens=int(st.session_state["max_tokens"]),
-        temp=float(st.session_state["temp"]),
-        top_p=float(st.session_state["top_p"]),
-        repeat_penalty=float(st.session_state["repeat_penalty"])
-    )
-    
-    st.write("\n\nResponse:")
-    st.write(response)
+        st.success("Response:")
+        st.write(response_text)
