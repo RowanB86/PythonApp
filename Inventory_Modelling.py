@@ -231,7 +231,7 @@ if LTDChartButton:
 
     min_val = min(i for i in cdfVals if i > (1-ProbStockout))   
     min_val_ind = cdfVals.tolist().index(min_val)
-    
+
     UB1 = x[min_val_ind]
     LB1 = x[min_val_ind-1]
     
@@ -243,8 +243,26 @@ if LTDChartButton:
     Rng2 = UB2 - LB2
     Factor = (Quantile-LB2) / Rng2
     ROP = LB1 + (Factor*Rng1)
+
+    median_val = min(i for i in cdfVals if i > 0.5) 
+    median_val_ind = cdfVals.tolist().index(median_val)
+
+    UB1 = x[median_val_ind]
+    LB1 = x[median_val_ind-1]
+    
+    Rng1 = UB1 - LB1
+    
+    UB2 = cdfVals[median_val_ind]
+    LB2 = cdfVals[median_val_ind-1]
+
+    Rng2 = UB2 - LB2
+    Factor = (0.5-LB2) / Rng2
+    st.session_state.AvgLTD = LB1 + (Factor*Rng1)
+    
+    
+    AvgLTD = st.session_state.AvgLTD
     ROQ = (365 / ROF) * st.session_state.AvgUsage
-    MSL = ROP + ROQ
+    MSL = ROP - st.session_state.AvgLTD + ROQ
 
     if LTDChart == 'PDF':
         axe.plot(x, pdfVals,color='r',label='PDF')
