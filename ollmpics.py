@@ -1,7 +1,7 @@
 import streamlit as st
 import boto3
 import os
-from gpt4all import GPT4All
+from llama_cpp import Llama
 
 # AWS S3 Configuration (Set these in Streamlit Secrets)
 S3_BUCKET = st.secrets["S3_BUCKET"]
@@ -78,7 +78,7 @@ model_path = models[select_model]
 
 
 
-gpt = GPT4All(models[select_model], n_ctx=32000)
+gpt = Llama(models[select_model])
 
 
 
