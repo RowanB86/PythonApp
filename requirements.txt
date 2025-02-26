@@ -39,5 +39,5 @@ pillow
 opencv-python
 boto3
 boto3
-gpt4all==2.5.0
+ctransformers
 
