@@ -10,24 +10,22 @@ S3_MODEL_KEY = st.secrets["S3_MODEL_KEY"]
 
 models = {
     
-"Reasoner v1":   "qwen2.5-coder-7b-instruct-q4_0.gguf"
+"Mistral Instruct": "mistral-7b-instruct-v0.1.Q4_0.gguf"
  }
 
-model_descriptions = {"Reasoner v1": """
-- Based on Owen2.5-Coder 7B 
-- Built-in JavaScript code interpreter   
-- Complex reasoning tasks aided by computation analysis  
-- Apache License Version 2.0  
-- #reasoning`  
-                                            
+model_descriptions = {"Mistral Instruct": """
+- Fast Responses
+- Trained by Mistral AI   
+- Uncensored 
+- Licensed for commercial use                               
 ---
                                                 
 **📌 Specifications:**  
-- **📁 File size:** 4.13 GB  
+- **📁 File size:** 3.83 GB  
 - **💾 RAM required:** 8 GB  
-- **🔢 Parameters:** 8 billion  
+- **🔢 Parameters:** 7 billion  
 - **🛠 Quantisation:** `q4_0`  
-- **🔠 Type:** `qwen2`  
+- **🔠 Type:** `Mistral`  
 """
         
 
@@ -40,7 +38,7 @@ s3 = boto3.client(
     aws_secret_access_key=st.secrets["AWS_SECRET_ACCESS_KEY"],
 )
 
-LOCAL_MODEL_PATH = "qwen2.5-coder-7b-instruct-q4_0.gguf"
+LOCAL_MODEL_PATH =  "mistral-7b-instruct-v0.1.Q4_0.gguf"
 # Function to download the model from S3 if not present
 def download_models():
     for key, value in models.items():
