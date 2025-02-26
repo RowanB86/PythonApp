@@ -15,7 +15,7 @@ if st.button("Generate Response"):
         response = requests.post(
             f"https://api-inference.huggingface.co/models/{MODEL_NAME}",
             headers={"Authorization": f"Bearer {HF_API_TOKEN}"},
-            json={"inputs": user_input},
+            json={"inputs": user_input, "parameters": {"max_length": 100}},
         )
 
         if response.status_code == 200:
