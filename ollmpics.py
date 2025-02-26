@@ -1,7 +1,7 @@
 import streamlit as st
 import boto3
 import os
-from gpt4all import GPT4All
+from ctransformers import AutoModelForCausalLM
 
 # AWS S3 Configuration (Set these in Streamlit Secrets)
 S3_BUCKET = st.secrets["S3_BUCKET"]
@@ -52,15 +52,9 @@ def download_model():
 # Download model at startup
 download_models()
 
-
-
-
-
 # Streamlit UI
 st.title("GPT4All Chatbot")
 user_input = st.text_area("Enter your prompt:")
-
-
 
 model_list = []
 
@@ -76,10 +70,10 @@ if select_model is not None:
     
 model_path = models[select_model]
 
-
-
-gpt = GPT4All(model_path, n_ctx=32000)
-
+gpt = AutoModelForCausalLM.from_pretrained(
+    models[select_model], 
+    model_type="qwen2"  # Use "mistral" or another type if needed
+)
 
 
 st.session_state["query"]  = st.text_input("Enter query")
