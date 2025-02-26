@@ -38,7 +38,7 @@ pygame
 pillow
 opencv-python
 boto3
-boto3
+sentencepiece
 torch
 transformers==4.37.2
 accelerate
