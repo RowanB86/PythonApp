@@ -69,7 +69,7 @@ if select_model is not None:
 
 model_path = os.path.join("/tmp", models[select_model])
 gpt = AutoModelForCausalLM.from_pretrained(
-    model_path, 
+    models[select_model], 
     model_type="mistral"  # Use "mistral" or another type if needed
 )
 
