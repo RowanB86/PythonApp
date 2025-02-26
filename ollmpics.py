@@ -66,8 +66,8 @@ if select_model is not None:
     with st.expander("Model information"):
         model_description.markdown(model_descriptions[select_model])
     
-model_path = models[select_model]
 
+model_path = os.path.join("/tmp", models[select_model])
 gpt = AutoModelForCausalLM.from_pretrained(
     models[select_model], 
     model_type="mistral"  # Use "mistral" or another type if needed
