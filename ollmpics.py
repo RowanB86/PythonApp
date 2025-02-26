@@ -10,7 +10,7 @@ import requests
 import json
 
 # Streamlit app layout
-st.title("LLaMA Bid Proposal Analyser")
+st.title("O-LLIM-PICS")
 
 selected_model = st.selectbox("Select model", options=["Llama-2-7b-chat-hf","zephyr-7b-beta"])
 HF_API_TOKEN = st.secrets["HF_API_TOKEN"]
