@@ -10,7 +10,7 @@ HF_TOKEN = st.secrets["HF_TOKEN"]
 @st.cache_resource  # Cache the model so it doesn't reload every time
 def load_model():
     st.write("🔄 Loading Mistral model from Hugging Face...")
-    tokenizer = LlamaTokenizer.from_pretrained(MODEL_NAME, token=use_auth_token=HF_TOKEN)
+    tokenizer = LlamaTokenizer.from_pretrained(MODEL_NAME, use_auth_token=HF_TOKEN)
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
         torch_dtype=torch.float16,  # ✅ Use float16 to save memory
