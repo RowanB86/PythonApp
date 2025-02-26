@@ -223,7 +223,6 @@ if LTDChartButton:
     fig.set_tight_layout(True)
     ax2 = axe.twinx() 
 
-    
     pdfVals = X.pdf(x)
     #cdfVals = X.cdf(x)
     cdfVals = np.array([kde.integrate_box_1d(0, xi) for xi in x])
@@ -259,10 +258,10 @@ if LTDChartButton:
     Factor = (0.5-LB2) / Rng2
     st.session_state.AvgLTD = LB1 + (Factor*Rng1)
     
-    
     AvgLTD = st.session_state.AvgLTD
     ROQ = (365 / ROF) * st.session_state.AvgUsage
     MSL = ROP - st.session_state.AvgLTD + ROQ
+    SS = ROP - AvgLTD
 
     if LTDChart == 'PDF':
         axe.plot(x, pdfVals,color='r',label='PDF')
@@ -273,6 +272,7 @@ if LTDChartButton:
     
     ax2.axvline(x=ROP,color='m',label='Re-Order Point')
     ax2.axvline(x=MSL,color='y',label='Max Stock Level')
+    ax2.axvline(x=SS,color='y',label='Safety Stock Level')
     # Adjust the subplot parameters to make room for the legend
     #plt.subplots_adjust(right=0.3)  # Adjust this value as needed to fit your legend
     plt.draw()
@@ -283,6 +283,6 @@ if LTDChartButton:
     plt.savefig('adjusted_plot.png')
 
     st.pyplot(fig)
-    
+    st.write('Safety Stock Level: ' + str(round(SS)))
     st.write('Re-Order Point: ' + str(round(ROP)))
     st.write('Max Stock Level: ' + str(round(MSL)))
