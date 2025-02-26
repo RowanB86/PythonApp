@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Hugging Face API Key
-HF_API_TOKEN = st.secrets["HF_TOKEN"]
+HF_API_TOKEN = st.secrets["HF_API_TOKEN"]
 MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.1"
 
 # Streamlit UI
