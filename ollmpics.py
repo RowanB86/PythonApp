@@ -4,6 +4,7 @@ import torch
 
 # Set the model name (Change if needed)
 MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.1"  # ✅ Load from Hugging Face
+HF_TOKEN = st.secrets["HF_TOKEN"] 
 
 # Load tokenizer & model
 @st.cache_resource  # Cache the model so it doesn't reload every time
@@ -13,7 +14,8 @@ def load_model():
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
         torch_dtype=torch.float16,  # ✅ Use float16 to save memory
-        device_map="auto"  # ✅ Automatically use GPU if available
+        device_map="auto",  # ✅ Automatically use GPU if available
+        use_auth_token=HF_TOKEN
     )
     st.success("✅ Model loaded successfully!")
     return tokenizer, model
