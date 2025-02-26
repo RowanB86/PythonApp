@@ -6,7 +6,106 @@ from gpt4all import GPT4All
 # AWS S3 Configuration (Set these in Streamlit Secrets)
 S3_BUCKET = st.secrets["S3_BUCKET"]
 S3_MODEL_KEY = st.secrets["S3_MODEL_KEY"]
-LOCAL_MODEL_PATH = "gpt4all-model.gguf"
+LOCAL_MODEL_PATH = "qwen2.5-coder-7b-instruct-q4_0.gguf"
+
+models = {
+    
+"Reasoner v1":   "qwen2.5-coder-7b-instruct-q4_0.gguf",
+
+"Mistral Instruct": "mistral-7b-instruct-v0.1.Q4_0.gguf",
+          
+"GPT4All Falcon": "gpt4all-falcon-newbpe-q4_0.gguf",
+          
+"Wizard v1.2": "wizardlm-13b-v1.2.Q4_0.gguf",
+          
+"Hermes": "nous-hermes-llama2-13b.Q4_0.gguf"
+          
+ }
+
+model_descriptions = {"Reasoner v1": """
+- Based on Owen2.5-Coder 7B 
+- Built-in JavaScript code interpreter   
+- Complex reasoning tasks aided by computation analysis  
+- Apache License Version 2.0  
+- #reasoning`  
+                                            
+---
+                                                
+**📌 Specifications:**  
+- **📁 File size:** 4.13 GB  
+- **💾 RAM required:** 8 GB  
+- **🔢 Parameters:** 8 billion  
+- **🛠 Quantisation:** `q4_0`  
+- **🔠 Type:** `qwen2`  
+""",
+          
+"Mistral Instruct": """
+- Fast Responses
+- Trained by Mistral AI   
+- Uncensored 
+- Licensed for commercial use                               
+---
+                                                
+**📌 Specifications:**  
+- **📁 File size:** 3.83 GB  
+- **💾 RAM required:** 8 GB  
+- **🔢 Parameters:** 7 billion  
+- **🛠 Quantisation:** `q4_0`  
+- **🔠 Type:** `Mistral`  
+""",
+    
+"GPT4All Falcon": """
+- Fast Responses
+- Instruction based
+- Trained by T2 
+- Finetuned by Nomic AI
+- Licensed for commercial use                               
+---
+                                                
+**📌 Specifications:**  
+- **📁 File size:** 3.92 GB  
+- **💾 RAM required:** 8 GB  
+- **🔢 Parameters:** 7 billion  
+- **🛠 Quantisation:** `q4_0`  
+- **🔠 Type:** `Falcon`  
+""",
+    
+          
+"Wizard v1.2": """
+- Instruction based
+- Gives very long responses
+- Finetuned with only 1k of high-quality data 
+- Trained by Microsoft and Peking University
+- Cannot be used commercially                               
+---
+                                                
+**📌 Specifications:**  
+- **📁 File size:** 6.86 GB  
+- **💾 RAM required:** 16 GB  
+- **🔢 Parameters:** 13 billion  
+- **🛠 Quantisation:** `q4_0`  
+- **🔠 Type:** `LLaMA2`  
+""",
+          
+    
+"Hermes": """
+- Instruction based
+- Gives very long responses
+- Curated with 300,000 uncensored instructions
+- Trained by Nous Research
+- Cannot be used commercially                               
+---
+                                                
+**📌 Specifications:**  
+- **📁 File size:** 6.86 GB  
+- **💾 RAM required:** 16 GB  
+- **🔢 Parameters:** 13 billion  
+- **🛠 Quantisation:** `q4_0`  
+- **🔠 Type:** `LLaMA2`  
+"""            
+    
+
+ }
 
 # Initialize S3 client
 s3 = boto3.client(
