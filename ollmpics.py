@@ -35,17 +35,23 @@ s3 = boto3.client(
     aws_secret_access_key=st.secrets["AWS_SECRET_ACCESS_KEY"],
 )
 
-# Function to download the model from S3 if not present
+
 def download_models():
-    local_model_path = os.path.join("/tmp", models["Mistral Instruct"])  # ✅ Store in /tmp
+    local_model_path = os.path.join("/tmp", models["Mistral Instruct"])  
 
     if not os.path.exists(local_model_path):
         with st.spinner(f"Downloading {models['Mistral Instruct']} from S3..."):
             s3.download_file(S3_BUCKET, S3_MODEL_KEY, local_model_path)
         st.success(f"Model {models['Mistral Instruct']} downloaded successfully!")
 
-    return local_model_path  # ✅ Return the correct local path
+    # ✅ Debugging: Print file size and confirm it's readable
+    if os.path.exists(local_model_path):
+        file_size = os.path.getsize(local_model_path) / (1024 * 1024 * 1024)  # Convert bytes to GB
+        st.write(f"✅ Model found at: {local_model_path} (Size: {file_size:.2f} GB)")
+    else:
+        st.error(f"❌ Model file missing after download: {local_model_path}")
 
+    return local_model_path
 # Download the model and get its local path
 model_path = download_models()
 
