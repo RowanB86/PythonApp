@@ -3,7 +3,7 @@ from transformers import AutoModelForCausalLM, LlamaTokenizer
 import torch
 
 # Set the model name (Change if needed)
-MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.1-GGUF" # ✅ Load from Hugging Face
+MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.1" # ✅ Load from Hugging Face
 HF_TOKEN = st.secrets["HF_TOKEN"] 
 
 # Load tokenizer & model
