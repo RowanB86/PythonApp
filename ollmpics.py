@@ -30,7 +30,7 @@ if st.button("Generate Response"):
     with st.spinner("Generating response..."):
         input_ids = tokenizer(user_input, return_tensors="pt").input_ids.to("cuda" if torch.cuda.is_available() else "cpu")
 
-        output = model.generate(input_ids, max_length=100)
+        output = model.generate(input_ids, max_new_tokens=100)
         response_text = tokenizer.decode(output[0], skip_special_tokens=True)
 
         st.success("Response:")
