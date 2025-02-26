@@ -70,7 +70,7 @@ model_path = models[select_model]
 
 gpt = AutoModelForCausalLM.from_pretrained(
     models[select_model], 
-    model_type="auto"  # Use "mistral" or another type if needed
+    model_type="mistral"  # Use "mistral" or another type if needed
 )
 
 
