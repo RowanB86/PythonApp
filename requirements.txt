@@ -39,5 +39,6 @@ pillow
 opencv-python
 boto3
 boto3
-ctransformers
-
+torch
+transformers
+accelerate
