@@ -39,5 +39,4 @@ pygame
 pillow
 opencv-python
 boto3
-os
 gpt4all
