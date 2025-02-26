@@ -40,5 +40,5 @@ opencv-python
 boto3
 boto3
 torch
-transformers
+transformers==4.37.2
 accelerate
