@@ -122,7 +122,7 @@ model_descriptions = {
 }
 
 
-with st.expander("Model Descriptions"):
+with st.expander("Model Description"):
            try:
                       st.markdown(model_descriptions[selected_model]  ,unsafe_allow_html=True)  
            except:
