@@ -18,7 +18,8 @@ HF_API_TOKEN = st.secrets["HF_API_TOKEN"]
 
 models = {"Llama-2-7b-chat-hf":"meta-llama/Llama-2-7b-chat-hf",
            "zephyr-7b-beta":"HuggingFaceH4/zephyr-7b-beta",
-         "Mistral-7B-Instruct-v0.2": "mistralai/Mistral-7B-Instruct-v0.2"}
+         "Mistral-7B-Instruct-v0.2": "mistralai/Mistral-7B-Instruct-v0.2",
+         "GritLM-7B","GritLM/GritLM-7B"}
 
 
 model_descriptions = {
