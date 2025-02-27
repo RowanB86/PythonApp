@@ -21,7 +21,7 @@ models = {"Llama-2-7b-chat-hf":"meta-llama/Llama-2-7b-chat-hf",
          "Mistral-7B-Instruct-v0.2": "mistralai/Mistral-7B-Instruct-v0.2",
          "GritLM-7B":"GritLM/GritLM-7B",
          "Gemma-7B-IT":"google/gemma-1.1-7b-it",
-         "TinyLlama-1.1B-Chat-v1.0","TinyLlama/TinyLlama-1.1B-Chat-v1.0"}
+         "TinyLlama-1.1B-Chat-v1.0":"TinyLlama/TinyLlama-1.1B-Chat-v1.0"}
 
 
 model_descriptions = {
