@@ -39,5 +39,5 @@ if st.button("Run Code"):
     except Exception as e:
         st.error(f"❌ Error in code execution: {e}")
 
-  if "df" in local_namespace:
-      st.write("Dataset Preview:", local_namespace["df"].head())
+    if "df" in local_namespace:
+        st.write("Dataset Preview:", local_namespace["df"].head())
