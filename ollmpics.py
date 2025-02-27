@@ -12,7 +12,7 @@ import json
 # Streamlit app layout
 st.title("O-LLM-PICS")
 
-selected_model = st.selectbox("Select model", options=["Llama-2-7b-chat-hf","zephyr-7b-beta","Mistral-7B-Instruct-v0.2"])
+selected_model = st.selectbox("Select model", options=["Llama-2-7b-chat-hf","zephyr-7b-beta","Mistral-7B-Instruct-v0.2","GritLM-7B"])
 HF_API_TOKEN = st.secrets["HF_API_TOKEN"]
 
 
