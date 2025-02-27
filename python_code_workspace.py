@@ -38,3 +38,4 @@ if st.button("Run Code"):
             st.error("⚠️ No figure object found. Ensure your script assigns a `fig` variable.")
     except Exception as e:
         st.error(f"❌ Error in code execution: {e}")
+st.write("Dataset Preview:", df.head())
