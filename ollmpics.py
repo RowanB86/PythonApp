@@ -120,7 +120,43 @@ model_descriptions = {
     - 🔐 Open-weight model under **Apache 2.0 License**  
     - 🌐 Available for research & commercial use  
     - 📄 [More details on Hugging Face](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2)  
-    """
+    """,
+"Gemma-7B-IT": """
+### 💎 Gemma-7B-IT  
+
+**🛠 Model Overview**  
+- 🧠 **Parameter Count:** 7 Billion  
+- ⚙️ **Architecture:** Transformer-based (Optimized for Instruction-Tuning)  
+- 📚 **Training Data:** High-quality dataset including publicly available web data  
+- 🔧 **Fine-Tuning:** Specialized for instruction-following tasks (IT = Instruction-Tuned)  
+
+**🚀 Performance Highlights**  
+- ✅ **Instruction-Tuned:** Designed to follow human-like instructions accurately  
+- ✅ **Improved Coherence:** More structured and logical responses compared to base models  
+- ✅ **Multi-Turn Conversations:** Handles follow-ups and maintains context well  
+- ✅ **Optimized for Safety & Bias Reduction**  
+
+**🔍 Usage Details**  
+- ✍️ **Input:** Text Prompts (Instruction-based queries work best)  
+- 📝 **Output:** AI-generated structured responses  
+- 📏 **Context Window:** Supports up to **4,096 Tokens**  
+- 📜 **Prompt Formatting:** Works best with explicit instructions. Example:
+
+```plaintext
+[INST] You are a helpful AI assistant. Explain the importance of data privacy in 100 words. [/INST]
+⚙️ Adjustable Parameters
+
+🔥 Temperature: Controls randomness (Higher = More creative, Lower = More deterministic)
+🎯 Top-P Sampling: Limits response choices to the most probable subset
+🔄 Repetition Penalty: Reduces redundancy in generated text
+📝 Max Tokens: Restricts response length
+📜 Licensing & Access
+
+🔐 Open-weight model under Apache 2.0 License
+🌐 Available for both research and commercial applications
+📄 More details on Hugging Face
+"""
+
 }
 
 
