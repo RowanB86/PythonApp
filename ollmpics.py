@@ -156,7 +156,9 @@ User Input [/INST]
 
 with st.expander("Model Descriptions"):
            try:
-                      st.markdown(model_descriptions[selected_model]  ,unsafe_allow_html=True)         
+                      st.markdown(model_descriptions[selected_model]  ,unsafe_allow_html=True)  
+           except:
+                      pass
 
 
 
