@@ -20,7 +20,8 @@ models = {"Llama-2-7b-chat-hf":"meta-llama/Llama-2-7b-chat-hf",
            "zephyr-7b-beta":"HuggingFaceH4/zephyr-7b-beta",
          "Mistral-7B-Instruct-v0.2": "mistralai/Mistral-7B-Instruct-v0.2",
          "GritLM-7B":"GritLM/GritLM-7B",
-         "Gemma-7B-IT":"google/gemma-1.1-7b-it"}
+         "Gemma-7B-IT":"google/gemma-1.1-7b-it",
+         "TinyLlama-1.1B-Chat-v1.0","TinyLlama/TinyLlama-1.1B-Chat-v1.0"}
 
 
 model_descriptions = {
@@ -150,6 +151,42 @@ model_descriptions = {
 🎯 Top-P Sampling: Limits response choices to the most probable subset
 🔄 Repetition Penalty: Reduces redundancy in generated text
 📝 Max Tokens: Restricts response length
+📜 Licensing & Access
+
+🔐 Open-weight model under Apache 2.0 License
+🌐 Available for both research and commercial applications
+📄 More details on Hugging Face
+""",
+"TinyLlama-1.1B-Chat-v1.0": """
+### 🦙 TinyLlama-1.1B-Chat-v1.0  
+
+**🛠 Model Overview**  
+- 🧠 **Parameter Count:** 1.1 Billion  
+- ⚙️ **Architecture:** Lightweight Transformer (Optimized for Speed & Low-Compute Use)  
+- 📚 **Training Data:** Web-based datasets & instruction-tuned dialogues  
+- 🔧 **Fine-Tuning:** Optimized for **chat applications and lightweight NLP tasks**  
+
+**🚀 Performance Highlights**  
+- ✅ **Ultra Lightweight:** **Only 1.1B parameters**, making it **efficient for low-resource environments**  
+- ✅ **Fast Inference:** Runs well on **CPUs and low-end GPUs**  
+- ✅ **Optimized for Conversational AI:** Handles **short & structured** conversations effectively  
+- ✅ **Low Memory Usage:** Suitable for **edge devices, mobile, and embedded applications**  
+
+**🔍 Usage Details**  
+- ✍️ **Input:** Text prompts (Works best for short, structured queries)  
+- 📝 **Output:** AI-generated responses  
+- 📏 **Context Window:** Supports **up to 2,048 Tokens**  
+- 📜 **Prompt Formatting:** Standard format, simple Q&A structure. Example:
+
+```plaintext
+User: What is the capital of France?  
+Assistant: The capital of France is Paris.
+⚙️ Adjustable Parameters
+
+🔥 Temperature: Controls randomness (Higher = More creative, Lower = More deterministic)
+🎯 Top-P Sampling: Limits response choices to the most probable subset
+🔄 Repetition Penalty: Reduces redundancy in responses
+📝 Max Tokens: Limits response length
 📜 Licensing & Access
 
 🔐 Open-weight model under Apache 2.0 License
