@@ -38,4 +38,6 @@ if st.button("Run Code"):
             st.error("⚠️ No figure object found. Ensure your script assigns a `fig` variable.")
     except Exception as e:
         st.error(f"❌ Error in code execution: {e}")
-st.write("Dataset Preview:", local_namespace["df"].head())
+
+  if "fig" in local_namespace:
+      st.write("Dataset Preview:", local_namespace["df"].head())
