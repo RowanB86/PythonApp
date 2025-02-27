@@ -21,138 +21,106 @@ models = {"Llama-2-7b-chat-hf":"meta-llama/Llama-2-7b-chat-hf",
          "Mistral-7B-Instruct-v0.2": "mistralai/Mistral-7B-Instruct-v0.2"}
 
 
-model_descriptions = {"Llama-2-7b-chat-hf": """
-    <div style="background-color:#f4f4f4; padding:15px; border-radius:10px;">
-        <h2 style="color:#4A90E2;">🦙 LLaMA 2 - 7B Chat Model</h2>
-        
-        <h3 style="color:#2C3E50;">🛠 Model Overview</h3>
-        <ul>
-            <li><strong>🧠 Parameter Count:</strong> 7 Billion</li>
-            <li><strong>⚙️ Architecture:</strong> Optimized Transformer</li>
-            <li><strong>📚 Training Data:</strong> 2 Trillion Tokens from Publicly Available Online Sources</li>
-            <li><strong>🔧 Fine-Tuning:</strong> SFT + RLHF for Dialogue Optimization</li>
-        </ul>
-        
-        <h3 style="color:#2C3E50;">🚀 Performance Highlights</h3>
-        <ul>
-            <li>✅ Outperforms many open-source chat models on key benchmarks</li>
-            <li>✅ Comparable in helpfulness and safety to closed-source models like ChatGPT</li>
-        </ul>
+model_descriptions = {
+    "Llama-2-7b-chat-hf": """
+    ### 🦙 LLaMA 2 - 7B Chat Model
 
-        <h3 style="color:#2C3E50;">🔍 Usage Details</h3>
-        <ul>
-            <li><strong>✍️ Input:</strong> Text Prompts</li>
-            <li><strong>📝 Output:</strong> AI-generated Responses</li>
-            <li><strong>📏 Context Window:</strong> Supports up to 4,000 Tokens</li>
-            <li><strong>📜 Prompt Formatting:</strong> Use the following format for best results:
-                <pre style="background-color:#EAECEE; padding:10px; border-radius:5px;">
-&lt;s&gt;[INST] &lt;&lt;SYS&gt;&gt;
-Your system prompt here
-&lt;&lt;/SYS&gt;&gt;
+    **🛠 Model Overview**  
+    - 🧠 **Parameter Count:** 7 Billion  
+    - ⚙️ **Architecture:** Optimized Transformer  
+    - 📚 **Training Data:** 2 Trillion Tokens from Publicly Available Online Sources  
+    - 🔧 **Fine-Tuning:** SFT + RLHF for Dialogue Optimization  
 
-User Input [/INST]
-                </pre>
-            </li>
-        </ul>
+    **🚀 Performance Highlights**  
+    - ✅ Outperforms many open-source chat models on key benchmarks  
+    - ✅ Comparable in helpfulness and safety to closed-source models like ChatGPT  
 
-        <h3 style="color:#2C3E50;">📜 Licensing & Access</h3>
-        <ul>
-            <li>🔐 Licensed under Meta's Custom Commercial License</li>
-            <li>🌐 Accept license terms on the official Meta website</li>
-            <li>📄 More details: <a href='https://huggingface.co/meta-llama/Llama-2-7b-chat-hf' target='_blank'>Hugging Face Model Page</a></li>
-        </ul>
-    </div>
-    """,
-"zephyr-7b-beta": """
-    <div style="background-color:#f4f4f4; padding:15px; border-radius:10px;">
-        <h2 style="color:#4A90E2;">🪁 Zephyr-7B-Beta</h2>
+    **🔍 Usage Details**  
+    - ✍️ **Input:** Text Prompts  
+    - 📝 **Output:** AI-generated Responses  
+    - 📏 **Context Window:** Supports up to **4,000 Tokens**  
+    - 📜 **Prompt Formatting:** Use the following format for best results:  
 
-        <h3 style="color:#2C3E50;">🛠 Model Overview</h3>
-        <ul>
-            <li><strong>🧠 Parameter Count:</strong> 7 Billion</li>
-            <li><strong>⚙️ Architecture:</strong> Transformer-based</li>
-            <li><strong>📚 Training Data:</strong> Extensive Public Text Datasets</li>
-            <li><strong>🔧 Fine-Tuning:</strong> dDPO (Direct Preference Optimization) for Better Response Alignment</li>
-        </ul>
+    ```plaintext
+    <s>[INST] <<SYS>>
+    Your system prompt here
+    <</SYS>>
 
-        <h3 style="color:#2C3E50;">🚀 Performance Highlights</h3>
-        <ul>
-            <li>✅ Strong alignment with user queries</li>
-            <li>✅ Optimized for helpfulness and reduced biases</li>
-            <li>✅ Outperforms many models in real-world conversational tasks</li>
-        </ul>
-
-        <h3 style="color:#2C3E50;">🔍 Usage Details</h3>
-        <ul>
-            <li><strong>✍️ Input:</strong> Text Prompts</li>
-            <li><strong>📝 Output:</strong> AI-generated Responses</li>
-            <li><strong>📏 Context Window:</strong> Supports up to 4,000 Tokens</li>
-            <li><strong>📜 Prompt Formatting:</strong> Uses standard text input without special formatting.</li>
-        </ul>
-
-        <h3 style="color:#2C3E50;">⚙️ Adjustable Parameters</h3>
-        <ul>
-            <li><strong>🔥 Temperature:</strong> Controls randomness (Higher = More creative, Lower = More deterministic)</li>
-            <li><strong>🎯 Top-P Sampling:</strong> Restricts output choices to the most probable subset</li>
-            <li><strong>🔄 Repetition Penalty:</strong> Reduces redundancy in responses</li>
-            <li><strong>📝 Max Tokens:</strong> Limits the number of generated tokens in the response</li>
-        </ul>
-
-        <h3 style="color:#2C3E50;">📜 Licensing & Access</h3>
-        <ul>
-            <li>🔐 Open-weight model under Apache 2.0 License</li>
-            <li>🌐 Available for both research and commercial use</li>
-            <li>📄 More details: <a href='https://huggingface.co/HuggingFaceH4/zephyr-7b-beta' target='_blank'>Hugging Face Model Page</a></li>
-        </ul>
-    </div>
+    User Input [/INST]
+    ```
+    
+    **📜 Licensing & Access**  
+    - 🔐 Licensed under **Meta's Custom Commercial License**  
+    - 🌐 Accept license terms on the official Meta website  
+    - 📄 [More details on Hugging Face](https://huggingface.co/meta-llama/Llama-2-7b-chat-hf)  
     """,
 
-"Mistral-7B-Instruct-v0.2": """
-    <div style="background-color:#f4f4f4; padding:15px; border-radius:10px;">
-        <h2 style="color:#4A90E2;">🌪️ Mistral-7B-Instruct-v0.2</h2>
+    "zephyr-7b-beta": """
+    ### 🪁 Zephyr-7B-Beta  
 
-        <h3 style="color:#2C3E50;">🛠 Model Overview</h3>
-        <ul>
-            <li><strong>🧠 Parameter Count:</strong> 7 Billion</li>
-            <li><strong>⚙️ Architecture:</strong> Transformer-based</li>
-            <li><strong>📚 Training Data:</strong> Web data + Publicly available sources</li>
-            <li><strong>🔧 Fine-Tuning:</strong> Optimized for Instruction-Based Tasks</li>
-        </ul>
+    **🛠 Model Overview**  
+    - 🧠 **Parameter Count:** 7 Billion  
+    - ⚙️ **Architecture:** Transformer-based  
+    - 📚 **Training Data:** Extensive Public Text Datasets  
+    - 🔧 **Fine-Tuning:** dDPO (Direct Preference Optimization)  
 
-        <h3 style="color:#2C3E50;">🚀 Performance Highlights</h3>
-        <ul>
-            <li>✅ Optimized for Instruction Following</li>
-            <li>✅ Capable of Multi-Turn Conversations</li>
-            <li>✅ Strong Performance Across Diverse NLP Tasks</li>
-            <li>✅ Improved Prompt Adherence Over Previous Versions</li>
-        </ul>
+    **🚀 Performance Highlights**  
+    - ✅ Strong alignment with user queries  
+    - ✅ Optimized for helpfulness and reduced biases  
+    - ✅ Outperforms many models in real-world conversational tasks  
 
-        <h3 style="color:#2C3E50;">🔍 Usage Details</h3>
-        <ul>
-            <li><strong>✍️ Input:</strong> Text Prompts</li>
-            <li><strong>📝 Output:</strong> AI-generated Responses</li>
-            <li><strong>📏 Context Window:</strong> Supports up to 4,096 Tokens</li>
-            <li><strong>📜 Prompt Formatting:</strong> Standard conversational input/output</li>
-        </ul>
+    **🔍 Usage Details**  
+    - ✍️ **Input:** Text Prompts  
+    - 📝 **Output:** AI-generated Responses  
+    - 📏 **Context Window:** Supports up to **4,000 Tokens**  
+    - 📜 **Prompt Formatting:** Standard text input without special formatting.  
 
-        <h3 style="color:#2C3E50;">⚙️ Adjustable Parameters</h3>
-        <ul>
-            <li><strong>🔥 Temperature:</strong> Controls randomness (Higher = More creative, Lower = More deterministic)</li>
-            <li><strong>🎯 Top-P Sampling:</strong> Restricts output choices to the most probable subset</li>
-            <li><strong>🔄 Repetition Penalty:</strong> Reduces redundancy in responses</li>
-            <li><strong>📝 Max Tokens:</strong> Limits the number of generated tokens in the response</li>
-        </ul>
+    **⚙️ Adjustable Parameters**  
+    - 🔥 **Temperature:** Controls randomness (Higher = More creative, Lower = More deterministic)  
+    - 🎯 **Top-P Sampling:** Restricts output choices to the most probable subset  
+    - 🔄 **Repetition Penalty:** Reduces redundancy in responses  
+    - 📝 **Max Tokens:** Limits the number of generated tokens in the response  
 
-        <h3 style="color:#2C3E50;">📜 Licensing & Access</h3>
-        <ul>
-            <li>🔐 Open-weight model under Apache 2.0 License</li>
-            <li>🌐 Available for research & commercial use</li>
-            <li>📄 More details: <a href='https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2' target='_blank'>Hugging Face Model Page</a></li>
-        </ul>
-    </div>
+    **📜 Licensing & Access**  
+    - 🔐 Open-weight model under **Apache 2.0 License**  
+    - 🌐 Available for both research and commercial use  
+    - 📄 [More details on Hugging Face](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta)  
+    """,
+
+    "Mistral-7B-Instruct-v0.2": """
+    ### 🌪️ Mistral-7B-Instruct-v0.2  
+
+    **🛠 Model Overview**  
+    - 🧠 **Parameter Count:** 7 Billion  
+    - ⚙️ **Architecture:** Transformer-based  
+    - 📚 **Training Data:** Web data + Publicly available sources  
+    - 🔧 **Fine-Tuning:** Optimized for Instruction-Based Tasks  
+
+    **🚀 Performance Highlights**  
+    - ✅ Optimized for Instruction Following  
+    - ✅ Capable of Multi-Turn Conversations  
+    - ✅ Strong Performance Across Diverse NLP Tasks  
+    - ✅ Improved Prompt Adherence Over Previous Versions  
+
+    **🔍 Usage Details**  
+    - ✍️ **Input:** Text Prompts  
+    - 📝 **Output:** AI-generated Responses  
+    - 📏 **Context Window:** Supports up to **4,096 Tokens**  
+    - 📜 **Prompt Formatting:** Standard conversational input/output  
+
+    **⚙️ Adjustable Parameters**  
+    - 🔥 **Temperature:** Controls randomness (Higher = More creative, Lower = More deterministic)  
+    - 🎯 **Top-P Sampling:** Restricts output choices to the most probable subset  
+    - 🔄 **Repetition Penalty:** Reduces redundancy in responses  
+    - 📝 **Max Tokens:** Limits the number of generated tokens in the response  
+
+    **📜 Licensing & Access**  
+    - 🔐 Open-weight model under **Apache 2.0 License**  
+    - 🌐 Available for research & commercial use  
+    - 📄 [More details on Hugging Face](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2)  
     """
+}
 
-                     }
 
 with st.expander("Model Descriptions"):
            try:
