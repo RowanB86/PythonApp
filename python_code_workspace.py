@@ -30,15 +30,11 @@ updated_code = st_ace(value=default_code, language="python", theme="monokai", ke
 if st.button("Run Code"):
     local_namespace = {}
     try:
-        exec(updated_code, {}, local_namespace)  # Execute code safely
-        fig = local_namespace.get("fig")  # Extract Plotly figure
-
-        if isinstance(fig, go.Figure):
+        exec(updated_code, {}, local_namespace)  # Use a dedicated namespace
+        if "fig" in local_namespace:  # Check in local_namespace instead of locals()
             st.success("✅ Chart generated successfully!")
-            st.plotly_chart(fig)  # Display chart
+            st.plotly_chart(local_namespace["fig"])
         else:
-            st.warning("⚠ No valid Plotly figure ('fig') found in the code.")
-
+            st.error("⚠️ No figure object found. Ensure your script assigns a `fig` variable.")
     except Exception as e:
-        st.error(f"❌ Error: {e}")
-
+        st.error(f"❌ Error in code execution: {e}")
