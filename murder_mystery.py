@@ -227,7 +227,7 @@ def generate_action(game,character):
     they choose not to give much of an answer to the question (they may give an evasive answer). Other actions might involve exploring a location or using one of their \
     items to interact with their environment. Please only describe the action that they attempt. Do not include any consequence of their action."}]
 
-    response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+    response = openai.ChatCompletion.create(model="gpt-4o",messages=messages)
     action_submitted = response["choices"][0]["message"]["content"] 
 
     return action_submitted
@@ -282,7 +282,7 @@ def submit_action(game,character,action):
         character is controlled by a human who will have the chance to respond to the question themselves. Please return a description of the action performed and the outcome in a way that will be \
         informative to the character who attempted the action and also suitable to be recorded in an events log that will be fed back to you as the game progresses."}]
 
-        response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+        response = openai.ChatCompletion.create(model="gpt-4o",messages=messages)
         event = response["choices"][0]["message"]["content"] 
 
         messages = [{"role": "system", "content": "You are the game master for a murder mystery game."}]
@@ -293,7 +293,7 @@ def submit_action(game,character,action):
         'Detective Hugh Barrington','Dr. Horace Bellamy','Eleanor Winslow', 'Isabella Moretti','Lady Vivian Blackthorn','Percy Hargrove','Reginald Reggie Crowley'.If a non-player character is \
         asked a question, you can include their response."}]
 
-        response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+        response = openai.ChatCompletion.create(model="gpt-4o",messages=messages)
         event2 = response["choices"][0]["message"]["content"]
         
         
@@ -306,7 +306,7 @@ def submit_action(game,character,action):
         'Isabella Moretti','Lady Vivian Blackthorn','Percy Hargrove','Reginald Reggie Crowley'. If a non-player character is asked a question, you can include their response. \
         Try to do this with as few tokens as possible whilst retaining the important nuances of the event."}]
 
-        response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+        response = openai.ChatCompletion.create(model="gpt-4o",messages=messages)
         event = response["choices"][0]["message"]["content"]
 
         return event,event2
@@ -409,7 +409,7 @@ if st.session_state['loggedIn']:
                 placeholder = st.empty()
                 placeholder.write("Generating backstory.")
                 response = openai.ChatCompletion.create(
-                       model="gpt-4o-mini",
+                       model="gpt-4o",
                        messages=messages)
 
                 backstory = response["choices"][0]["message"]["content"]
@@ -453,7 +453,7 @@ if st.session_state['loggedIn']:
                                 prefix = f"{character}'s third objective is: "
 
                             response = openai.ChatCompletion.create(
-                                       model="gpt-4o-mini",
+                                       model="gpt-4o",
                                        messages=messages)
 
                             objective = response["choices"][0]["message"]["content"] 
@@ -501,7 +501,7 @@ if st.session_state['loggedIn']:
                                 prefix = f"{character}'s third item is: "
 
                             response = openai.ChatCompletion.create(
-                                       model="gpt-4o-mini",
+                                       model="gpt-4o",
                                        messages=messages)
 
                             item = response["choices"][0]["message"]["content"] 
@@ -534,7 +534,7 @@ if st.session_state['loggedIn']:
                     to the player character e.g. if the character committed the murder, it is important that this appears in their 'Character Viewpoint'. Please do not generate anything \
                     superfluous."}]
 
-                    response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+                    response = openai.ChatCompletion.create(model="gpt-4o",messages=messages)
                     viewpoint = response["choices"][0]["message"]["content"] 
                     character_viewpoint = {"game": st.session_state['game_name'], "character": character, "viewpoint": viewpoint}
                     ref.push(character_viewpoint)
@@ -717,7 +717,7 @@ if st.session_state['loggedIn']:
                 messages += [{"role": "user", "content": f"Please assess all events that have occurred in the game and provide the player a log of all events that player character; \
                 {st.session_state['user_character']} would realistically have been aware of in the game e.g. a question that was posed to him by another character in the game or an action that the \
                 character performed."}]
-                response = openai.ChatCompletion.create(model="gpt-4o-mini",messages=messages)
+                response = openai.ChatCompletion.create(model="gpt-4o",messages=messages)
                 events_log = response["choices"][0]["message"]["content"]
                 events_placeholder.write(events_log)
 
