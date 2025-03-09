@@ -22,7 +22,8 @@ db = firestore.client()
 DOC_ID = "current_hole_cards"
 
 # Set OpenAI API Key
-openai_api_key = "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"
+
+openai.api_key =  "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"
 openai_client = openai.Client(api_key=openai_api_key)
 
 # Streamlit UI
@@ -79,11 +80,11 @@ if st.button("Analyze Player Stats"):
             - **Playing Style:** (briefly describe their tendencies)
             - **Strategy to Play Against Them:** (how to adjust play to exploit them)
             """
-
-            response = openai_client.chat.completions.create(
+            response = openai.ChatCompletion.create(
                 model="gpt-4o",
                 messages=[{"role": "user", "content": prompt}]
             )
+
 
             summary = response.choices[0].message.content
 
