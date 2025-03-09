@@ -1,6 +1,7 @@
 import streamlit as st
 import firebase_admin
 from firebase_admin import credentials, firestore
+import json
 
 firebase_credentials = json.loads(st.secrets["firebase"]["service_account_json"])
 cred = credentials.Certificate(firebase_credentials)
