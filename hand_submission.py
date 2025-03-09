@@ -21,11 +21,11 @@ db = firestore.client()
 # Define a fixed document ID for hole cards
 DOC_ID = "current_hole_cards"
 
-
+# Set OpenAI API Key
 openai.api_key = st.secrets["openai"]["api_key"]
 
 # Streamlit UI
-st.title("♠️ Poker AI Assistant")
+st.title("🏆 Poker AI Assistant - Tournament Mode")
 st.write("Enter your hole cards and submit to Firebase. This will overwrite the last submission.")
 
 # Input: Hole Cards
@@ -40,19 +40,19 @@ if st.button("Submit Hole Cards"):
     else:
         st.warning("⚠️ Please enter your hole cards before submitting.")
 
-# **New Section: Analyze Player Stats**
-st.header("📊 Analyze Player Stats")
+# **New Section: Analyze Tournament Player Stats**
+st.header("📊 Analyze Tournament Player Stats")
 
-if st.button("Analyze Player Stats"):
-    # Retrieve player stats from Firestore
-    stats_doc = db.collection("player_stats").document("latest_stats").get()
+if st.button("Analyze Tournament Players"):
+    # Retrieve tournament player stats from Firestore
+    stats_doc = db.collection("tournament_player_stats").document("latest_tourney_stats").get()
 
     if stats_doc.exists:
         stats_data = stats_doc.to_dict()["stats"]
         df_stats = pd.DataFrame(stats_data)
 
         # Display DataFrame
-        st.subheader("📋 Player Statistics")
+        st.subheader("📋 Tournament Player Statistics")
         st.dataframe(df_stats)
 
         # Generate player analysis summaries
@@ -67,7 +67,8 @@ if st.button("Analyze Player Stats"):
 
             # Construct prompt for OpenAI analysis
             prompt = f"""
-            You are a poker AI. Analyze the player's stats and give a **concise** playing style summary. Then, suggest the **best strategy** to exploit them.
+            You are a poker AI analyzing **tournament** player tendencies.
+            Provide a **concise** summary of their playing style and a **strategy** to exploit them.
 
             **Player Name:** {player_name}
             **VPIP (Voluntarily Put Money In Pot %):** {vpip}
@@ -83,18 +84,17 @@ if st.button("Analyze Player Stats"):
                     model="gpt-4o",
                     messages=[{"role": "user", "content": prompt}]
                 )
+                summary = response.choices[0].message.content
+                player_summaries.append(f"**{player_name}**\n{summary}\n")
 
             except openai.error.AuthenticationError as e:
                 st.error(f"OpenAI Authentication Error: {e}")
             except Exception as e:
                 st.error(f"Unexpected Error: {e}")
-            summary = response.choices[0].message.content
-
-            player_summaries.append(f"**{player_name}**\n{summary}\n")
 
         # Display player summaries
         for summary in player_summaries:
             st.markdown(summary)
 
     else:
-        st.warning("⚠️ No player stats found in Firestore.")
+        st.warning("⚠️ No tournament player stats found in Firestore.")
