@@ -21,8 +21,6 @@ db = firestore.client()
 # Define a fixed document ID for hole cards
 DOC_ID = "current_hole_cards"
 
-# Set OpenAI API Key
-
 
 openai.api_key = st.secrets["openai"]["api_key"]
 
@@ -80,12 +78,16 @@ if st.button("Analyze Player Stats"):
             - **Playing Style:** (briefly describe their tendencies)
             - **Strategy to Play Against Them:** (how to adjust play to exploit them)
             """
-            response = openai.ChatCompletion.create(
-                model="gpt-4o",
-                messages=[{"role": "user", "content": prompt}]
-            )
+            try:
+                response = openai.ChatCompletion.create(
+                    model="gpt-4o",
+                    messages=[{"role": "user", "content": prompt}]
+                )
 
-
+            except openai.error.AuthenticationError as e:
+                st.error(f"OpenAI Authentication Error: {e}")
+            except Exception as e:
+                st.error(f"Unexpected Error: {e}")
             summary = response.choices[0].message.content
 
             player_summaries.append(f"**{player_name}**\n{summary}\n")
