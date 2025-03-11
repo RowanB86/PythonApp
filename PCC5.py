@@ -372,16 +372,17 @@ def get_bounding_box_by_ID(node_ID):
             
             return bbox
 
+
 node_images = {
-    "ACP_BLUE": r"C:\Users\RowanBarua\Documents\PCC5 Images\ACP_BLUE.png",
-    "ACP_RED": r"C:\Users\RowanBarua\Documents\PCC5 Images\ACP_RED.png",
-    "DSA": r"C:\Users\RowanBarua\Documents\PCC5 Images\DSA.png",
-    "BSG": r"C:\Users\RowanBarua\Documents\PCC5 Images\BSG.png",
-    "Target": r"C:\Users\RowanBarua\Documents\PCC5 Images\Target.png",
-    "Fire1": r"C:\Users\RowanBarua\Documents\PCC5 Images\Fire1.png",
-    "Fire2": r"C:\Users\RowanBarua\Documents\PCC5 Images\Fire2.png",
-    "Fire3": r"C:\Users\RowanBarua\Documents\PCC5 Images\Fire3.png",
-    "Fire4": r"C:\Users\RowanBarua\Documents\PCC5 Images\Fire4.png"
+    "ACP_BLUE": r"https://drive.google.com/file/d/1_BCkYwozUWB0LECUOADPXLVEi4-NDDU4/view?usp=drive_link",
+    "ACP_RED": r"https://drive.google.com/file/d/1WM17jMT44QZN5mJ8hoG0fsEIqYXTwj17/view?usp=drive_link",
+    "DSA": r"https://drive.google.com/file/d/1uDLWk1fcU7H8UDBU3d34jGsNTaV8BTqF/view?usp=drive_link",
+    "BSG": r"https://drive.google.com/file/d/1Lg2yVPAuc4QSHuVipJ9x8tRwYYBJ03tt/view?usp=drive_link",
+    "Target": r"https://drive.google.com/file/d/1_J710WufrDyQhrEkgb2LqiM5KYMW-_Fy/view?usp=drive_link",
+    "Fire1": r"https://drive.google.com/file/d/1yLFEWRZpbj3y91fSBhBl1AJDhIIf28f3/view?usp=drive_link",
+    "Fire2": r"https://drive.google.com/file/d/1eCKlfLzNwmPqveoVXQHBgfBUZ_9yhA1G/view?usp=drive_link",
+    "Fire3": r"https://drive.google.com/file/d/1BL9lGuzbFSRHqEX9e9M2SRE8J8Ke2vKK/view?usp=drive_link",
+    "Fire4": r"https://drive.google.com/file/d/1W-ZLqxWXROdV7hEtvZiYTnmv_fcYcYcj/view?usp=drive_link"
     
 }
 
