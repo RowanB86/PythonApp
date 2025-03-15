@@ -1,3 +1,4 @@
+
 import streamlit as st
 import firebase_admin
 from firebase_admin import credentials, firestore, initialize_app
@@ -44,57 +45,70 @@ if st.button("Submit Hole Cards"):
 st.header("📊 Analyze Tournament Player Stats")
 
 if st.button("Analyze Tournament Players"):
-    # Retrieve tournament player stats from Firestore
-    stats_doc = db.collection("tournament_player_stats").document("latest_tourney_stats").get()
+    # Step 1: Retrieve the most recent tournament table ID
+    table_id_doc = db.collection("tournament_metadata").document("latest_table_id").get()
 
-    if stats_doc.exists:
-        stats_data = stats_doc.to_dict()["stats"]
-        df_stats = pd.DataFrame(stats_data)
+    if table_id_doc.exists:
+        latest_table_id = table_id_doc.to_dict().get("table_id")
 
-        # Display DataFrame
-        st.subheader("📋 Tournament Player Statistics")
-        st.dataframe(df_stats)
+        if latest_table_id:
+            # Step 2: Retrieve only players from the most recent table
+            stats_doc = db.collection("tournament_player_stats").document(f"table_{latest_table_id}").get()
 
-        # Generate player analysis summaries
-        st.subheader("🧐 Player Analysis & Strategy")
-        
-        player_summaries = []
-        for _, row in df_stats.iterrows():
-            player_name = row["player_name"]
-            vpip = row["vpip"]
-            pfr = row["pfr"]
-            three_bet = row["3-Bet %"]
+            if stats_doc.exists:
+                stats_data = stats_doc.to_dict()["stats"]
+                df_stats = pd.DataFrame(stats_data)
 
-            # Construct prompt for OpenAI analysis
-            prompt = f"""
-            You are a poker AI analyzing **tournament** player tendencies.
-            Provide a **concise** summary of their playing style and a **strategy** to exploit them.
+                # Display DataFrame
+                st.subheader(f"📋 Tournament Player Statistics (Table {latest_table_id})")
+                st.dataframe(df_stats)
 
-            **Player Name:** {player_name}
-            **VPIP (Voluntarily Put Money In Pot %):** {vpip}
-            **PFR (Preflop Raise %):** {pfr}
-            **3-Bet %:** {three_bet}
+                # Generate player analysis summaries
+                st.subheader("🧐 Player Analysis & Strategy")
 
-            **Output format:** 
-            - **Playing Style:** (briefly describe their tendencies)
-            - **Strategy to Play Against Them:** (how to adjust play to exploit them)
-            """
-            try:
-                response = openai.ChatCompletion.create(
-                    model="gpt-4o",
-                    messages=[{"role": "user", "content": prompt}]
-                )
-                summary = response.choices[0].message.content
-                player_summaries.append(f"**{player_name}**\n{summary}\n")
+                player_summaries = []
+                for _, row in df_stats.iterrows():
+                    player_name = row["player_name"]
+                    vpip = row["vpip"]
+                    pfr = row["pfr"]
+                    three_bet = row["3-Bet %"]
 
-            except openai.error.AuthenticationError as e:
-                st.error(f"OpenAI Authentication Error: {e}")
-            except Exception as e:
-                st.error(f"Unexpected Error: {e}")
+                    # Construct prompt for OpenAI analysis
+                    prompt = f"""
+                    You are a poker AI analyzing **tournament** player tendencies.
+                    Provide a **concise** summary of their playing style and a **strategy** to exploit them.
 
-        # Display player summaries
-        for summary in player_summaries:
-            st.markdown(summary)
+                    **Player Name:** {player_name}
+                    **VPIP (Voluntarily Put Money In Pot %):** {vpip}
+                    **PFR (Preflop Raise %):** {pfr}
+                    **3-Bet %:** {three_bet}
 
+                    **Output format:** 
+                    - **Playing Style:** (briefly describe their tendencies)
+                    - **Strategy to Play Against Them:** (how to adjust play to exploit them)
+                    """
+                    try:
+                        response = openai.ChatCompletion.create(
+                            model="gpt-4o",
+                            messages=[{"role": "user", "content": prompt}]
+                        )
+                        summary = response.choices[0].message.content
+                        player_summaries.append(f"**{player_name}**\n{summary}\n")
+
+                    except openai.error.AuthenticationError as e:
+                        st.error(f"OpenAI Authentication Error: {e}")
+                    except Exception as e:
+                        st.error(f"Unexpected Error: {e}")
+
+                # Display player summaries
+                for summary in player_summaries:
+                    st.markdown(summary)
+
+            else:
+                st.warning(f"⚠️ No player stats found for **Table {latest_table_id}** in Firestore.")
+
+        else:
+            st.warning("⚠️ No recent tournament table ID found.")
     else:
-        st.warning("⚠️ No tournament player stats found in Firestore.")
+        st.warning("⚠️ Tournament metadata not available in Firestore.")
+
