@@ -50,7 +50,7 @@ if st.button("Analyze Tournament Players"):
                 stats_data = stats_doc.to_dict()["stats"]
                 df_stats = pd.DataFrame(stats_data)
 
-                # Display stats
+                # Display stats (including WTSD% and Fold to C-Bet % if present)
                 st.subheader(f"📋 Tournament Player Statistics (Table {latest_table_id})")
                 st.dataframe(df_stats)
 
@@ -65,6 +65,8 @@ if st.button("Analyze Tournament Players"):
                     three_bet = row.get("3-Bet %", "N/A")
                     call_pfr = row.get("Call PFR %", "N/A")
                     flop_seen = row.get("Flop Seen %", "N/A")
+                    wtsd = row.get("WTSD %", "N/A")
+                    fold_to_cbet = row.get("Fold to C-Bet %", "N/A")
 
                     # Updated AI prompt with new metrics
                     prompt = f"""
@@ -77,6 +79,8 @@ if st.button("Analyze Tournament Players"):
                     **3-Bet %:** {three_bet}
                     **Call PFR %:** {call_pfr}
                     **Flop Seen %:** {flop_seen}
+                    **WTSD (Went to Showdown %):** {wtsd}
+                    **Fold to C-Bet %:** {fold_to_cbet}
 
                     **Output format:** 
                     - **Playing Style:** (briefly describe their tendencies)
