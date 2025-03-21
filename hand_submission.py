@@ -50,6 +50,18 @@ if st.button("Analyze Tournament Players"):
                 stats_data = stats_doc.to_dict()["stats"]
                 df_stats = pd.DataFrame(stats_data)
 
+                # **Reorder Columns for Logical Flow**
+                column_order = [
+                    "player_name", "total_hands",  # General Info
+                    "vpip", "pfr", "3-Bet %", "Call PFR %", "Fold to PFR %",  # Preflop
+                    "Flop Seen %", "C-Bet %", "Fold to C-Bet %",  # Postflop
+                    "Flop Aggression %", "Turn Aggression %", "River Aggression %", "aggression_factor",  # Aggression
+                    "WTSD %"  # Showdown
+                ]
+                
+                # Select columns in defined order if they exist in DataFrame
+                df_stats = df_stats[[col for col in column_order if col in df_stats.columns]]
+
                 # Display stats
                 st.subheader(f"📋 Tournament Player Statistics (Table {latest_table_id})")
                 st.dataframe(df_stats)
@@ -63,17 +75,17 @@ if st.button("Analyze Tournament Players"):
                     total_hands = row.get("total_hands", "N/A")
                     vpip = row.get("vpip", "N/A")
                     pfr = row.get("pfr", "N/A")
-                    call_pfr = row.get("Call PFR %", "N/A")
                     three_bet = row.get("3-Bet %", "N/A")
+                    call_pfr = row.get("Call PFR %", "N/A")
+                    fold_to_pfr = row.get("Fold to PFR %", "N/A")
+                    flop_seen = row.get("Flop Seen %", "N/A")
+                    cbet = row.get("C-Bet %", "N/A")
+                    fold_to_cbet = row.get("Fold to C-Bet %", "N/A")
                     flop_aggression = row.get("Flop Aggression %", "N/A")
                     turn_aggression = row.get("Turn Aggression %", "N/A")
                     river_aggression = row.get("River Aggression %", "N/A")
                     aggression_factor = row.get("aggression_factor", "N/A")
-                    flop_seen = row.get("Flop Seen %", "N/A")
                     wtsd = row.get("WTSD %", "N/A")
-                    fold_to_cbet = row.get("Fold to C-Bet %", "N/A")
-                    cbet = row.get("C-Bet %", "N/A")
-                    fold_to_pfr = row.get("Fold to PFR %", "N/A")
 
                     # **Updated AI prompt with all stats**
                     prompt = f"""
@@ -82,19 +94,27 @@ if st.button("Analyze Tournament Players"):
 
                     **Player Name:** {player_name}
                     **Total Hands Played:** {total_hands}
-                    **VPIP (Voluntarily Put Money In Pot %):** {vpip}
-                    **PFR (Preflop Raise %):** {pfr}
-                    **Call PFR %:** {call_pfr}
-                    **3-Bet %:** {three_bet}
-                    **Flop Aggression %:** {flop_aggression}
-                    **Turn Aggression %:** {turn_aggression}
-                    **River Aggression %:** {river_aggression}
-                    **Aggression Factor:** {aggression_factor}
-                    **Flop Seen %:** {flop_seen}
-                    **WTSD (Went to Showdown %):** {wtsd}
-                    **Fold to C-Bet %:** {fold_to_cbet}
-                    **C-Bet %:** {cbet}
-                    **Fold to PFR %:** {fold_to_pfr}
+                    
+                    **Preflop Behavior:**
+                    - VPIP (Voluntarily Put Money In Pot %): {vpip}
+                    - PFR (Preflop Raise %): {pfr}
+                    - 3-Bet %: {three_bet}
+                    - Call PFR %: {call_pfr}
+                    - Fold to PFR %: {fold_to_pfr}
+                    
+                    **Postflop Behavior:**
+                    - Flop Seen %: {flop_seen}
+                    - C-Bet %: {cbet}
+                    - Fold to C-Bet %: {fold_to_cbet}
+                    
+                    **Aggression:**
+                    - Flop Aggression %: {flop_aggression}
+                    - Turn Aggression %: {turn_aggression}
+                    - River Aggression %: {river_aggression}
+                    - Aggression Factor: {aggression_factor}
+                    
+                    **Showdown:**
+                    - WTSD (Went to Showdown %): {wtsd}
 
                     **Output format:** 
                     - **Playing Style:** (briefly describe their tendencies)
