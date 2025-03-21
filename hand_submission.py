@@ -50,7 +50,7 @@ if st.button("Analyze Tournament Players"):
                 stats_data = stats_doc.to_dict()["stats"]
                 df_stats = pd.DataFrame(stats_data)
 
-                # Display stats (including WTSD% and Fold to C-Bet % if present)
+                # Display stats
                 st.subheader(f"📋 Tournament Player Statistics (Table {latest_table_id})")
                 st.dataframe(df_stats)
 
@@ -67,8 +67,9 @@ if st.button("Analyze Tournament Players"):
                     flop_seen = row.get("Flop Seen %", "N/A")
                     wtsd = row.get("WTSD %", "N/A")
                     fold_to_cbet = row.get("Fold to C-Bet %", "N/A")
+                    cbet = row.get("C-Bet %", "N/A")
 
-                    # Updated AI prompt with new metrics
+                    # AI prompt with new metrics
                     prompt = f"""
                     You are a poker AI analyzing **tournament** player tendencies.
                     Provide a **concise** summary of their playing style and a **strategy** to exploit them.
@@ -81,6 +82,7 @@ if st.button("Analyze Tournament Players"):
                     **Flop Seen %:** {flop_seen}
                     **WTSD (Went to Showdown %):** {wtsd}
                     **Fold to C-Bet %:** {fold_to_cbet}
+                    **C-Bet %:** {cbet}
 
                     **Output format:** 
                     - **Playing Style:** (briefly describe their tendencies)
