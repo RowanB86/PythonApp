@@ -39,7 +39,7 @@ st.header("📊 Analyze Tournament Player Stats")
 
 if st.button("Analyze Tournament Players"):
     table_id_doc = db.collection("tournament_metadata").document("latest_table_id").get()
-
+    
     if table_id_doc.exists:
         latest_table_id = table_id_doc.to_dict().get("table_id")
 
@@ -145,7 +145,7 @@ if st.button("Analyze Tournament Players"):
 query = st.text_input("Enter question", key="question")
 
 if st.button("Submit question"):
-
+    table_id_doc = db.collection("tournament_metadata").document("latest_table_id").get()
     if table_id_doc.exists:
         latest_table_id = table_id_doc.to_dict().get("table_id")
 
