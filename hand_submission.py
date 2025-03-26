@@ -90,7 +90,7 @@ if st.button("Analyze Tournament Players"):
                     # **Updated AI prompt with all stats**
                     prompt = f"""
                     You are a poker AI analyzing **tournament** player tendencies.
-                    Provide a **concise** summary of their playing style and a **strategy** to exploit them.
+                    Please provide a rapid answer to this question
 
                     **Player Name:** {player_name}
                     **Total Hands Played:** {total_hands}
@@ -167,7 +167,7 @@ if st.button("Submit question"):
                 
                 # Select columns in defined order if they exist in DataFrame
                 df_stats = df_stats[[col for col in column_order if col in df_stats.columns]]
-
+                stats_string = ''
 
                 player_summaries = []
                 for _, row in df_stats.iterrows():
@@ -188,9 +188,8 @@ if st.button("Submit question"):
                     wtsd = row.get("WTSD %", "N/A")
 
                     # **Updated AI prompt with all stats**
-                    prompt = f"""
-                    You are a poker AI analyzing **tournament** player tendencies.
-                    Please assess the player starts below and try to answer this question posed by the user: {query}
+                    stats = f"""
+
 
 
                     **Player Stats:**
@@ -219,13 +218,19 @@ if st.button("Submit question"):
                     **Showdown:**
                     - WTSD (Went to Showdown %): {wtsd} """
 
+                    stats_string += '\n' + stats
 
-                    try:
-                        response = openai.ChatCompletion.create(
-                            model="gpt-4o",
-                            messages=[{"role": "user", "content": prompt}]
-                        )
-                        summary = response.choices[0].message.content
-                        player_summaries.append(f"**{player_name}**\n{summary}\n")
-                    except Exception as e:
-                        st.error(f"Error analyzing {player_name}: {e}")    
+                query_to_AI =  f"""Please provid a rapid answer to assist a live poker player to this question: {query} , 
+                       based on these player stats: {stats_string}"""
+
+                
+                try:
+                    response = openai.ChatCompletion.create(
+                        model="gpt-4o",
+                        messages=[{"role": "user", "content": query_to_AI}]
+                    )
+                    summary = response.choices[0].message.content
+
+                    st.write(summary)
+                except Exception as e:
+                    st.error(f"Error analyzing {player_name}: {e}")    
