@@ -141,3 +141,101 @@ if st.button("Analyze Tournament Players"):
             st.warning("⚠️ No recent tournament table ID found.")
     else:
         st.warning("⚠️ Tournament metadata not available in Firestore.")
+
+query = st.text_input("Enter question", key="question")
+
+if st.button("Submit question"):
+
+    if table_id_doc.exists:
+        latest_table_id = table_id_doc.to_dict().get("table_id")
+
+        if latest_table_id:
+            stats_doc = db.collection("tournament_player_stats").document(f"table_{latest_table_id}").get()
+
+            if stats_doc.exists:
+                stats_data = stats_doc.to_dict()["stats"]
+                df_stats = pd.DataFrame(stats_data)
+
+                # **Reorder Columns for Logical Flow**
+                column_order = [
+                    "player_name", "total_hands",  # General Info
+                    "vpip", "pfr", "3-Bet %", "Call PFR %", "Fold to PFR %",  # Preflop
+                    "Flop Seen %", "C-Bet %", "Fold to C-Bet %",  # Postflop
+                    "Flop Aggression %", "Turn Aggression %", "River Aggression %", "aggression_factor",  # Aggression
+                    "WTSD %"  # Showdown
+                ]
+                
+                # Select columns in defined order if they exist in DataFrame
+                df_stats = df_stats[[col for col in column_order if col in df_stats.columns]]
+
+                # Display stats
+                st.subheader(f"📋 Tournament Player Statistics (Table {latest_table_id})")
+                st.dataframe(df_stats)
+
+                # AI analysis
+                st.subheader("🧐 Player Analysis & Strategy")
+
+                player_summaries = []
+                for _, row in df_stats.iterrows():
+                    player_name = row["player_name"]
+                    total_hands = row.get("total_hands", "N/A")
+                    vpip = row.get("vpip", "N/A")
+                    pfr = row.get("pfr", "N/A")
+                    three_bet = row.get("3-Bet %", "N/A")
+                    call_pfr = row.get("Call PFR %", "N/A")
+                    fold_to_pfr = row.get("Fold to PFR %", "N/A")
+                    flop_seen = row.get("Flop Seen %", "N/A")
+                    cbet = row.get("C-Bet %", "N/A")
+                    fold_to_cbet = row.get("Fold to C-Bet %", "N/A")
+                    flop_aggression = row.get("Flop Aggression %", "N/A")
+                    turn_aggression = row.get("Turn Aggression %", "N/A")
+                    river_aggression = row.get("River Aggression %", "N/A")
+                    aggression_factor = row.get("aggression_factor", "N/A")
+                    wtsd = row.get("WTSD %", "N/A")
+
+                    # **Updated AI prompt with all stats**
+                    prompt = f"""
+                    You are a poker AI analyzing **tournament** player tendencies.
+                    Please assess the player starts below and try to answer this question posed by the user: {query}
+
+
+                    **Player Stats:**
+
+                    **Player Name:** {player_name}
+                    **Total Hands Played:** {total_hands}
+                    
+                    **Preflop Behavior:**
+                    - VPIP (Voluntarily Put Money In Pot %): {vpip}
+                    - PFR (Preflop Raise %): {pfr}
+                    - 3-Bet %: {three_bet}
+                    - Call PFR %: {call_pfr}
+                    - Fold to PFR %: {fold_to_pfr}
+                    
+                    **Postflop Behavior:**
+                    - Flop Seen %: {flop_seen}
+                    - C-Bet %: {cbet}
+                    - Fold to C-Bet %: {fold_to_cbet}
+                    
+                    **Aggression:**
+                    - Flop Aggression %: {flop_aggression}
+                    - Turn Aggression %: {turn_aggression}
+                    - River Aggression %: {river_aggression}
+                    - Aggression Factor: {aggression_factor}
+                    
+                    **Showdown:**
+                    - WTSD (Went to Showdown %): {wtsd}
+
+                    **Output format:** 
+                    - **Playing Style:** (briefly describe their tendencies)
+                    - **Strategy to Play Against Them:** (how to adjust play to exploit them)
+                    """
+
+                    try:
+                        response = openai.ChatCompletion.create(
+                            model="gpt-4o",
+                            messages=[{"role": "user", "content": prompt}]
+                        )
+                        summary = response.choices[0].message.content
+                        player_summaries.append(f"**{player_name}**\n{summary}\n")
+                    except Exception as e:
+                        st.error(f"Error analyzing {player_name}: {e}")    
