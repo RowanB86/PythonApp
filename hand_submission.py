@@ -217,7 +217,7 @@ if st.button("Submit question"):
                     - Aggression Factor: {aggression_factor}
                     
                     **Showdown:**
-                    - WTSD (Went to Showdown %): {wtsd}
+                    - WTSD (Went to Showdown %): {wtsd} """
 
 
                     try:
