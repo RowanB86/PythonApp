@@ -168,12 +168,6 @@ if st.button("Submit question"):
                 # Select columns in defined order if they exist in DataFrame
                 df_stats = df_stats[[col for col in column_order if col in df_stats.columns]]
 
-                # Display stats
-                st.subheader(f"📋 Tournament Player Statistics (Table {latest_table_id})")
-                st.dataframe(df_stats)
-
-                # AI analysis
-                st.subheader("🧐 Player Analysis & Strategy")
 
                 player_summaries = []
                 for _, row in df_stats.iterrows():
@@ -225,10 +219,6 @@ if st.button("Submit question"):
                     **Showdown:**
                     - WTSD (Went to Showdown %): {wtsd}
 
-                    **Output format:** 
-                    - **Playing Style:** (briefly describe their tendencies)
-                    - **Strategy to Play Against Them:** (how to adjust play to exploit them)
-                    """
 
                     try:
                         response = openai.ChatCompletion.create(
