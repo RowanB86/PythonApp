@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_ace import st_ace
 import plotly.express as px
 import plotly.graph_objects as go
+import pandasql as ps
 
 # Default example code
 default_code = """
